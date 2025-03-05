@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { IMAGES } from "../../constants/images";
+import { IMAGES } from "../../../constants/images";
 
 const LoginPage = () => {
   return (
