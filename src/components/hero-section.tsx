@@ -44,7 +44,7 @@ const HeroSection = () => {
         </div>
         <div className="mt-5 mx-10">
           <div className="flex gap-5 justify-center">
-            <div className="w-[805px]">
+            <div className="w-2/3 2xl:w-[805px]">
               <Carousel arrows infinite={true} autoplay={true}>
                 <div>
                   <Image
@@ -78,7 +78,7 @@ const HeroSection = () => {
                 </div>
               </Carousel>
             </div>
-            <div className="w-1/3 flex flex-col justify-between">
+            <div className="flex flex-col justify-between">
               <Image
                 src={
                   'https://cdn.nhathuoclongchau.com.vn/unsafe/425x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Banner_Ung_Thu_1_185705d391.jpg'

@@ -6,6 +6,7 @@ import { Button, GetProps, Input } from 'antd';
 import { AudioOutlined } from '@ant-design/icons';
 import { HiUser } from 'react-icons/hi2';
 import { MdKeyboardArrowDown } from 'react-icons/md';
+import { FaShoppingCart } from 'react-icons/fa';
 
 const Header = () => {
   type SearchProps = GetProps<typeof Input.Search>;
@@ -46,7 +47,10 @@ const Header = () => {
               Đăng nhập
             </a>
           </div>
-          <Button className="bg-[#1250DC] text-white border-[#1250DC] font-semibold">
+          <Button
+            className="bg-[#1250DC] text-white border-[#1250DC] font-semibold"
+            icon={<FaShoppingCart/>}
+          >
             Giỏ hàng
           </Button>
         </div>
