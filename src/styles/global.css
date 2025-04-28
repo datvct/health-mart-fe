@@ -19,3 +19,27 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.slick-prev::after, .slick-next::after {
+  display: none;
+  text-align: center !important;
+  top: 0px !important;
+  position: unset !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+
+.slick-prev, .slick-next {
+  width: 40px !important;
+  height: 40px !important;
+  background: white !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  border-radius: 50px;
+  /* z-index: 10 !important; */
+  color: #1250dc !important;
+  font-weight: 600 !important;
+  border: 1px solid white !important;
+  opacity: 1 !important;
+}
