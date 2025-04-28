@@ -19,8 +19,3 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
-
-.custom-background-header {
-  background-image: url("../../public/images/image-header.png");
-    background-size: cover;
-}

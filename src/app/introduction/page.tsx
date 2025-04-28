@@ -90,10 +90,10 @@ Nhà thuốc FPT Long Châu không ngừng cải thiện chất lượng dịch 
     content: `
       <strong>Quy chế hoạt động website/ứng dụng thương mại điện tử bán hàng</strong><br/><br/>
 
-      <strong>I. Nguyên tắc chung</strong><br/>
+      <strong class="text-2xl">I. Nguyên tắc chung</strong><br/>
       Website/ứng dụng thương mại điện tử bán hàng do Công ty Cổ phần dược phẩm FPT Long Châu (<strong>Nhà thuốc Long Châu</strong>) thực hiện hoạt động và vận hành. Đối tượng phục vụ là tất cả khách hàng trên 63 tỉnh thành Việt Nam có nhu cầu mua hàng nhưng không có thời gian đến shop hoặc đặt trước để đảm bảo có hàng khi đến shop.<br/><br/>
 
-      <strong>II. Quy định chung</strong><br/>
+      <strong class="text-2xl">II. Quy định chung</strong><br/>
       <strong>Tên miền website thương mại điện tử bán hàng:</strong> Website <a href="https://nhathuoclongchau.com.vn" target="_blank" rel="noopener noreferrer" class="text-blue-600">https://nhathuoclongchau.com.vn</a> do Công ty Cổ phần dược phẩm FPT Long Châu phát triển, được gọi tắt là <a href="https://nhathuoclongchau.com.vn" target="_blank" rel="noopener noreferrer" class="text-blue-600">nhathuoclongchau.com.vn</a> hoặc “website.”<br/><br/>
       <strong>Tên miền ứng dụng thương mại điện tử bán hàng:</strong> Ứng dụng <a href="https://nhathuoclongchau.com.vn" target="_blank" rel="noopener noreferrer" class="text-blue-600">Long Châu – Chuyên gia thuốc</a> do Công ty Cổ phần dược phẩm FPT Long Châu phát triển trên iOS và Android, được gọi tắt là “Long Châu – Chuyên gia thuốc” hoặc “ứng dụng.”<br/><br/>
       <strong>Định nghĩa chung:</strong><br/>
@@ -101,7 +101,7 @@ Nhà thuốc FPT Long Châu không ngừng cải thiện chất lượng dịch 
       - <strong>Người mua:</strong> Công dân Việt Nam trên toàn quốc (có thể đăng ký tài khoản hoặc không).<br/>
       - <strong>Thành viên:</strong> Bao gồm cả người mua và người tham khảo thông tin trên website/ứng dụng.<br/><br/>
 
-      <strong>III. Quy trình giao dịch</strong><br/>
+      <strong class="text-2xl">III. Quy trình giao dịch</strong><br/>
       <strong>Dành cho người mua hàng:</strong><br/>
       <strong>Bước 1:</strong> Tìm kiếm và chọn sản phẩm cần mua.<br/>
       <strong>Bước 2:</strong> Xem thông tin chi tiết sản phẩm.<br/>
@@ -121,23 +121,23 @@ Nhà thuốc FPT Long Châu không ngừng cải thiện chất lượng dịch 
       - Giữ hàng tại cửa hàng.<br/>
       Miễn phí giao hàng với hóa đơn từ 300.000 đồng nếu giao trong cùng tỉnh/thành phố với cửa hàng gần nhất. Với các trường hợp khác, nhân viên sẽ tư vấn chi tiết.<br/><br/>
 
-      <strong>IV. Quy trình thanh toán</strong><br/>
+      <strong class="text-2xl">IV. Quy trình thanh toán</strong><br/>
       Các phương thức thanh toán gồm:<br/>
       1. <strong>Thanh toán trực tiếp:</strong> Người mua đến cửa hàng và thanh toán bằng tiền mặt, thẻ ATM hoặc thẻ tín dụng.<br/>
       2. <strong>Thanh toán sau (COD):</strong> Giao hàng và thu tiền tận nơi.<br/>
       3. <strong>Thanh toán online:</strong> Người mua thanh toán qua thẻ ATM nội địa hoặc thẻ tín dụng sau khi xác thực đơn hàng.<br/><br/>
 
-      <strong>V. Đảm bảo an toàn giao dịch</strong><br/>
+      <strong class="text-2xl">V. Đảm bảo an toàn giao dịch</strong><br/>
       - Người mua cung cấp đầy đủ thông tin (tên, địa chỉ, số điện thoại, email) khi đặt hàng.<br/>
       - Thanh toán trực tuyến được xử lý qua hệ thống ngân hàng liên kết, đảm bảo bảo mật.<br/><br/>
 
-      <strong>VI. Bảo vệ thông tin cá nhân khách hàng</strong><br/>
+      <strong class="text-2xl">VI. Bảo vệ thông tin cá nhân khách hàng</strong><br/>
       Nhà thuốc Long Châu cam kết bảo mật thông tin cá nhân của khách hàng theo chính sách bảo mật. Thông tin chỉ được thu thập khi có sự đồng ý và lưu trữ cho đến khi khách hàng yêu cầu hủy bỏ.<br/><br/>
 
-      <strong>VII. Quản lý thông tin xấu</strong><br/>
+      <strong class="text-2xl">VII. Quản lý thông tin xấu</strong><br/>
       Thành viên phải tự chịu trách nhiệm bảo mật thông tin đăng ký và không được thay đổi, sao chép hay truyền bá thông tin nếu không có sự đồng ý của Nhà thuốc Long Châu.<br/><br/>
 
-      <strong>XI. Điều khoản áp dụng</strong><br/>
+      <strong class="text-2xl">XI. Điều khoản áp dụng</strong><br/>
       Mọi tranh chấp sẽ được giải quyết trên cơ sở thương lượng; nếu không, vụ việc sẽ được đưa ra Tòa án nhân dân có thẩm quyền tại TP. Hồ Chí Minh. Quy chế có hiệu lực từ ngày ban hành và có thể được điều chỉnh theo thông báo của Nhà thuốc Long Châu.
       `
   },
@@ -227,7 +227,7 @@ Nhà thuốc FPT Long Châu không ngừng cải thiện chất lượng dịch 
       <a href="tel:18006928" class="text-blue-600">1800 6928</a> nhánh số 3
   `},
   { id: "5", name: "Chính sách nội dung", description: "", content: `
-    <strong>1. Thông báo miễn trừ trách nhiệm</strong><br/>
+    <strong class="text-2xl">1. Thông báo miễn trừ trách nhiệm</strong><br/>
     <ul class="list-disc marker:text-blue-600 ml-6 space-y-1">
       <li>Tất cả các sản phẩm bán tại nhà thuốc Long Châu đều có mô tả 
       chi tiết. Nhà thuốc sẽ cung cấp thông tin về sản phẩm như ảnh, 
@@ -264,7 +264,7 @@ Nhà thuốc FPT Long Châu không ngừng cải thiện chất lượng dịch 
       khảo, không dùng các thông tin này để “chẩn đoán” hoặc “điều trị” 
       cho các vấn đề sức khỏe cũng như các tình trạng y tế khác.</li>
     </ul><br/>
-    <strong>2. Góp ý nội dung</strong><br/>
+    <strong class="text-2xl">2. Góp ý nội dung</strong><br/>
     Chúng tôi luôn cố gắng chọn lọc và cung cấp thông tin từ các nguồn 
     đáng tin cậy, nhưng không tránh khỏi khả năng có thông tin chưa 
     thật sự chính xác. Nếu bạn phát hiện bất kỳ thông tin không chính 
@@ -273,7 +273,7 @@ Nhà thuốc FPT Long Châu không ngừng cải thiện chất lượng dịch 
     và cập nhật thông tin đó.
   `},
   { id: "6", name: "Chính sách đối trả thuốc", description: "", content: `
-    <strong>1. Quy định đổi trả</strong>
+    <strong class="text-2xl">1. Quy định đổi trả</strong>
     <div class="overflow-x-auto">
       <table class="min-w-full border-collapse border border-gray-300">
         <thead>
@@ -361,7 +361,7 @@ Nhà thuốc FPT Long Châu không ngừng cải thiện chất lượng dịch 
       - Bán lẻ: áp dụng đổi trả lẻ
     </ul> <br />
 
-    <strong>2. Phương thức đổi trả hàng và cách thức nhận lại tiền</strong> <br />
+    <strong class="text-2xl">2. Phương thức đổi trả hàng và cách thức nhận lại tiền</strong> <br />
     Khách hàng mang sản phẩm đã mua (bao gồm vỏ hộp, giấy hướng dẫn sử dụng kèm theo) tới cửa hàng Nhà thuốc 
     Long Châu gần nhất để được thực hiện đổi trả và hoàn tiền. <br />
     Để nhận tiền hoàn, khách hàng có 2 lựa chọn:
@@ -374,7 +374,7 @@ Nhà thuốc FPT Long Châu không ngừng cải thiện chất lượng dịch 
     </ul>
   ` },
   { id: "7", name: "Chính sách hoàn hủy đổi trả Vắc xin", description: "", content: `
-    <strong>1. Chính sách phí và thời gian hoàn - hủy - hoãn tiêm</strong>
+    <strong class="text-2xl">1. Chính sách phí và thời gian hoàn - hủy - hoãn tiêm</strong>
     <table class="min-w-full border-collapse border border-gray-300">
     <thead>
       <tr class="bg-gray-200"">
@@ -477,7 +477,7 @@ Nhà thuốc FPT Long Châu không ngừng cải thiện chất lượng dịch 
     <li>Không áp dụng hoàn hủy trong trường hợp tổng phí phát sinh do hoàn hủy lớn hơn giá trị cần hoàn trả cho Khách hàng.</li>
   </ul>
 
-  <strong>2. Phương thức đổi trả và cách thức nhận lại tiền</strong><br />
+  <strong class="text-2xl">2. Phương thức đổi trả và cách thức nhận lại tiền</strong><br />
   Quý khách hàng có thể ra trực tiếp Trung tâm Tiêm chủng Long Châu gần nhất hoặc liên hệ qua 
   Tổng đài 18006928 (Nhánh 2) để thực hiện đổi trả và hoàn tiền. <br />
   Để nhận tiền hoàn, Quý khách hàng có 2 lựa chọn:
@@ -489,7 +489,7 @@ Nhà thuốc FPT Long Châu không ngừng cải thiện chất lượng dịch 
     TTTC Long Châu sẽ hoàn lại tiền trong vòng 2-3 ngày (không kể T7, CN hoặc ngày lễ, tết).</li>
   </ul>
 
-  <strong>3. Hiệu lực của hợp đồng gói vắc xin</strong><br />
+  <strong class="text-2xl">3. Hiệu lực của hợp đồng gói vắc xin</strong><br />
   <strong>3.1.Thời hạn sử dụng dịch vụ khi mua gói vắc-xin tại Tiêm Chủng Long Châu</strong>
   <ul class="list-disc marker:text-blue-600 ml-6 space-y-1">
     <li>Thời hạn sử dụng dịch vụ đối với gói vắc-xin được tính từ <strong>ngày ký kết hợp đồng</strong> đến 
@@ -510,7 +510,7 @@ Nhà thuốc FPT Long Châu không ngừng cải thiện chất lượng dịch 
   ` },
 
   { id: "8", name: "Chính sách giao hàng", description: "", content: `
-    <strong>I. Về đơn thuốc</strong><br /><br />
+    <strong class="text-2xl">I. Về đơn thuốc</strong><br /><br />
     <strong>1. Nhà thuốc Long Châu có giao hàng thuốc không?</strong><br />
     <strong>Thuốc kê đơn:</strong> Nhà thuốc Long Châu chỉ bán thuốc kê đơn tại nhà thuốc khi có đơn thuốc hợp lệ, 
     theo đúng chỉ định của người kê đơn, Thuốc kê đơn không bán trực tuyến. <br />
@@ -526,7 +526,7 @@ Nhà thuốc FPT Long Châu không ngừng cải thiện chất lượng dịch 
     Chuyên gia thuốc hoặc liên hệ tổng đài miễn cước <a href="tel:18006928" class="text-blue-600">1800 6928</a> 
     để biết được thời gian nhận được đơn hàng dự kiến. <br />
 
-    <strong>II. Giao hàng</strong><br />
+    <strong class="text-2xl">II. Giao hàng</strong><br />
     <strong>1. Phí giao hàng</strong>
     <div class="overflow-x-auto">
       <table class="w-full border-collapse border border-gray-300 text-sm">
@@ -643,7 +643,7 @@ Nhà thuốc FPT Long Châu không ngừng cải thiện chất lượng dịch 
     Chủ tài khoản: <strong>Công ty Cổ Phần Dược Phẩm FPT Long Châu</strong> <br />
     Ngân Hàng: <strong>Ngân hàng TMCP Công Thương Việt Nam - Chi nhánh 1, PGD Tân Định</strong><br />
 
-    <strong>III. Thông tin giao hàng</strong><br />
+    <strong class="text-2xl">III. Thông tin giao hàng</strong><br />
     <strong>1. Nhà thuốc Long Châu có giao hàng vào cuối tuần và ngày lễ không?</strong> <br />
     Nhà thuốc Long châu giao hàng vào tất cả các ngày trong tuần. <br />
     <strong>2. Tôi đang rất cần sản phẩm, nhà thuốc Long Châu có thể giao gấp cho tôi được không?</strong><br />
@@ -667,10 +667,229 @@ Nhà thuốc FPT Long Châu không ngừng cải thiện chất lượng dịch 
     Trường hợp Nhà thuốc Long Châu không thể kết nối được với quý khách hoặc đơn vị vận chuyển không thể giao hàng 
     thành công đến quý khách đơn hàng sẽ được hủy bởi hệ thống.
   ` },
-  { id: "9", name: "Chính sách bảo mật", description: "", content: "Nội dung bảo mật..." },
-  { id: "10", name: "Chính sách thanh toán", description: "", content: "Nội dung thanh toán..." },
-  { id: "11", name: "Chính sách thu thập và xử lý dữ liệu cá nhân", description: "", content: "Nội dung thu thập dữ liệu..." },
-  { id: "12", name: "Thông tin trung tâm bảo hành máy thiết bị y tế từng hãng", description: "", content: "Nội dung bảo hành..." },
+  { id: "9", name: "Chính sách bảo mật", description: "", content: `
+    <strong class="text-2xl">1. Mục đích, phạm vi thu thập thông tin</strong> <br /><br />
+    Nhà thuốc Long Châu chỉ thu thập thông tin liên lạc cần thiết để thực hiện giao dịch giữa website/ứng dụng 
+    với khách hàng mà không lấy thêm thông tin gì khác. Thông tin của khách hàng sẽ chỉ được lưu lại khi khách 
+    hàng tạo tài khoản và đăng nhập với tài khoản của mình. Nhà thuốc Long Châu thu thập và sử dụng thông tin 
+    cá nhân của khách hàng với mục đích phù hợp và hoàn toàn tuân thủ theo pháp luật. 
+    Nhà thuốc Long Châu cam kết không chia sẻ hay sử dụng thông tin cá nhân của khách hàng cho một bên thứ 
+    3 nào khác với mục đích lợi nhuận. Thông tin của khách hàng sẽ chỉ được sử dụng trong nội bộ Nhà thuốc Long Châu. 
+    Khi cần thiết, chúng tôi có thể sử dụng những thông tin này để liên hệ trực tiếp với khách hàng dưới các hình thức 
+    như: gửi thư, đơn đặt hàng, thư cảm ơn. Khách hàng có thể nhận được thư định kỳ cung cấp thông tin sản phẩm, 
+    dịch vụ mới, thông tin về các chương trình khuyến mãi. Khi khách hàng đăng kí trên website/ứng dụng, 
+    những thông tin chúng tôi thu thập bao gồm: <br />
+    <strong>Tên - Địa chỉ giao hàng - Số điện thoại - Ngày sinh - Giới tính - Những thông tin khác (nếu có).</strong> <br /> <br />
+
+    <strong class="text-2xl">2. Phạm vi sử dụng thông tin</strong><br />
+    Những thông tin trên chỉ được sử dụng cho những mục đích sau đây:
+    <ul class="list-disc marker:text-blue-600 ml-6 space-y-1">
+      <li>Giao hàng cho các đơn hàng được đặt mua trên website/ứng dụng</li>
+      <li>Thông báo giao hàng và hỗ trợ khách hàng</li>
+      <li>Cung cấp thông tin sản phẩm</li>
+      <li>Xử lý đơn đặt hàng và cung cấp dịch vụ của chúng tôi theo yêu cầu của khách hàng</li>
+      <li>Chia sẻ cho dịch vụ chuyển phát nhanh để giao hàng</li>
+    </ul>
+
+    Ngoài ra, chúng tôi sẽ sử dụng thông tin của khách hàng trong việc quản lý tài khoản, giao dịch tài chính, 
+    kiểm tra dữ liệu để cải thiện tính năng của website/ứng dụng nhằm mang đến cho khách hàng những trải nghiệm 
+    tốt nhất khi ghé thăm website/ứng dụng của chúng tôi. <br />
+    Chi tiết đơn hàng của khách hàng sẽ được giữ bảo mật và chỉ được cung cấp cho chủ đơn hàng. 
+    Chúng tôi có quyền không cung cấp thông tin nếu khách hàng không cung cấp chính xác thông tin xác nhận 
+    theo yêu cầu từ Nhà thuốc Long Châu. Khách hàng có thể theo dõi đơn hàng của mình trong tài khoản của mình và 
+    bảo đảm không cho bên thứ 3 biết thông tin. Chúng tôi sẽ không chịu trách nhiệm về việc khách hàng nhập 
+    sai mật khẩu trừ khi đó là lỗi từ phía chúng tôi. <br /><br />
+
+    <strong class="text-2xl">3. Những người hoặc tổ chức có thể được tiếp cận với thông tin cá nhân của khách hàng</strong><br />
+    Khách hàng đồng ý rằng, trong trường hợp cần thiết, các cơ quan/ tổ chức/cá nhân sau có quyền được tiếp cận 
+    và thu thập các thông tin cá nhân của mình, bao gồm:
+    <ul class="list-disc marker:text-blue-600 ml-6 space-y-1">
+      <li>Ban quản trị, nhân viên Công ty Cổ phần Dược phẩm FPT Long Châu</li>
+      <li>Bên thứ ba có dịch vụ tích hợp với website/ứng dụng</li>
+      <li>Đơn vị vận chuyển liên kết với Công ty để giao hàng cho khách hàng</li>
+      <li>Cố vấn tài chính, pháp lý và Công ty kiểm toán</li>
+      <li>Bên khiếu nại chứng minh được hành vi vi phạm của khách hàng</li>
+      <li>Theo yêu cầu của cơ quan nhà nước có thẩm quyền</li>
+    </ul>
+
+    <strong class="text-2xl">4. Thời gian lưu trữ thông tin</strong> <br />
+    Thông tin của khách hàng sẽ được giữ đúng trong thời hạn pháp luật quy định hoặc chỉ sử dụng 
+    cho mục đích mà thông tin đó được thu thập. <br /> <br />
+
+    <strong class="text-2xl">5. Địa chỉ của đơn vị thu thập và quản lý thông tin cá nhân</strong>
+    <ul class="list-disc marker:text-blue-600 ml-6 space-y-1">
+      <li><strong>Đơn vị:</strong> Công ty cổ phần dược phẩm FPT Long Châu</li>
+      <li><strong>Người đại diện pháp lý:</strong> Nguyễn Bạch Điệp</li>
+      <li><strong>Địa chỉ:</strong> 379-381 Hai Bà Trưng, P.8, Q.3, TP. Hồ Chí Minh</li>
+      <li><strong>Hotline miễn phí:</strong> <a href="tel:18006928" class="text-blue-600">1800 6928</a> </li>
+      <li><strong>Email:</strong> <a href="mailto:sale@nhathuoclongchau.com.vn">sale@nhathuoclongchau.com.vn</a></li>
+    </ul> <br />
+
+    <strong class="text-2xl">6. Phương tiện và công cụ để người dùng tiếp cận và chỉnh sửa dữ liệu cá nhân của mình</strong><br />
+    Bất cứ thời điểm nào khách hàng cũng có thể truy cập và chỉnh sửa những thông tin cá nhân của mình theo 
+    các bước hướng dẫn thích hợp mà chúng tôi cung cấp. <br /><br />
+
+    <strong class="text-2xl">7. Cam kết bảo vệ thông tin cá nhân khách hàng</strong> <br />
+    Nhà thuốc Long Châu luôn đảm bảo rằng mọi thông tin cá nhân của khách hàng sẽ được lưu giữ an toàn. 
+    Ngoại trừ các trường hợp về việc sử dụng thông tin cá nhân như đã nêu trong chính sách này, 
+    chúng tôi cam kết sẽ không tiết lộ thông tin cá nhân khách hàng ra ngoài vì mục đích thương mại. 
+    Chúng tôi có thể tiết lộ hoặc cung cấp thông tin cá nhân của khách hàng trong các trường hợp thật sự cần thiết như sau:
+    <ul class="list-disc marker:text-blue-600 ml-6 space-y-1">
+      <li>Khi có yêu cầu của cơ quan pháp luật</li>
+      <li>Trong trường hợp mà điều đó giúp chúng tôi bảo vệ quyền lợi chính đáng của mình trước pháp luật</li>
+      <li>Tình huống khẩn cấp và cần thiết để bảo đảm quyền an toàn cá nhân của các thành viên khác</li>
+    </ul> <br />
+    
+    <strong class="text-2xl">8. Thay đổi chính sách bảo mật</strong><br />
+    Nhà thuốc Long Châu có quyền thay đổi và chỉnh sửa chính sách bảo mật này vào bất kỳ lúc nào. 
+    Chúng tôi sẽ cập nhật những thay đổi trên website/ứng dụng. Nếu khách hàng có khiếu nại hay đóng góp về 
+    chính sách của Nhà thuốc Long Châu , xin vui lòng liên hệ với chúng tôi qua hai hình thức sau:
+    <ul class="list-disc marker:text-blue-600 ml-6 space-y-1">
+      <li><strong>Hotline miễn phí:</strong> <a href="tel:18006928" class="text-blue-600">1800 6928</a> nhánh số 3</li>
+      <li><strong>Email:</strong> <a href="mailto:fpt.longchau@fpt.com.vn">fpt.longchau@fpt.com.vn</a></li>
+    </ul> <br />
+
+    <strong class="text-2xl">9. Cơ chế tiếp nhận và giải quyết khiếu nại liên quan đến việc thông tin của khách hàng</strong><br />
+    Khi phát hiện thông tin cá nhân của mình bị sử dụng sai mục đích hoặc phạm vi, khách hàng gửi email khiếu nại đến email 
+    fpt.longchau@fpt.com.vn hoặc gọi điện thoại tới số <a href="tel:18006928" class="text-blue-600">1800 6928</a> nhánh số 3 
+    để khiếu nại và cung cấp chứng cứ liên quan tới vụ việc cho Ban quản trị. Ban quản trị cam kết sẽ phản hồi ngay lập tức hoặc 
+    muộn nhất là trong vòng 24 (hai mươi tư) giờ làm việc kể từ thời điểm nhận được khiếu nại.
+  ` },
+  { id: "10", name: "Chính sách thanh toán", description: "", content: `
+    <strong>
+      <p style="color: gray;">
+        Về thanh toán, có 3 cách. Quý khách có thể thanh toán cho Công ty CP Dược phẩm FPT Long Châu bằng các hình thức sau:
+      </p>
+    </strong><br />
+    <strong>Thanh toán tại chỗ (Ship COD):</strong> Long Châu sẽ gọi lại cho khách hàng để xin địa chỉ giao hàng tận nơi và nhận thanh toán tại chỗ. <br />
+    <strong>Thanh toán qua thẻ ngân hàng:</strong> Chấp nhận thanh toán nhiều thương hiệu và loại thẻ bao gồm thẻ ATM, thẻ Visa, MasterCard,... <br />
+    <strong>Chuyển khoản trước:</strong> Khách hàng có thể chọn chuyển khoản trước vào tài khoản của Nhà thuốc Long Châu <br />
+    Số tài khoản: <strong>113002672043</strong> <br />
+    Chủ tài khoản: <strong>Công ty Cổ Phần Dược Phẩm FPT Long Châu</strong><br />
+    Ngân Hàng: <strong>Ngân hàng TMCP Công Thương Việt Nam - Chi nhánh 1, PGD Tân Định</strong>
+  ` },
+  { id: "11", name: "Chính sách thu thập và xử lý dữ liệu cá nhân", description: "", content: `
+    <strong class="text-2xl">Chính sách thu thập và xử lý dữ liệu cá nhân</strong><br /><br />
+    Chính sách xử lý dữ liệu cá nhân khách hàng <strong>(“Chính sách”)</strong> này được thực hiện bởi Công ty Cổ phần Dược phẩm 
+    FPT Long Châu <strong>(“Long Châu”, “Công ty”)</strong>, mô tả các hoạt động liên quan đến việc xử lý dữ liệu cá nhân của 
+    Khách hàng để Khách hàng hiểu rõ hơn về mục đích, phạm vi thông tin mà Long Châu xử lý, các biện pháp Long Châu 
+    áp dụng để bảo vệ thông tin và quyền của Quý Khách hàng đối với các hoạt động này. <br />
+    Chính sách này là một phần không thể tách rời của các hợp đồng, thỏa thuận, điều khoản và điều kiện ràng buộc 
+    mối quan hệ giữa Long Châu và Khách hàng. <br /><br />
+    
+    <strong class="text-2xl">Điều 1. Đối tượng và phạm vi áp dụng</strong><br />
+    <strong>1.1.</strong> Chính sách này điều chỉnh cách thức mà Long Châu xử lý dữ liệu cá nhân của Khách hàng và những người có liên quan 
+    đến Khách hàng theo các mối quan hệ do pháp luật yêu cầu phải xử lý dữ liệu hoặc người đồng sử dụng các sản phẩm/ 
+    dịch vụ của Long Châu với khách hàng khi sử dụng hoặc tương tác với trang tin điện tử hoặc/và các sản phẩm/ dịch vụ của Long Châu. <br />
+    <strong>1.2.</strong> Để tránh nhầm lẫn, Chính sách bảo mật dữ liệu này chỉ áp dụng cho các Khách hàng cá nhân. 
+    Long Châu khuyến khích Khách hàng đọc kỹ Chính sách này và thường xuyên kiểm tra trang tin điện tử để 
+    cập nhật bất kỳ thay đổi nào mà Long Châu có thể thực hiện theo các điều khoản của Chính sách. <br /><br />
+
+    <strong class="text-2xl">Điều 2. Giải thích từ ngữ</strong><br />
+    <strong>2.1. <i>”Khách hàng”</i></strong> là cá nhân tiếp cận, tìm hiểu, đăng ký, sử dụng hoặc có liên quan trong quy trình hoạt động, 
+    cung cấp các sản phẩm, dịch vụ của Long Châu. <br />
+    <strong>2.2. <i>“Long Châu”</i></strong> là Công ty Cổ phần Dược phẩm FPT Long Châu, mã số thuế 0315275368, địa chỉ trụ sở chính: 
+    379-381 Hai Bà Trưng, P. Võ Thị Sáu, Q.3, TP. Hồ Chí Minh, Việt Nam. <br />
+    <strong>2.3. <i>“Dữ liệu cá nhân” hay “DLCN”</i></strong> là thông tin dưới dạng ký hiệu, chữ viết, chữ số, hình ảnh, 
+    âm thanh hoặc dạng tương tự trên môi trường điện tử gắn liền với một con người cụ thể hoặc giúp xác định một con người cụ thể. 
+    Dữ liệu cá nhân bao gồm dữ liệu cá nhân cơ bản và dữ liệu cá nhân nhạy cảm. <br />
+    <strong><i>2.4. Dữ liệu cá nhân cơ bản bao gồm:</i></strong><br />
+    (a) Họ, chữ đệm và tên khai sinh, tên gọi khác (nếu có); <br />
+    (b) Ngày, tháng, năm sinh; ngày, tháng, năm chết hoặc mất tích;<br />
+    (c) Giới tính;<br />
+    (d) Nơi sinh, nơi đăng ký khai sinh, nơi thường trú, nơi tạm trú, nơi ở hiện tại, quê quán, địa chỉ liên hệ;<br />
+    (e) Quốc tịch;
+    (f) Hình ảnh của cá nhân;
+    (g) Số điện thoại, số chứng minh nhân dân, số định danh cá nhân, số hộ chiếu, số giấy phép lái xe, số biển số xe, 
+    số mã số thuế cá nhân, số bảo hiểm xã hội, số thẻ bảo hiểm y tế;<br />
+    (h) Tình trạng hôn nhân;<br />
+    (i) Thông tin về mối quan hệ gia đình (cha mẹ, con cái);<br />
+    (j) Thông tin về tài khoản số của cá nhân; dữ liệu cá nhân phản ánh hoạt động, lịch sử hoạt động trên không gian mạng;<br />
+    (k) Các thông tin khác gắn liền với một con người cụ thể hoặc giúp xác định một con người cụ thể không thuộc Dữ liệu cá nhân nhạy cảm.<br />
+    (l) Các dữ liệu khác theo quy định pháp luật hiện hành<br />
+    <strong><i>2.5. Dữ liệu cá nhân nhạy cảm</i></strong> dữ liệu cá nhân gắn liền với quyền riêng tư của cá nhân mà khi bị xâm phạm 
+    sẽ gây ảnh hưởng trực tiếp tới quyền và lợi ích hợp pháp của cá nhân gồm: <br />
+    (a) Quan điểm chính trị, quan điểm tôn giáo;<br />
+    (b) Tình trạng sức khỏe và đời tư được ghi trong hồ sơ bệnh án, không bao gồm thông tin về nhóm máu;<br />
+    (c) Thông tin liên quan đến nguồn gốc chủng tộc, nguồn gốc dân tộc;<br />
+    (d) Thông tin về đặc điểm di truyền được thừa hưởng hoặc có được của cá nhân;<br />
+    (e)Thông tin về thuộc tính vật lý, đặc điểm sinh học riêng của cá nhân;<br />
+    (f)Thông tin về đời sống tình dục, xu hướng tình dục của cá nhân;<br />
+    (g) Dữ liệu về tội phạm, hành vi phạm tội được thu thập, lưu trữ bởi các cơ quan thực thi pháp luật;<br />
+    (h) Thông tin khách hàng của tổ chức tín dụng, chi nhánh ngân hàng nước ngoài, tổ chức cung ứng dịch vụ trung gian thanh toán, 
+    các tổ chức được phép khác, gồm: thông tin định danh khách hàng theo quy định của pháp luật, thông tin về tài khoản, 
+    thông tin về tiền gửi, thông tin về tài sản gửi, thông tin về giao dịch, thông tin về tổ chức, cá nhân là bên bảo 
+    đảm tại tổ chức tín dụng, chi nhánh ngân hàng, tổ chức cung ứng dịch vụ trung gian thanh toán;<br />
+    (i) Dữ liệu về vị trí của cá nhân được xác định qua dịch vụ định vị;<br />
+    (j) Dữ liệu cá nhân khác được pháp luật quy định là đặc thù và cần có biện pháp bảo mật cần thiết.<br />
+  ` },
+  { id: "12", name: "Thông tin trung tâm bảo hành máy thiết bị y tế từng hãng", description: "", content: `
+    <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+      <table class="w-full text-sm text-gray-700">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="p-3 border border-gray-300 text-left min-w-[120px]">HÃNG</th>
+            <th class="p-3 border border-gray-300 text-left min-w-[180px]">LOẠI MÁY</th>
+            <th class="p-3 border border-gray-300 text-left min-w-[300px]">Địa chỉ TTBH</th>
+            <th class="p-3 border border-gray-300 text-left min-w-[200px]">Thông tin người nhận</th>
+            <th class="p-3 border border-gray-300 text-left min-w-[300px]">Lưu ý</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- OMRON - Máy đo huyết áp -->
+          <tr class="bg-white">
+            <td class="p-3 border border-gray-300 align-top" rowspan="2">OMRON</td>
+            <td class="p-3 border border-gray-300">MÁY ĐO HUYẾT ÁP</td>
+            <td class="p-3 border border-gray-300">
+              HCM: Lầu 6, Tháp A2, Tòa nhà Viettel Complex,<br>
+              285 CMT8, P12, Quận 10, TP.HCM
+            </td>
+            <td class="p-3 border border-gray-300">
+              TTBH OMRON<br>
+              SĐT: <span class="text-blue-600">0908 019 299</span>
+            </td>
+            <td class="p-3 border border-gray-300"></td>
+          </tr>
+
+          <!-- OMRON - Máy xông khí dung -->
+          <tr class="bg-white">
+            <td class="p-3 border border-gray-300">MÁY XÔNG KHÍ DUNG<br>(BH online gọi hủy BH)</td>
+            <td class="p-3 border border-gray-300">
+              Hà Nội: Tầng 16 Tòa nhà Peakview,<br>
+              Số 36 Phố Hoàng Cầu, P. Ô Chợ Dừa,<br>
+              Q. Đống Đa, TP. Hà Nội
+            </td>
+            <td class="p-3 border border-gray-300">
+              Phòng BH OMRON HN<br>
+              SĐT: <span class="text-blue-600">024 8589 8408</span>
+            </td>
+            <td class="p-3 border border-gray-300"></td>
+          </tr>
+
+          <!-- ACCU CHEK -->
+          <tr class="bg-white">
+            <td class="p-3 border border-gray-300 align-top">ACCU CHEK</td>
+            <td class="p-3 border border-gray-300">MÁY ĐO ĐƯỜNG HUYẾT<br>(Không đối đơn vị)</td>
+            <td class="p-3 border border-gray-300">
+              Tầng 27, Tòa nhà Pearl Plaza,<br>
+              561A Điện Biên Phủ, Phường 25,<br>
+              Bình Thạnh, TP.HCM
+            </td>
+            <td class="p-3 border border-gray-300">
+              Chị Trám<br>
+              SĐT: <span class="text-blue-600">0906 382 078</span>
+            </td>
+            <td class="p-3 border border-gray-300 text-red-600">
+              • Kèm tờ giấy ghi: Tên, SĐT, địa chỉ<br>
+              • Gửi trực tiếp tầng 27 Pearl Plaza<br>
+              • Sử dụng dịch vụ chuyển phát uy tín
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>  
+  ` },
 ];
 
 function ExtraInfo() {
@@ -705,12 +924,16 @@ function ExtraInfo() {
 const renderContent = (content: string, categoryId: string) => {
   if (categoryId === "1") {
     return renderFormattedContent(content);
-  } else if (categoryId === "2" || categoryId === "3" || categoryId === "4" || categoryId === "5" || categoryId === "6" || categoryId === "7" || categoryId === "8") {
-    return <div dangerouslySetInnerHTML={{ __html: content }} />;
-  } else {
-    return content.split("\n").map((line, idx) => <p key={idx}>{line}</p>);
   }
+
+  const htmlCategories = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+  if (htmlCategories.includes(categoryId)) {
+    return <div dangerouslySetInnerHTML={{ __html: content }} />;
+  }
+
+  return content.split("\n").map((line, idx) => <p key={idx}>{line}</p>);
 };
+
 
 function renderFormattedContent(content: string): React.ReactNode[] {
   const lines = content.split("\n").map((line) => line.trim()).filter(Boolean);

@@ -32,7 +32,7 @@ const Footer = () => {
               <h2 className="font-bold mb-4">VỀ CHÚNG TÔI</h2>
               <ul className="space-y-2">
                 <li>
-                  <Link href="/introduction" className="hover:underline text-blue-600">
+                  <Link href="/introduction?id=1" className="hover:underline text-blue-600">
                     Giới thiệu
                   </Link>
                 </li>
@@ -42,12 +42,12 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:underline text-blue-600">
+                  <Link href="/introduction?id=2" className="hover:underline text-blue-600">
                     Giấy phép kinh doanh
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:underline text-blue-600">
+                  <Link href="/introduction?id=3" className="hover:underline text-blue-600">
                     Quy chế hoạt động
                   </Link>
                 </li>
@@ -57,27 +57,27 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:underline text-blue-600">
+                  <Link href="/introduction?id=5" className="hover:underline text-blue-600">
                     Chính sách nội dung
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:underline text-blue-600">
+                  <Link href="/introduction?id=6" className="hover:underline text-blue-600">
                     Chính sách đối trả thuốc
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:underline text-blue-600">
+                  <Link href="/introduction?id=8" className="hover:underline text-blue-600">
                     Chính sách giao hàng
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:underline text-blue-600">
+                  <Link href="/introduction?id=9" className="hover:underline text-blue-600">
                     Chính sách bảo mật dữ liệu cá nhân khách hàng
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:underline text-blue-600">
+                  <Link href="/introduction?id=10" className="hover:underline text-blue-600">
                     Chính sách thanh toán
                   </Link>
                 </li>
@@ -87,17 +87,17 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:underline text-blue-600">
+                  <Link href="/introduction?id=11" className="hover:underline text-blue-600">
                     Chính sách thu thập và xử lý dữ liệu cá nhân
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:underline text-blue-600">
+                  <Link href="/introduction?id=7" className="hover:underline text-blue-600">
                     Chính sách hoàn hủy đổi trả Vắc xin
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:underline text-blue-600">
+                  <Link href="/introduction?id=12" className="hover:underline text-blue-600">
                     Thông tin trung tâm bảo hành máy thiết bị y tế từng hãng
                   </Link>
                 </li>
@@ -266,7 +266,7 @@ const Footer = () => {
             </summary>
             <ul className="mt-2 ml-4 list-disc">
               <li>
-                <Link href="/introduction" className="hover:underline text-blue-600">
+                <Link href="/introduction?id=1" className="hover:underline text-blue-600">
                   Giới thiệu
                 </Link>
               </li>
@@ -276,12 +276,12 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:underline text-blue-600">
+                <Link href="/introduction?id=2" className="hover:underline text-blue-600">
                   Giấy phép kinh doanh
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:underline text-blue-600">
+                <Link href="/introduction?id=3" className="hover:underline text-blue-600">
                   Quy chế hoạt động
                 </Link>
               </li>
