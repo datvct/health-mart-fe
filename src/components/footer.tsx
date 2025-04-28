@@ -32,7 +32,7 @@ const Footer = () => {
               <h2 className="font-bold mb-4">VỀ CHÚNG TÔI</h2>
               <ul className="space-y-2">
                 <li>
-                  <Link href="#" className="hover:underline text-blue-600">
+                  <Link href="/introduction" className="hover:underline text-blue-600">
                     Giới thiệu
                   </Link>
                 </li>
@@ -52,7 +52,7 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:underline text-blue-600">
+                  <Link href="/introduction?id=4" className="hover:underline text-blue-600">
                     Chính sách đặt cọc
                   </Link>
                 </li>
@@ -266,7 +266,7 @@ const Footer = () => {
             </summary>
             <ul className="mt-2 ml-4 list-disc">
               <li>
-                <Link href="#" className="hover:underline text-blue-600">
+                <Link href="/introduction" className="hover:underline text-blue-600">
                   Giới thiệu
                 </Link>
               </li>

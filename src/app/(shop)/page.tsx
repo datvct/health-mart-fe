@@ -747,6 +747,13 @@ const ProductPage: React.FC = () => {
       sold: 800,
       image: "/images/product.png",
     },
+    {
+      id: 5,
+      name: "Viên uống Omexxel 3-6-9 Premium hỗ trợ tốt cho não và mắt (100 viên)",
+      price: 453000,
+      sold: 800,
+      image: "/images/product.png",
+    },
   ];
 
   // Trạng thái sắp xếp và layout
@@ -878,7 +885,7 @@ const ProductPage: React.FC = () => {
             </div>
           </div>
           {/* Danh sách sản phẩm */}
-          <div className={`grid grid-cols-1 sm:grid-cols-${gridLayout === 4 ? 4 : 2} gap-4`}>
+          <div className={`grid grid-cols-1 ${gridLayout === 4 ? "sm:grid-cols-4" : "sm:grid-cols-2"} gap-4`}>
             {sortedProducts.map((product) => (
               <div
                 key={product.id}

@@ -80,6 +80,16 @@ export default {
         '200': '200ms',
         '300': '300ms',
       },
+      // Bổ sung thêm keyframes và animation cho fade in
+      keyframes: {
+        fade: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+      },
+      animation: {
+        fade: 'fade 0.3s ease-in-out',
+      },
     },
   },
   plugins: [],
