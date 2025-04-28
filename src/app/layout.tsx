@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import 'antd/dist/reset.css'; // Ant Design reset style
 import "../styles/global.css"; // file css của bạn
-import "../styles/global.css"
 
 export const metadata: Metadata = {
   title: "Health Mart",

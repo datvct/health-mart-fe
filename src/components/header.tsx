@@ -26,7 +26,7 @@ const Header = () => {
   return (
     <header>
       <div
-        className={`flex py-10 px-10 justify-between items-center bg-[url(/images/header/image-header.png)] bg-cover bg-centen`}
+        className={`flex py-10 px-10 justify-center gap-10 items-center bg-[url(/images/header/image-header.png)] bg-cover bg-centen`}
       >
         <a href="">
           <Image src={IMAGES.ImageLogo} alt="Logo" />
@@ -40,7 +40,7 @@ const Header = () => {
           onSearch={onSearch}
         />
         <div className="flex gap-5">
-          <div className="flex items-center gap-2 cursor-pointer group">
+          <div className="flex items-center gap-2 cursor-pointer group w-[120px]">
             <HiUser className="text-white group-hover:text-black" />
             <a href="#" className="text-white font-medium group-hover:text-black">
               Đăng nhập
@@ -52,7 +52,7 @@ const Header = () => {
         </div>
       </div>
       <div>
-        <div className="flex justify-between py-2 px-4 h-[50px] relative">
+        <div className="flex justify-around py-2 px-4 h-[50px] relative">
           <div className="flex items-center cursor-pointer group hover:shadow-[inset_0_-2px_0_0] hover:shadow-[#1250dc]">
             <span className="group-hover:text-[#1250dc] text-[#020b27] font-medium">
               Thực phẩm chức năng
@@ -62,7 +62,7 @@ const Header = () => {
               className="transition-transform duration-300 ease-in-out  group-hover:rotate-180 group-hover:text-[#1250dc]"
             />
             <div className="bg-[#767d91] w-[100%] absolute top-10 left-0 p-4 cursor-pointer opacity-50 z-0 inset-0 h-[100vh] hidden group-hover:flex"></div>
-            <div className="bg-[white] z-10 top-10 absolute w-[98%] group-hover:flex p-4 rounded-b-2xl hidden">
+            <div className="bg-[white] z-10 top-10 absolute w-[91%] group-hover:flex p-4 rounded-b-2xl hidden">
               <div className="w-1/4 flex flex-col">
                 <div className="flex gap-2 items-center rounded-l-xl bg-[#ffffff] hover:bg-[#EDF0F3] p-3 hover:border border-[#dce0e4] cursor-pointer">
                   <Image
