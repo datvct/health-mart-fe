@@ -7,6 +7,10 @@ import { AudioOutlined } from '@ant-design/icons';
 import { HiUser } from 'react-icons/hi2';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { FaShoppingCart } from 'react-icons/fa';
+import { IoIosMenu } from 'react-icons/io';
+import { useState } from 'react';
+import '@ant-design/v5-patch-for-react-19';
+import Link from 'next/link';
 
 const Header = () => {
   type SearchProps = GetProps<typeof Input.Search>;
@@ -24,10 +28,17 @@ const Header = () => {
 
   const { Search } = Input;
 
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpenMenu((prev) => !prev);
+  };
+
   return (
     <header>
       <div
-        className={`flex py-10 px-10 justify-center gap-10 items-center bg-[url(/images/header/image-header.png)] bg-cover bg-centen`}
+        className={`hidden md:flex lg:flex xl:flex 2xl:flex py-10 px-10 justify-center gap-10 items-center bg-[url(/images/header/image-header.png)] bg-cover bg-center`}
       >
         <a href="">
           <Image src={IMAGES.ImageLogo} alt="Logo" />
@@ -49,13 +60,41 @@ const Header = () => {
           </div>
           <Button
             className="bg-[#1250DC] text-white border-[#1250DC] font-semibold"
-            icon={<FaShoppingCart/>}
+            icon={<FaShoppingCart />}
           >
             Giỏ hàng
           </Button>
         </div>
       </div>
-      <div>
+      <div
+        className={`flex md:hidden lg:hidden xlhiddenx 2xl:hidden flex-col justify-center gap-2 items-center bg-[url(/images/header/image-header.png)] bg-cover bg-center p-2`}
+      >
+        <div className="flex items-center justify-between w-full">
+          <Button
+            icon={<IoIosMenu size={30} />}
+            className="bg-transparent text-white border-transparent"
+            onClick={() => {
+              setIsOpen(true);
+            }}
+          />
+          <a href="">
+            <Image src={IMAGES.ImageLogo} alt="Logo" />
+          </a>
+          <Button
+            className="bg-[#1250DC] text-white border-[#1250DC] font-semibold rounded-full"
+            icon={<FaShoppingCart />}
+          ></Button>
+        </div>
+        <Search
+          className="w-full"
+          placeholder="Tìm tên thuốc, bệnh lý, TCNP,..."
+          enterButton="Search"
+          size="large"
+          suffix={suffix}
+          onSearch={onSearch}
+        />
+      </div>
+      <div className="hidden md:block lg:block xl:block 2xl:block">
         <div className="flex justify-around py-2 px-4 h-[50px] relative">
           <div className="flex items-center cursor-pointer group hover:shadow-[inset_0_-2px_0_0] hover:shadow-[#1250dc]">
             <span className="group-hover:text-[#1250dc] text-[#020b27] font-medium">
@@ -185,6 +224,99 @@ const Header = () => {
             </span>
           </div>
         </div>
+      </div>
+      {/* Overlay xám mờ */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setIsOpen(false)} // click vào overlay là đóng
+        />
+      )}
+      {/* Sidebar trượt ra */}
+      <div
+        className={`fixed top-0 left-0 h-full w-80 bg-white z-50 shadow-lg transform transition-transform duration-300 ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        } overflow-y-auto`}
+      >
+        <div className="px-4 pt-4 flex justify-between items-center bg-[#3a73e6]">
+          <div>
+            <Link href="/">
+              <Image src={IMAGES.ImageLogo} alt="Logo" />
+            </Link>
+          </div>
+          <button className="text-white font-semibold" onClick={() => setIsOpen(false)}>
+            ✖
+          </button>
+        </div>
+        <div className="bg-[#3a73e6] border-b p-4 flex items-center flex-col gap-2">
+          <p className="text-sm text-justify text-white">
+            Đăng nhập để hưởng những đặc quyền riêng cho thành viên
+          </p>
+          <div className="flex items-center gap-2">
+            <Button className="bg-[#eaeffa] text-[#1250dc] rounded-2xl font-medium">
+              Đăng nhập
+            </Button>
+            <Button className="bg-[linear-gradient(315deg,#1250dc_0%,#306de4_100%)] text-white rounded-2xl font-medium">
+              Đăng ký
+            </Button>
+          </div>
+        </div>
+
+        <ul className="p-4 space-y-2">
+          <div className="flex flex-col group">
+            <div className="flex items-center justify-between" onClick={toggleDropdown}>
+              <li className="font-semibold p-2">Thực phẩm chức năng</li>
+              <MdKeyboardArrowDown
+                size={25}
+                className={`transition-transform duration-300 ease-in-out ${
+                  isOpenMenu ? 'rotate-180 text-[#1250dc]' : ''
+                }`}
+              />
+            </div>
+            {isOpenMenu && (
+              <div className="bg-[#eaeffa] flex flex-col mx-4 rounded-xl">
+                <div className="p-2  border-b">
+                  <Link href="/">Vitamin & khoáng chất</Link>
+                </div>
+                <div className="p-2  border-b">
+                  <Link href="/">Vitamin & khoáng chất</Link>
+                </div>
+                <div className="p-2">
+                  <Link href="/">Vitamin & khoáng chất</Link>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="flex items-center justify-between">
+            <li className="font-semibold p-2">Dược mỹ phẩm</li>
+            <MdKeyboardArrowDown
+              size={25}
+              className="transition-transform duration-300 ease-in-out group-hover:rotate-180 group-hover:text-[#1250dc]"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <li className="font-semibold p-2">Thuốc</li>
+            <MdKeyboardArrowDown
+              size={25}
+              className="transition-transform duration-300 ease-in-out group-hover:rotate-180 group-hover:text-[#1250dc]"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <li className="font-semibold p-2">Chăm sóc cá nhân</li>
+            <MdKeyboardArrowDown
+              size={25}
+              className="transition-transform duration-300 ease-in-out group-hover:rotate-180 group-hover:text-[#1250dc]"
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <li className="font-semibold p-2">Thiết bị y tế</li>
+            <MdKeyboardArrowDown
+              size={25}
+              className="transition-transform duration-300 ease-in-out group-hover:rotate-180 group-hover:text-[#1250dc]"
+            />
+          </div>
+          <li className="font-semibold p-2">Hệ thống nhà nước</li>
+        </ul>
       </div>
     </header>
   );
