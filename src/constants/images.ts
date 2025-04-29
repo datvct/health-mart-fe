@@ -8,6 +8,7 @@ import ImageHeader from "../../public/images/header/image-header.png"
 import FPTIDLogo from "../../public/images/logo-login-fpt.png"
 import LongChauLogo from "../../public/images/logo-login-long-chau.png"
 import ImageLogo from "../../public/images/logo-long-chau.svg"
+import ImageError from "../../public/images/error-page/error_image.svg"
 
 import ImageMomo from "../../public/images/momo.png"
 import ImageZaloPay from "../../public/images/zalopay.png"
@@ -23,5 +24,6 @@ export const IMAGES = {
     ImageMomo,
     ImageIconChungNhan,
     ImageIconChungNhan2,
-    ImageZaloPay
+    ImageZaloPay,
+    ImageError
 }
