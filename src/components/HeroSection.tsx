@@ -52,6 +52,7 @@ const HeroSection = () => {
                       'https://cdn.nhathuoclongchau.com.vn/unsafe/828x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/H1_Desktop_805x246_da1e92a7c6.png'
                     }
                     alt="banner"
+                    className='rounded-2xl'
                     height={246}
                     width={805}
                   />
@@ -62,6 +63,7 @@ const HeroSection = () => {
                       'https://cdn.nhathuoclongchau.com.vn/unsafe/828x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Banner_Web_754f67cafc.jpg'
                     }
                     alt="banner"
+                    className='rounded-2xl'
                     height={246}
                     width={805}
                   />
@@ -72,6 +74,7 @@ const HeroSection = () => {
                       'https://cdn.nhathuoclongchau.com.vn/unsafe/828x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Banner_Web_754f67cafc.jpg'
                     }
                     alt="banner"
+                    className='rounded-2xl'
                     height={246}
                     width={805}
                   />
@@ -84,6 +87,7 @@ const HeroSection = () => {
                   'https://cdn.nhathuoclongchau.com.vn/unsafe/425x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Banner_Ung_Thu_1_185705d391.jpg'
                 }
                 alt="banner"
+                className='rounded-2xl'
                 height={117}
                 width={399}
               />
@@ -92,6 +96,7 @@ const HeroSection = () => {
                   'https://cdn.nhathuoclongchau.com.vn/unsafe/425x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/Banner_Ung_Thu_1_185705d391.jpg'
                 }
                 alt="banner"
+                className='rounded-2xl'
                 height={117}
                 width={399}
               />

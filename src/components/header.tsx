@@ -54,7 +54,7 @@ const Header = () => {
         <div className="flex gap-5">
           <div className="flex items-center gap-2 cursor-pointer group w-[120px]">
             <HiUser className="text-white group-hover:text-black" />
-            <a href="#" className="text-white font-medium group-hover:text-black">
+            <a href="/sign-in" className="text-white font-medium group-hover:text-black">
               Đăng nhập
             </a>
           </div>
