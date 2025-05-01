@@ -1,17 +1,8 @@
 import Header from '@/components/Header';
-// import { Geist, Geist_Mono } from 'next/font/google';
 import Footer from '../../components/Footer';
 import '../../styles/global.css';
-
-// const geistSans = Geist({
-//   variable: '--font-geist-sans',
-//   subsets: ['latin'],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: '--font-geist-mono',
-//   subsets: ['latin'],
-// });
+import Image from 'next/image';
+import { FOOTER } from '../../constants/images';
 
 export default function RootLayout({
   children,
@@ -19,12 +10,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
     <>
       <Header />
       <main className="bg-[#edf0f3] mx-auto px-2 sm:px-10 md:px-10">{children}</main>
+      <section>
+        <Image src={FOOTER.Footer_PC} alt='chân trang' className='hidden md:block lg:block xl:block 2xl:block'/>
+        <Image src={FOOTER.Footer_MB} alt='chân trang' className='block md:hidden lg:hidden xl:hidden 2xl:hidden'/>
+      </section>
       <Footer />
     </>
-    // </body>
   );
 }

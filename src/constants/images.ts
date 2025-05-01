@@ -12,6 +12,7 @@ import ImageError from '../../public/images/error-page/error_image.svg';
 
 import ImageMomo from '../../public/images/momo.png';
 import ImageZaloPay from '../../public/images/zalopay.png';
+
 import Banner_1_1_PC from '../../public/images/hero-section/desktop/banner-1/banner-1-1-PC.webp';
 import Banner_1_2_PC from '../../public/images/hero-section/desktop/banner-1/banner-1-2-PC.webp';
 import Banner_2_1_PC from '../../public/images/hero-section/desktop/banner-2/Banner_web_PC_2_1.webp';
@@ -24,6 +25,12 @@ import Banner_1_2_MB from '../../public/images/hero-section/mobile/banner-1/Bann
 import Banner_2_1_MB from '../../public/images/hero-section/mobile/banner-2/Banner_MB_2_1.webp';
 import Banner_2_2_MB from '../../public/images/hero-section/mobile/banner-2/Banner_MB_2_2.webp';
 import Banner_2_3_MB from '../../public/images/hero-section/mobile/banner-2/Banner_MB_2_3.webp';
+
+import Footer_MB from '../../public/images/footer/footer_MB.webp';
+import Footer_PC from '../../public/images/footer/footer_PC.jpg';
+import Footer_Certificate_1 from '../../public/images/footer/certificate/bo_cong_thuong_a8e5750f57.svg';
+import Footer_Certificate_2 from '../../public/images/footer/certificate/DMCA_1_1f84305343.svg';
+import Footer_Certificate_3 from '../../public/images/footer/certificate/legit_2_18f407eac4.svg';
 
 const IMAGES = {
   ImageHeader,
@@ -49,4 +56,10 @@ const HEROSECTION = {
   Banner_2_MB: [Banner_2_1_MB, Banner_2_2_MB, Banner_2_3_MB],
 };
 
-export { IMAGES, HEROSECTION };
+const FOOTER = {
+  Footer_MB,
+  Footer_PC,
+  Certificate: [Footer_Certificate_1, Footer_Certificate_2, Footer_Certificate_3],
+};
+
+export { IMAGES, HEROSECTION, FOOTER };
