@@ -1,5 +1,5 @@
-import { Button } from "antd";
-import Image from "next/image";
+import { Button } from 'antd';
+import Image from 'next/image';
 
 const ProductCard = () => {
   return (
@@ -8,15 +8,17 @@ const ProductCard = () => {
         <p className="text-white text-sm font-bold">-19.000đ</p>
       </div>
       <div className="pt-4 px-2 pb-2 flex flex-col gap-1">
-        <Image
-          src={
-            'https://cdn.nhathuoclongchau.com.vn/unsafe/256x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/00016524_nepro_1_gold_400g_5081_5e78_large_17ca9ce857.JPG'
-          }
-          alt="hình ảnh sản phẩm"
-          className="mb-3"
-          width={140}
-          height={140}
-        />
+        <div className='flex justify-center items-center'>
+          <Image
+            src={
+              'https://cdn.nhathuoclongchau.com.vn/unsafe/256x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/00016524_nepro_1_gold_400g_5081_5e78_large_17ca9ce857.JPG'
+            }
+            alt="hình ảnh sản phẩm"
+            className="mb-3"
+            width={140}
+            height={140}
+          />
+        </div>
         <p className="line-clamp-3 text-sm font-semibold">
           Sữa bột Nepro 1 Gold VitaDairy bổ sung dinh dưỡng giảm protein dành cho người bệnh đái
           tháo đường (400g)

@@ -1,22 +1,23 @@
-"use client";
-import { ChevronDown } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { IMAGES } from "../constants/images";
+'use client';
+import { ChevronDown } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { FOOTER } from '../constants/images';
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 const Footer = () => {
   return (
-    <footer className="bg-blue-600 text-white">
+    <footer className="bg-blue-600 text-white text-sm">
       {/* Phần Header */}
       <div className="container mx-auto px-4 py-4">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div className="flex items-center space-x-2">
-            <span className="text-xl">📍</span>
+            <FaMapMarkerAlt />
             <h1 className="text-lg font-bold text-left">
               Xem hệ thống 1965 nhà thuốc trên toàn quốc
             </h1>
           </div>
-          <button className="mt-4 md:mt-0 bg-white text-blue-600 py-2 px-4 rounded-lg font-medium hover:shadow-md hover:bg-gray-100">
+          <button className="mt-4 md:mt-0 bg-white text-blue-600 py-2 px-4 rounded-3xl font-medium hover:shadow-md hover:bg-gray-100">
             Xem danh sách nhà thuốc
           </button>
         </div>
@@ -221,20 +222,43 @@ const Footer = () => {
                   </Link>
                 </li>
 
+                <h2 className="font-bold mb-4">CHỨNG NHẬN BỞI</h2>
+                <div className="flex flex-wrap justify-start gap-1 items-center">
+                  <Image
+                    src={FOOTER.Certificate.Footer_Certificate_1}
+                    alt="Connect methods"
+                    width={25}
+                    height={10}
+                    className="cursor-pointer"
+                  />
+                  <Image
+                    src={FOOTER.Certificate.Footer_Certificate_2}
+                    alt="Connect methods"
+                    width={42}
+                    height={10}
+                    className="cursor-pointer"
+                  />
+                  <Image
+                    src={FOOTER.Certificate.Footer_Certificate_3}
+                    alt="Connect methods"
+                    width={90}
+                    height={33}
+                    className="cursor-pointer"
+                  />
+                </div>
+
                 <h2 className="font-bold mb-4">HỖ TRỢ THANH TOÁN</h2>
                 <div className="flex flex-wrap gap-4 justify-start">
-                  <Image
-                    src={IMAGES.ImageMomo}
-                    alt="Momo"
-                    width={60}
-                    height={40}
-                  />
-                  <Image
-                    src={IMAGES.ImageZaloPay}
-                    alt="ZaloPay"
-                    width={60}
-                    height={40}
-                  />
+                  {FOOTER.Payment.map((img, index) => (
+                    <Image
+                      key={index}
+                      src={img}
+                      alt="Connect methods"
+                      width={36}
+                      height={19}
+                      className="cursor-pointer"
+                    />
+                  ))}
                 </div>
               </ul>
             </div>
@@ -242,13 +266,17 @@ const Footer = () => {
             {/* Cột 5 - KẾT NỐI VỚI CHÚNG TÔI */}
             <div className="text-left">
               <h2 className="font-bold mb-4">KẾT NỐI VỚI CHÚNG TÔI</h2>
-              <div className="flex flex-col space-y-2">
-                <Link href="#" className="hover:underline text-blue-600">
-                  Facebook
-                </Link>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Zalo
-                </Link>
+              <div className="flex gap-2">
+                {FOOTER.Connect.map((img, index) => (
+                  <Image
+                    key={index}
+                    src={img}
+                    alt="Connect methods"
+                    width={28}
+                    height={28}
+                    className="cursor-pointer"
+                  />
+                ))}
               </div>
             </div>
           </div>
@@ -444,25 +472,29 @@ const Footer = () => {
               TỔNG ĐÀI (8:00-22:00)
               <ChevronDown className="transform transition-transform duration-300" size={20} />
             </summary>
-            <ul className="mt-2 ml-4 list-disc">
-              <li>Tư vấn mua hàng</li>
-              <li>
-                <Link href="tel:18006928" className="hover:underline text-blue-600">
-                  18006928 (Nhánh 1)
-                </Link>
-              </li>
-              <li className="mt-2">Trung tâm Vắc xin</li>
-              <li>
-                <Link href="tel:18006928" className="hover:underline text-blue-600">
-                  18006928 (Nhánh 2)
-                </Link>
-              </li>
-              <li className="mt-2">Góp ý, khiếu nại</li>
-              <li>
-                <Link href="tel:18006928" className="hover:underline text-blue-600">
-                  18006928 (Nhánh 3)
-                </Link>
-              </li>
+            <ul className="mt-2 flex justify-between">
+              <div>
+                <li>Tư vấn mua hàng</li>
+                <li className="mt-2">Trung tâm Vắc xin</li>
+                <li className="mt-2">Góp ý, khiếu nại</li>
+              </div>
+              <div>
+                <li>
+                  <Link href="tel:18006928" className="hover:underline text-blue-600">
+                    18006928 (Nhánh 1)
+                  </Link>
+                </li>
+                <li className="mt-2">
+                  <Link href="tel:18006928" className="hover:underline text-blue-600">
+                    18006928 (Nhánh 2)
+                  </Link>
+                </li>
+                <li className="mt-2">
+                  <Link href="tel:18006928" className="hover:underline text-blue-600">
+                    18006928 (Nhánh 3)
+                  </Link>
+                </li>
+              </div>
             </ul>
           </details>
 
@@ -472,19 +504,17 @@ const Footer = () => {
               KẾT NỐI VỚI CHÚNG TÔI
               <ChevronDown className="transform transition-transform duration-300" size={20} />
             </summary>
-            <div className="mt-2 ml-4">
-              <ul className="list-disc">
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Facebook
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Zalo
-                  </Link>
-                </li>
-              </ul>
+            <div className="mt-2 flex gap-2">
+              {FOOTER.Connect.map((img, index) => (
+                <Image
+                  key={index}
+                  src={img}
+                  alt="Connect methods"
+                  width={28}
+                  height={28}
+                  className="cursor-pointer"
+                />
+              ))}
             </div>
           </details>
 
@@ -494,32 +524,39 @@ const Footer = () => {
               CHỨNG NHẬN BỞI & HỖ TRỢ THANH TOÁN
               <ChevronDown className="transform transition-transform duration-300" size={20} />
             </summary>
-            <div className="mt-2 ml-4">
-              <div className="flex flex-wrap gap-2 justify-start">
+            <div className="mt-2">
+              <div className="grid grid-cols-3 gap-2 place-items-center">
                 <Image
-                  src={IMAGES.ImageIconChungNhan}
-                  alt="Chứng nhận"
-                  width={60}
-                  height={40}
+                  src={FOOTER.Certificate.Footer_Certificate_1}
+                  alt="Connect methods"
+                  width={96}
+                  height={56}
+                  className="cursor-pointer"
                 />
                 <Image
-                  src={IMAGES.ImageIconChungNhan2}
-                  alt="Bảo mật thanh toán"
-                  width={80}
-                  height={40}
+                  src={FOOTER.Certificate.Footer_Certificate_2}
+                  alt="Connect methods"
+                  width={96}
+                  height={56}
+                  className="cursor-pointer"
                 />
                 <Image
-                  src={IMAGES.ImageMomo}
-                  alt="Momo"
-                  width={60}
-                  height={40}
+                  src={FOOTER.Certificate.Footer_Certificate_3}
+                  alt="Connect methods"
+                  width={96}
+                  height={56}
+                  className="cursor-pointer"
                 />
-                <Image
-                  src={IMAGES.ImageZaloPay}
-                  alt="ZaloPay"
-                  width={60}
-                  height={40}
-                />
+                {FOOTER.Payment.map((img, index) => (
+                  <Image
+                    key={index}
+                    src={img}
+                    alt="Connect methods"
+                    width={36}
+                    height={19}
+                    className="cursor-pointer"
+                  />
+                ))}
               </div>
             </div>
           </details>
@@ -533,15 +570,13 @@ const Footer = () => {
           <br />
           Số ĐKKD 0315275368 cấp ngày 17/09/2018 tại Sở Kế hoạch Đầu tư TPHCM
           <div className="mt-3 space-y-1">
+            <p>Địa chỉ: 379-381 Hai Bà Trưng, P. Võ Thị Sáu, Q.3, TP. HCM</p>
             <p>
-              Địa chỉ: 379-381 Hai Bà Trưng, P. Võ Thị Sáu, Q.3, TP. HCM
-            </p>
-            <p>
-              Điện thoại:{" "}
+              Điện thoại:{' '}
               <Link href="tel:02873023456" className="hover:underline text-blue-600">
                 02873023456
-              </Link>{" "}
-              • Email:{" "}
+              </Link>{' '}
+              • Email:{' '}
               <Link
                 href="mailto:sale@nhathuoclongchau.com.vn"
                 className="hover:underline text-blue-600"
