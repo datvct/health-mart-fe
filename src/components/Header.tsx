@@ -40,9 +40,9 @@ const Header = () => {
       <div
         className={`hidden md:flex lg:flex xl:flex 2xl:flex py-10 px-10 justify-center gap-10 items-center bg-[url(/images/header/image-header.png)] bg-cover bg-center`}
       >
-        <a href="">
+        <Link href="/">
           <Image src={IMAGES.ImageLogo} alt="Logo" />
-        </a>
+        </Link>
         <Search
           className="w-[650px]"
           placeholder="Tìm tên thuốc, bệnh lý, TCNP,..."
@@ -104,7 +104,6 @@ const Header = () => {
               size={25}
               className="transition-transform duration-300 ease-in-out  group-hover:rotate-180 group-hover:text-[#1250dc]"
             />
-            <div className="bg-[#767d91] w-[100%] absolute top-10 left-0 p-4 cursor-pointer opacity-50 z-0 inset-0 h-[100vh] hidden group-hover:flex"></div>
             <div className="bg-[white] z-10 top-10 absolute w-[91%] group-hover:flex p-4 rounded-b-2xl hidden">
               <div className="w-1/4 flex flex-col">
                 <div className="flex gap-2 items-center rounded-l-xl bg-[#ffffff] hover:bg-[#EDF0F3] p-3 hover:border border-[#dce0e4] cursor-pointer">

@@ -1,11 +1,12 @@
-'use client';
 import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FOOTER } from '../constants/images';
 import { FaMapMarkerAlt } from 'react-icons/fa';
+import { productApi } from '../lib/apis/product';
 
-const Footer = () => {
+const Footer = async () => {
+  const data = await productApi.getListPharmacyStocks();
   return (
     <footer className="bg-blue-600 text-white text-sm">
       {/* Phần Header */}
@@ -14,12 +15,12 @@ const Footer = () => {
           <div className="flex items-center space-x-2">
             <FaMapMarkerAlt />
             <h1 className="text-lg font-bold text-left">
-              Xem hệ thống 1965 nhà thuốc trên toàn quốc
+              Xem hệ thống {data.data.length} nhà thuốc trên toàn quốc
             </h1>
           </div>
-          <button className="mt-4 md:mt-0 bg-white text-blue-600 py-2 px-4 rounded-3xl font-medium hover:shadow-md hover:bg-gray-100">
+          <Link className="mt-4 md:mt-0 bg-white text-blue-600 py-2 px-4 rounded-3xl font-medium hover:shadow-md hover:bg-gray-100" href="/he-thong-cua-hang">
             Xem danh sách nhà thuốc
-          </button>
+          </Link>
         </div>
       </div>
 
