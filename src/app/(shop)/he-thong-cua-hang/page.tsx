@@ -69,148 +69,158 @@ const NhaThuocPage = () => {
         slug={['he-thong-cua-hang']}
         customTitles={{ 'he-thong-cua-hang': 'Hệ thống cửa hàng' }}
       />
-      <h1>Hệ thống nhà thuốc trên toàn quốc</h1>
-      <p>Thời gian hoạt động: 6:00 - 23:00 hằng ngày (Thay đổi tùy theo từng nhà thuốc)</p>
-      <div className="flex gap-4">
-        <div className="bg-white w-1/3 p-5 rounded-2xl">
-          <p>Tìm kiếm nhà thuốc</p>
-          <Search placeholder="Tìm bằng tên đường và tỉnh thành" onSearch={onSearch} enterButton />
-          <div>
-            <div></div>
-            <p>Hoặc</p>
-            <div></div>
-          </div>
-          <Select
-            placeholder="Chọn Tỉnh/Thành"
-            onChange={handleProvinceChange}
-            options={provinces.map((province) => ({
-              label: province.name,
-              value: province.code,
-            }))}
-          />
-          <Select
-            placeholder="Chọn Quận/Huyện"
-            disabled={!selectedProvinceCode}
-            options={districts.map((district) => ({
-              label: district.name,
-              value: district.code,
-            }))}
-          />
-          <div>
-            <p>Nhà thuốc gợi ý</p>
-            <Radio.Group
-              onChange={onChange}
-              value={value}
-              style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
-            >
-              {allOptions.slice(0, visibleCount).map((opt) => (
-                <Radio key={opt.value} value={opt.value}>
-                  {opt.label}
-                </Radio>
-              ))}
-
-              {visibleCount < allOptions.length && (
-                <Button>
-                  <span onClick={handleLoadMore} style={{ cursor: 'pointer', color: '#1890ff' }}>
-                    Xem thêm nhà thuốc
-                  </span>
-                </Button>
-              )}
-            </Radio.Group>
-          </div>
-        </div>
-        <div className="bg-white w-2/3 p-5 rounded-2xl">
-          <p>
-            Long Châu là hệ thống nhà thuốc bán lẻ & phân phối trải khắp 63 tỉnh thành luôn luôn mở
-            rộng để phục vụ Khách hàng trên toàn quốc, cung cấp dịch vụ bán hàng và phục vụ hàng
-            đầu:
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-xl font-semibold">Hệ thống nhà thuốc trên toàn quốc</h1>
+          <p className="text-[#4a4f63] text-sm">
+            Thời gian hoạt động: 6:00 - 23:00 hằng ngày (Thay đổi tùy theo từng nhà thuốc)
           </p>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex gap-2 items-start">
-              <Image
-                src={PHARMACY_SHOP.PHARMACY_SHOP_1}
-                alt="nhà thuốc icon"
-                width={32}
-                height={32}
-              ></Image>
-              <div>
-                <h3>Nhà thuốc chính hãng</h3>
-                <p>Sở hữu danh mục thuốc chính hãng vừa đa dạng, phong phú lại vừa chuyên sâu.</p>
-              </div>
+        </div>
+        <div className="flex gap-4">
+          <div className="bg-white w-1/3 p-5 rounded-2xl flex flex-col gap-2">
+            <p className='font-medium text-[#020b27] border-b'>Tìm kiếm nhà thuốc</p>
+            <Search
+              placeholder="Tìm bằng tên đường và tỉnh thành"
+              onSearch={onSearch}
+              enterButton
+            />
+            <div className='flex items-center justify-center gap-2'>
+              <div className='border w-2/3'></div>
+              <p className='text-center text-sm'>Hoặc</p>
+              <div className='border w-2/3'></div>
             </div>
-            <div className="flex gap-2 items-start">
-              <Image
-                src={PHARMACY_SHOP.PHARMACY_SHOP_2}
-                alt="nhà thuốc icon"
-                width={32}
-                height={32}
-              ></Image>
-              <div>
-                <h3>Chuyên thuốc theo toa</h3>
-                <p>
-                  Long Châu có đầy đủ các loại thuốc để có thể đáp đứng đầy đủ nhu cầu của người
-                  dùng.
-                </p>
-              </div>
+            <Select
+              placeholder="Chọn Tỉnh/Thành"
+              onChange={handleProvinceChange}
+              options={provinces.map((province) => ({
+                label: province.name,
+                value: province.code,
+              }))}
+            />
+            <Select
+              placeholder="Chọn Quận/Huyện"
+              disabled={!selectedProvinceCode}
+              options={districts.map((district) => ({
+                label: district.name,
+                value: district.code,
+              }))}
+            />
+            <div>
+              <p>Nhà thuốc gợi ý</p>
+              <Radio.Group
+                onChange={onChange}
+                value={value}
+                style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
+              >
+                {allOptions.slice(0, visibleCount).map((opt) => (
+                  <Radio key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </Radio>
+                ))}
+
+                {visibleCount < allOptions.length && (
+                  <Button>
+                    <span onClick={handleLoadMore} style={{ cursor: 'pointer', color: '#1890ff' }}>
+                      Xem thêm nhà thuốc
+                    </span>
+                  </Button>
+                )}
+              </Radio.Group>
             </div>
-            <div className="flex gap-2 items-start">
-              <Image
-                src={PHARMACY_SHOP.PHARMACY_SHOP_3}
-                alt="nhà thuốc icon"
-                width={32}
-                height={32}
-              ></Image>
-              <div>
-                <h3>Dược sĩ tư vấn tại chỗ</h3>
-                <p>
-                  Với kinh nghiệm và chuyên môn cao với 4 tiêu chí: đúng thuốc, đúng liều, đúng cách
-                  và đúng giá.
-                </p>
+          </div>
+          <div className="bg-white w-2/3 p-5 rounded-2xl text-[#4a4f63] text-sm flex flex-col gap-4">
+            <p>
+              Long Châu là hệ thống nhà thuốc bán lẻ & phân phối trải khắp 63 tỉnh thành luôn luôn
+              mở rộng để phục vụ Khách hàng trên toàn quốc, cung cấp dịch vụ bán hàng và phục vụ
+              hàng đầu:
+            </p>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex gap-2 items-start">
+                <Image
+                  src={PHARMACY_SHOP.PHARMACY_SHOP_1}
+                  alt="nhà thuốc icon"
+                  width={32}
+                  height={32}
+                ></Image>
+                <div>
+                  <h3 className='font-semibold'>Nhà thuốc chính hãng</h3>
+                  <p>Sở hữu danh mục thuốc chính hãng vừa đa dạng, phong phú lại vừa chuyên sâu.</p>
+                </div>
               </div>
-            </div>
-            <div className="flex gap-2 items-start">
-              <Image
-                src={PHARMACY_SHOP.PHARMACY_SHOP_4}
-                alt="nhà thuốc icon"
-                width={32}
-                height={32}
-              ></Image>
-              <div>
-                <h3>Mua lẻ với giá sỉ</h3>
-                <p>
-                  Sản phẩm đúng chất lượng với giá thấp hơn so với thị trường chung, tương đương với
-                  giá bán sỉ.
-                </p>
+              <div className="flex gap-2 items-start">
+                <Image
+                  src={PHARMACY_SHOP.PHARMACY_SHOP_2}
+                  alt="nhà thuốc icon"
+                  width={32}
+                  height={32}
+                ></Image>
+                <div>
+                  <h3 className='font-semibold'>Chuyên thuốc theo toa</h3>
+                  <p>
+                    Long Châu có đầy đủ các loại thuốc để có thể đáp đứng đầy đủ nhu cầu của người
+                    dùng.
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="flex gap-2 items-start">
-              <Image
-                src={PHARMACY_SHOP.PHARMACY_SHOP_5}
-                alt="nhà thuốc icon"
-                width={32}
-                height={32}
-              ></Image>
-              <div>
-                <h3>Giao hàng tận nơi</h3>
-                <p>
-                  Giao hàng cực nhanh trong khu vực Tp.HCM và chuyển hàng đến tận nhà tại các tỉnh
-                  thành khác.
-                </p>
+              <div className="flex gap-2 items-start">
+                <Image
+                  src={PHARMACY_SHOP.PHARMACY_SHOP_3}
+                  alt="nhà thuốc icon"
+                  width={32}
+                  height={32}
+                ></Image>
+                <div>
+                  <h3 className='font-semibold'>Dược sĩ tư vấn tại chỗ</h3>
+                  <p>
+                    Với kinh nghiệm và chuyên môn cao với 4 tiêu chí: đúng thuốc, đúng liều, đúng
+                    cách và đúng giá.
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="flex gap-2 items-start">
-              <Image
-                src={PHARMACY_SHOP.PHARMACY_SHOP_6}
-                alt="nhà thuốc icon"
-                width={32}
-                height={32}
-              ></Image>
-              <div>
-                <h3>Đổi trả nguyên giá</h3>
-                <p>
-                  Chỉ cần đọc SĐT hoặc giữ lại hóa đơn, bạn sẽ được đổi trả / hoàn tiền đã mua trong
-                  vòng 30 ngày.
-                </p>
+              <div className="flex gap-2 items-start">
+                <Image
+                  src={PHARMACY_SHOP.PHARMACY_SHOP_4}
+                  alt="nhà thuốc icon"
+                  width={32}
+                  height={32}
+                ></Image>
+                <div>
+                  <h3 className='font-semibold'>Mua lẻ với giá sỉ</h3>
+                  <p>
+                    Sản phẩm đúng chất lượng với giá thấp hơn so với thị trường chung, tương đương
+                    với giá bán sỉ.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2 items-start">
+                <Image
+                  src={PHARMACY_SHOP.PHARMACY_SHOP_5}
+                  alt="nhà thuốc icon"
+                  width={32}
+                  height={32}
+                ></Image>
+                <div>
+                  <h3 className='font-semibold'>Giao hàng tận nơi</h3>
+                  <p>
+                    Giao hàng cực nhanh trong khu vực Tp.HCM và chuyển hàng đến tận nhà tại các tỉnh
+                    thành khác.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2 items-start">
+                <Image
+                  src={PHARMACY_SHOP.PHARMACY_SHOP_6}
+                  alt="nhà thuốc icon"
+                  width={32}
+                  height={32}
+                ></Image>
+                <div>
+                  <h3 className='font-semibold'>Đổi trả nguyên giá</h3>
+                  <p>
+                    Chỉ cần đọc SĐT hoặc giữ lại hóa đơn, bạn sẽ được đổi trả / hoàn tiền đã mua
+                    trong vòng 30 ngày.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

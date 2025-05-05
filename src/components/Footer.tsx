@@ -6,7 +6,16 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 import { productApi } from '../lib/apis/product';
 
 const Footer = async () => {
-  const data = await productApi.getListPharmacyStocks();
+  let data = null;
+
+  try {
+    const response = await productApi.getListPharmacyStocks();
+    data = response.data;
+  } catch (error) {
+    console.log('Failed to fetch pharmacy stocks:', error);
+  }
+
+  const pharmacyCount = data?.length ?? 0;
   return (
     <footer className="bg-blue-600 text-white text-sm">
       {/* Phần Header */}
@@ -15,7 +24,7 @@ const Footer = async () => {
           <div className="flex items-center space-x-2">
             <FaMapMarkerAlt />
             <h1 className="text-lg font-bold text-left">
-              Xem hệ thống {data.data.length} nhà thuốc trên toàn quốc
+              Xem hệ thống {pharmacyCount} nhà thuốc trên toàn quốc
             </h1>
           </div>
           <Link className="mt-4 md:mt-0 bg-white text-blue-600 py-2 px-4 rounded-3xl font-medium hover:shadow-md hover:bg-gray-100" href="/he-thong-cua-hang">
