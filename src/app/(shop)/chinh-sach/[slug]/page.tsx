@@ -8,7 +8,8 @@ interface PageProps {
   params: { slug: string };
 }
 
-export default async function ChinhSachPage({ params: { slug } }: PageProps) {
+export default async function ChinhSachPage({ params }: PageProps) {
+  const { slug } = await params;
   const policies = await policyApi.getListPolicy();
   const selectedPolicy =
     policies.find((p: Policy) => p.slug === slug) ||
