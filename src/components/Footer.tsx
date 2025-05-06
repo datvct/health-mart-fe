@@ -1,12 +1,17 @@
-import { ChevronDown } from 'lucide-react';
+import { Collapse } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FOOTER } from '../constants/images';
 import { FaMapMarkerAlt } from 'react-icons/fa';
+import { FOOTER } from '../constants/images';
+import { policyApi } from '../lib/apis/policy';
 import { productApi } from '../lib/apis/product';
+
+const { Panel } = Collapse;
 
 const Footer = async () => {
   const data = await productApi.getListPharmacyStocks();
+  const dataPolicy = await policyApi.getListPolicy();
+  
   return (
     <footer className="bg-blue-600 text-white text-sm">
       {/* Phần Header */}
@@ -33,76 +38,16 @@ const Footer = async () => {
             <div className="text-left">
               <h2 className="font-bold mb-4">VỀ CHÚNG TÔI</h2>
               <ul className="space-y-2">
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Giới thiệu
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Hệ thống cửa hàng
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Giấy phép kinh doanh
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Quy chế hoạt động
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Chính sách đặt cọc
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Chính sách nội dung
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Chính sách đối trả thuốc
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Chính sách giao hàng
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Chính sách bảo mật dữ liệu cá nhân khách hàng
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Chính sách thanh toán
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Kiểm tra hóa đơn điện tử
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Chính sách thu thập và xử lý dữ liệu cá nhân
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Chính sách hoàn hủy đổi trả Vắc xin
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:underline text-blue-600">
-                    Thông tin trung tâm bảo hành máy thiết bị y tế từng hãng
-                  </Link>
-                </li>
+                {dataPolicy.map((item: any) => (
+                  <li key={item.slug}>
+                    <Link
+                      href={`/chinh-sach/${item.slug}`}
+                      className="hover:underline text-blue-600"
+                    >
+                      {item.title}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -287,282 +232,125 @@ const Footer = async () => {
       {/* Mobile version */}
       <div className="bg-white text-gray-700 py-4 block md:hidden">
         <div className="container mx-auto px-4 text-sm space-y-4">
-          {/* VỀ CHÚNG TÔI */}
-          <details className="border-b pb-2">
-            <summary className="flex justify-between items-center text-left font-bold cursor-pointer">
-              VỀ CHÚNG TÔI
-              <ChevronDown className="transform transition-transform duration-300" size={20} />
-            </summary>
-            <ul className="mt-2 ml-4 list-disc">
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Giới thiệu
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Hệ thống cửa hàng
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Giấy phép kinh doanh
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Quy chế hoạt động
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Chính sách đặt cọc
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Chính sách nội dung
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Chính sách đối trả thuốc
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Chính sách giao hàng
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Chính sách bảo mật dữ liệu cá nhân khách hàng
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Chính sách thanh toán
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Kiểm tra hóa đơn điện tử
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Chính sách thu thập và xử lý dữ liệu cá nhân
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline">
-                  Chính sách hoàn hủy đổi trả Vắc xin
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Thông tin trung tâm bảo hành máy thiết bị y tế từng hãng
-                </Link>
-              </li>
-            </ul>
-          </details>
-
-          {/* DANH MỤC */}
-          <details className="border-b pb-2">
-            <summary className="flex justify-between items-center text-left font-bold cursor-pointer">
-              DANH MỤC
-              <ChevronDown className="transform transition-transform duration-300" size={20} />
-            </summary>
-            <ul className="mt-2 ml-4 list-disc">
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Thực phẩm chức năng
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Dược mỹ phẩm
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Thuốc
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Chăm sóc cá nhân
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Trang thiết bị y tế
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Đặt thuốc online
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Trung tâm Tiêm chủng
-                </Link>
-              </li>
-            </ul>
-          </details>
-
-          {/* TÌM HIỂU THÊM */}
-          <details className="border-b pb-2">
-            <summary className="flex justify-between items-center text-left font-bold cursor-pointer">
-              TÌM HIỂU THÊM
-              <ChevronDown className="transform transition-transform duration-300" size={20} />
-            </summary>
-            <ul className="mt-2 ml-4 list-disc">
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Góc sức khỏe
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Tra cứu thuốc
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Tra cứu dược chất
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Tra cứu dược liệu
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Bệnh thường gặp
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Bệnh viện
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Đội ngũ chuyên môn
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Tin tức tuyển dụng
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:underline text-blue-600">
-                  Tin tức sự kiện
-                </Link>
-              </li>
-            </ul>
-          </details>
-
-          {/* TỔNG ĐÀI & THANH TOÁN */}
-          <details className="border-b pb-2">
-            <summary className="flex justify-between items-center text-left font-bold cursor-pointer">
-              TỔNG ĐÀI (8:00-22:00)
-              <ChevronDown className="transform transition-transform duration-300" size={20} />
-            </summary>
-            <ul className="mt-2 flex justify-between">
-              <div>
-                <li>Tư vấn mua hàng</li>
-                <li className="mt-2">Trung tâm Vắc xin</li>
-                <li className="mt-2">Góp ý, khiếu nại</li>
-              </div>
-              <div>
-                <li>
-                  <Link href="tel:18006928" className="hover:underline text-blue-600">
-                    18006928 (Nhánh 1)
-                  </Link>
-                </li>
-                <li className="mt-2">
-                  <Link href="tel:18006928" className="hover:underline text-blue-600">
-                    18006928 (Nhánh 2)
-                  </Link>
-                </li>
-                <li className="mt-2">
-                  <Link href="tel:18006928" className="hover:underline text-blue-600">
-                    18006928 (Nhánh 3)
-                  </Link>
-                </li>
-              </div>
-            </ul>
-          </details>
-
-          {/* KẾT NỐI VỚI CHÚNG TÔI */}
-          <details className="border-b pb-2">
-            <summary className="flex justify-between items-center text-left font-bold cursor-pointer">
-              KẾT NỐI VỚI CHÚNG TÔI
-              <ChevronDown className="transform transition-transform duration-300" size={20} />
-            </summary>
-            <div className="mt-2 flex gap-2">
-              {FOOTER.Connect.map((img, index) => (
-                <Image
-                  key={index}
-                  src={img}
-                  alt="Connect methods"
-                  width={28}
-                  height={28}
-                  className="cursor-pointer"
-                />
-              ))}
-            </div>
-          </details>
-
-          {/* CHỨNG NHẬN BỞI & HỖ TRỢ THANH TOÁN */}
-          <details className="border-b pb-2">
-            <summary className="flex justify-between items-center text-left font-bold cursor-pointer">
-              CHỨNG NHẬN BỞI & HỖ TRỢ THANH TOÁN
-              <ChevronDown className="transform transition-transform duration-300" size={20} />
-            </summary>
-            <div className="mt-2">
-              <div className="grid grid-cols-3 gap-2 place-items-center">
-                <Image
-                  src={FOOTER.Certificate.Footer_Certificate_1}
-                  alt="Connect methods"
-                  width={96}
-                  height={56}
-                  className="cursor-pointer"
-                />
-                <Image
-                  src={FOOTER.Certificate.Footer_Certificate_2}
-                  alt="Connect methods"
-                  width={96}
-                  height={56}
-                  className="cursor-pointer"
-                />
-                <Image
-                  src={FOOTER.Certificate.Footer_Certificate_3}
-                  alt="Connect methods"
-                  width={96}
-                  height={56}
-                  className="cursor-pointer"
-                />
-                {FOOTER.Payment.map((img, index) => (
-                  <Image
-                    key={index}
-                    src={img}
-                    alt="Connect methods"
-                    width={36}
-                    height={19}
-                    className="cursor-pointer"
-                  />
-                ))}
-              </div>
-            </div>
-          </details>
+          <Collapse
+          ghost
+          expandIconPosition="end"
+          items={[
+            {
+              key: '1',
+              label: 'VỀ CHÚNG TÔI',
+              children: (
+                <ul className="ml-4 list-disc">
+                  {dataPolicy.map((item: any) => (
+                    <li key={item.slug}>
+                      <Link href={`/chinh-sach/${item.slug}`} className="hover:underline text-blue-600">
+                        {item.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ),
+            },
+            {
+              key: '2',
+              label: 'DANH MỤC',
+              children: (
+                <ul className="ml-4 list-disc space-y-1">
+                  {[
+                    'Thực phẩm chức năng',
+                    'Dược mỹ phẩm',
+                    'Thuốc',
+                    'Chăm sóc cá nhân',
+                    'Trang thiết bị y tế',
+                    'Đặt thuốc online',
+                    'Trung tâm Tiêm chủng',
+                  ].map((item) => (
+                    <li key={item}>
+                      <Link href="#" className="hover:underline text-blue-600">
+                        {item}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ),
+            },
+            {
+              key: '3',
+              label: 'TÌM HIỂU THÊM',
+              children: (
+                <ul className="ml-4 list-disc space-y-1">
+                  {[
+                    'Góc sức khỏe',
+                    'Tra cứu thuốc',
+                    'Tra cứu dược chất',
+                    'Tra cứu dược liệu',
+                    'Bệnh thường gặp',
+                    'Bệnh viện',
+                    'Đội ngũ chuyên môn',
+                    'Tin tức tuyển dụng',
+                    'Tin tức sự kiện',
+                  ].map((item) => (
+                    <li key={item}>
+                      <Link href="#" className="hover:underline text-blue-600">
+                        {item}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ),
+            },
+            {
+              key: '4',
+              label: 'TỔNG ĐÀI (8:00-22:00)',
+              children: (
+                <div className="flex justify-between">
+                  <div className="space-y-2">
+                    <div>Tư vấn mua hàng</div>
+                    <div className="space-y-2 text-blue-600">
+                      <Link href="tel:18006928">18006928 (Nhánh 1)</Link>
+                    </div>
+                    <div>Trung tâm Vắc xin</div>
+                    <div className="space-y-2 text-blue-600">
+                      <Link href="tel:18006928">18006928 (Nhánh 2)</Link>
+                    </div>
+                    <div>Góp ý, khiếu nại</div>
+                    <div className="space-y-2 text-blue-600">
+                      <Link href="tel:18006928">18006928 (Nhánh 3)</Link>
+                    </div>
+                  </div>   
+                </div>
+              ),
+            },
+            {
+              key: '5',
+              label: 'KẾT NỐI VỚI CHÚNG TÔI',
+              children: (
+                <div className="flex gap-2">
+                  {FOOTER.Connect.map((img, index) => (
+                    <Image key={index} src={img} alt="Connect" width={28} height={28} />
+                  ))}
+                </div>
+              ),
+            },
+            {
+              key: '6',
+              label: 'CHỨNG NHẬN & THANH TOÁN',
+              children: (
+                <div className="grid grid-cols-3 gap-2 place-items-center">
+                  <Image src={FOOTER.Certificate.Footer_Certificate_1} alt="" width={96} height={56} />
+                  <Image src={FOOTER.Certificate.Footer_Certificate_2} alt="" width={96} height={56} />
+                  <Image src={FOOTER.Certificate.Footer_Certificate_3} alt="" width={96} height={56} />
+                  {FOOTER.Payment.map((img, index) => (
+                    <Image key={index} src={img} alt="Payment" width={36} height={19} />
+                  ))}
+                </div>
+              ),
+            },
+          ]}
+      />
         </div>
       </div>
+
 
       {/* Footer cuối – thông tin liên hệ */}
       <div className="bg-white text-gray-700 py-4 px-4">
