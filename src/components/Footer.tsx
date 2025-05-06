@@ -5,13 +5,21 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 import { FOOTER } from '../constants/images';
 import { policyApi } from '../lib/apis/policy';
 import { productApi } from '../lib/apis/product';
-
-const { Panel } = Collapse;
+import { Policy } from '../lib/types/policies/type';
 
 const Footer = async () => {
-  const data = await productApi.getListPharmacyStocks();
   const dataPolicy = await policyApi.getListPolicy();
-  
+
+  let data = null;
+
+  try {
+    const response = await productApi.getListPharmacyStocks();
+    data = response.data;
+  } catch (error) {
+    console.log('Failed to fetch pharmacy stocks:', error);
+  }
+
+  const pharmacyCount = data?.length ?? 0;
   return (
     <footer className="bg-blue-600 text-white text-sm">
       {/* Phần Header */}
@@ -20,10 +28,13 @@ const Footer = async () => {
           <div className="flex items-center space-x-2">
             <FaMapMarkerAlt />
             <h1 className="text-lg font-bold text-left">
-              Xem hệ thống {data.data.length} nhà thuốc trên toàn quốc
+              Xem hệ thống {pharmacyCount} nhà thuốc trên toàn quốc
             </h1>
           </div>
-          <Link className="mt-4 md:mt-0 bg-white text-blue-600 py-2 px-4 rounded-3xl font-medium hover:shadow-md hover:bg-gray-100" href="/he-thong-cua-hang">
+          <Link
+            className="mt-4 md:mt-0 bg-white text-blue-600 py-2 px-4 rounded-3xl font-medium hover:shadow-md hover:bg-gray-100"
+            href="/he-thong-cua-hang"
+          >
             Xem danh sách nhà thuốc
           </Link>
         </div>
@@ -38,7 +49,7 @@ const Footer = async () => {
             <div className="text-left">
               <h2 className="font-bold mb-4">VỀ CHÚNG TÔI</h2>
               <ul className="space-y-2">
-                {dataPolicy.map((item: any) => (
+                {dataPolicy.map((item: Policy) => (
                   <li key={item.slug}>
                     <Link
                       href={`/chinh-sach/${item.slug}`}
@@ -233,124 +244,141 @@ const Footer = async () => {
       <div className="bg-white text-gray-700 py-4 block md:hidden">
         <div className="container mx-auto px-4 text-sm space-y-4">
           <Collapse
-          ghost
-          expandIconPosition="end"
-          items={[
-            {
-              key: '1',
-              label: 'VỀ CHÚNG TÔI',
-              children: (
-                <ul className="ml-4 list-disc">
-                  {dataPolicy.map((item: any) => (
-                    <li key={item.slug}>
-                      <Link href={`/chinh-sach/${item.slug}`} className="hover:underline text-blue-600">
-                        {item.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              ),
-            },
-            {
-              key: '2',
-              label: 'DANH MỤC',
-              children: (
-                <ul className="ml-4 list-disc space-y-1">
-                  {[
-                    'Thực phẩm chức năng',
-                    'Dược mỹ phẩm',
-                    'Thuốc',
-                    'Chăm sóc cá nhân',
-                    'Trang thiết bị y tế',
-                    'Đặt thuốc online',
-                    'Trung tâm Tiêm chủng',
-                  ].map((item) => (
-                    <li key={item}>
-                      <Link href="#" className="hover:underline text-blue-600">
-                        {item}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              ),
-            },
-            {
-              key: '3',
-              label: 'TÌM HIỂU THÊM',
-              children: (
-                <ul className="ml-4 list-disc space-y-1">
-                  {[
-                    'Góc sức khỏe',
-                    'Tra cứu thuốc',
-                    'Tra cứu dược chất',
-                    'Tra cứu dược liệu',
-                    'Bệnh thường gặp',
-                    'Bệnh viện',
-                    'Đội ngũ chuyên môn',
-                    'Tin tức tuyển dụng',
-                    'Tin tức sự kiện',
-                  ].map((item) => (
-                    <li key={item}>
-                      <Link href="#" className="hover:underline text-blue-600">
-                        {item}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              ),
-            },
-            {
-              key: '4',
-              label: 'TỔNG ĐÀI (8:00-22:00)',
-              children: (
-                <div className="flex justify-between">
-                  <div className="space-y-2">
-                    <div>Tư vấn mua hàng</div>
-                    <div className="space-y-2 text-blue-600">
-                      <Link href="tel:18006928">18006928 (Nhánh 1)</Link>
+            ghost
+            expandIconPosition="end"
+            items={[
+              {
+                key: '1',
+                label: 'VỀ CHÚNG TÔI',
+                children: (
+                  <ul className="ml-4 list-disc">
+                    {dataPolicy.map((item: Policy) => (
+                      <li key={item.slug}>
+                        <Link
+                          href={`/chinh-sach/${item.slug}`}
+                          className="hover:underline text-blue-600"
+                        >
+                          {item.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ),
+              },
+              {
+                key: '2',
+                label: 'DANH MỤC',
+                children: (
+                  <ul className="ml-4 list-disc space-y-1">
+                    {[
+                      'Thực phẩm chức năng',
+                      'Dược mỹ phẩm',
+                      'Thuốc',
+                      'Chăm sóc cá nhân',
+                      'Trang thiết bị y tế',
+                      'Đặt thuốc online',
+                      'Trung tâm Tiêm chủng',
+                    ].map((item) => (
+                      <li key={item}>
+                        <Link href="#" className="hover:underline text-blue-600">
+                          {item}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ),
+              },
+              {
+                key: '3',
+                label: 'TÌM HIỂU THÊM',
+                children: (
+                  <ul className="ml-4 list-disc space-y-1">
+                    {[
+                      'Góc sức khỏe',
+                      'Tra cứu thuốc',
+                      'Tra cứu dược chất',
+                      'Tra cứu dược liệu',
+                      'Bệnh thường gặp',
+                      'Bệnh viện',
+                      'Đội ngũ chuyên môn',
+                      'Tin tức tuyển dụng',
+                      'Tin tức sự kiện',
+                    ].map((item) => (
+                      <li key={item}>
+                        <Link href="#" className="hover:underline text-blue-600">
+                          {item}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ),
+              },
+              {
+                key: '4',
+                label: 'TỔNG ĐÀI (8:00-22:00)',
+                children: (
+                  <div className="flex justify-between">
+                    <div className="space-y-2">
+                      <div>Tư vấn mua hàng</div>
+                      <div className="space-y-2 text-blue-600">
+                        <Link href="tel:18006928">18006928 (Nhánh 1)</Link>
+                      </div>
+                      <div>Trung tâm Vắc xin</div>
+                      <div className="space-y-2 text-blue-600">
+                        <Link href="tel:18006928">18006928 (Nhánh 2)</Link>
+                      </div>
+                      <div>Góp ý, khiếu nại</div>
+                      <div className="space-y-2 text-blue-600">
+                        <Link href="tel:18006928">18006928 (Nhánh 3)</Link>
+                      </div>
                     </div>
-                    <div>Trung tâm Vắc xin</div>
-                    <div className="space-y-2 text-blue-600">
-                      <Link href="tel:18006928">18006928 (Nhánh 2)</Link>
-                    </div>
-                    <div>Góp ý, khiếu nại</div>
-                    <div className="space-y-2 text-blue-600">
-                      <Link href="tel:18006928">18006928 (Nhánh 3)</Link>
-                    </div>
-                  </div>   
-                </div>
-              ),
-            },
-            {
-              key: '5',
-              label: 'KẾT NỐI VỚI CHÚNG TÔI',
-              children: (
-                <div className="flex gap-2">
-                  {FOOTER.Connect.map((img, index) => (
-                    <Image key={index} src={img} alt="Connect" width={28} height={28} />
-                  ))}
-                </div>
-              ),
-            },
-            {
-              key: '6',
-              label: 'CHỨNG NHẬN & THANH TOÁN',
-              children: (
-                <div className="grid grid-cols-3 gap-2 place-items-center">
-                  <Image src={FOOTER.Certificate.Footer_Certificate_1} alt="" width={96} height={56} />
-                  <Image src={FOOTER.Certificate.Footer_Certificate_2} alt="" width={96} height={56} />
-                  <Image src={FOOTER.Certificate.Footer_Certificate_3} alt="" width={96} height={56} />
-                  {FOOTER.Payment.map((img, index) => (
-                    <Image key={index} src={img} alt="Payment" width={36} height={19} />
-                  ))}
-                </div>
-              ),
-            },
-          ]}
-      />
+                  </div>
+                ),
+              },
+              {
+                key: '5',
+                label: 'KẾT NỐI VỚI CHÚNG TÔI',
+                children: (
+                  <div className="flex gap-2">
+                    {FOOTER.Connect.map((img, index) => (
+                      <Image key={index} src={img} alt="Connect" width={28} height={28} />
+                    ))}
+                  </div>
+                ),
+              },
+              {
+                key: '6',
+                label: 'CHỨNG NHẬN & THANH TOÁN',
+                children: (
+                  <div className="grid grid-cols-3 gap-2 place-items-center">
+                    <Image
+                      src={FOOTER.Certificate.Footer_Certificate_1}
+                      alt=""
+                      width={96}
+                      height={56}
+                    />
+                    <Image
+                      src={FOOTER.Certificate.Footer_Certificate_2}
+                      alt=""
+                      width={96}
+                      height={56}
+                    />
+                    <Image
+                      src={FOOTER.Certificate.Footer_Certificate_3}
+                      alt=""
+                      width={96}
+                      height={56}
+                    />
+                    {FOOTER.Payment.map((img, index) => (
+                      <Image key={index} src={img} alt="Payment" width={36} height={19} />
+                    ))}
+                  </div>
+                ),
+              },
+            ]}
+          />
         </div>
       </div>
-
 
       {/* Footer cuối – thông tin liên hệ */}
       <div className="bg-white text-gray-700 py-4 px-4">

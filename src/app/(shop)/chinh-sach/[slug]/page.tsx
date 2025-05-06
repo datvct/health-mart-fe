@@ -2,6 +2,7 @@
 import { policyApi } from '@/lib/apis/policy';
 import clsx from 'clsx';
 import Link from 'next/link';
+import { Policy } from '../../../../lib/types/policies/type';
 
 interface PageProps {
   params: { slug: string };
@@ -10,7 +11,7 @@ interface PageProps {
 export default async function ChinhSachPage({ params: { slug } }: PageProps) {
   const policies = await policyApi.getListPolicy();
   const selectedPolicy =
-    policies.find((p: any) => p.slug === slug) ||
+    policies.find((p: Policy) => p.slug === slug) ||
     (policies[0] ? policies[0] : null);
 
   if (!selectedPolicy) {
@@ -45,7 +46,7 @@ export default async function ChinhSachPage({ params: { slug } }: PageProps) {
       </div>
 
       {/* Container chứa danh mục và nội dung */}
-      <div className="w-full py-10 bg-white rounded-2xl -mx-4">
+      <div className="w-full py-10 bg-white rounded-2xl">
         <div className="max-w-[1680px] mx-auto px-4">
           <div className="flex flex-col md:flex-row gap-8">
             {/* Sidebar với border bo tròn và icon ba gạch */}
@@ -72,11 +73,8 @@ export default async function ChinhSachPage({ params: { slug } }: PageProps) {
 
                 {/* Danh sách bài viết */}
                 <ul className="text-sm">
-                  {policies.map((policy: any, index: number) => {
-                    const isFirst = index === 0;
-                    const isLast = index === policies.length - 1;
-                    const isActive = policy.slug === slug;
-
+                  {policies.map((policy: Policy) => {
+                    console.log('policy', policy);
                     return (
                       <li key={policy.slug}>
                         <Link
