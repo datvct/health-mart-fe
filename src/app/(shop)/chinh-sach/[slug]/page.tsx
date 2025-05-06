@@ -74,7 +74,6 @@ export default async function ChinhSachPage({ params: { slug } }: PageProps) {
                 {/* Danh sách bài viết */}
                 <ul className="text-sm">
                   {policies.map((policy: Policy) => {
-                    console.log('policy', policy);
                     return (
                       <li key={policy.slug}>
                         <Link
