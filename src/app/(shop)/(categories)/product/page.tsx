@@ -264,7 +264,7 @@ const ProductDetail = () => {
     overallRatingStats.total > 0 ? (count / overallRatingStats.total) * 100 : 0;
 
   return (
-    <>
+    <section className='py-5'>
       <div className="bg-white p-6 rounded-xl shadow-md w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Left Section: Product Images */}
@@ -932,7 +932,7 @@ const ProductDetail = () => {
 
 
 
-    </>
+    </section>
   );
 };
 
