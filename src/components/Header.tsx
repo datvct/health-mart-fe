@@ -8,11 +8,29 @@ import { HiUser } from 'react-icons/hi2';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { FaShoppingCart } from 'react-icons/fa';
 import { IoIosMenu } from 'react-icons/io';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import '@ant-design/v5-patch-for-react-19';
 import Link from 'next/link';
+import { productApi } from '../lib/apis/product';
 
 const Header = () => {
+  const [categoriesRoot, setCategoriesRoot] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await productApi.getListCategoriesRoot();
+        setCategoriesRoot(data.data);
+      } catch (error) {
+        console.error('Lỗi khi lấy danh mục gốc:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  console.log('categoriesRoot', categoriesRoot);
+
   type SearchProps = GetProps<typeof Input.Search>;
 
   const suffix = (
@@ -98,7 +116,7 @@ const Header = () => {
         <div className="flex justify-around py-2 px-4 h-[50px] relative">
           <div className="flex items-center cursor-pointer group hover:shadow-[inset_0_-2px_0_0] hover:shadow-[#1250dc]">
             <span className="group-hover:text-[#1250dc] text-[#020b27] font-medium">
-              Thực phẩm chức năng
+              {categoriesRoot[0]?.name}
             </span>
             <MdKeyboardArrowDown
               size={25}
