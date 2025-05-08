@@ -224,6 +224,103 @@ const ProductDetail = () => {
         repliedAt: "4 ngày trước",
       },
     },
+    {
+      id: 4,
+      userName: "Bùi Anh Tuấn",
+      initials: "AT",
+      rating: 4,
+      content: "e",
+      createdAt: "5 ngày trước",
+      reply: {
+        repliedBy: "Quỳnh Chu",
+        initials: "QC",
+        role: "Dược sĩ",
+        replyContent:
+          "Chào bạn, cảm ơn bạn đã đánh giá. Nếu có bất kỳ thắc mắc nào, bạn cứ để lại câu hỏi nhé!",
+        repliedAt: "4 ngày trước",
+      },
+    },
+    {
+      id: 5,
+      userName: "Bùi Anh Tuấn",
+      initials: "AT",
+      rating: 4,
+      content: "e",
+      createdAt: "5 ngày trước",
+      reply: {
+        repliedBy: "Quỳnh Chu",
+        initials: "QC",
+        role: "Dược sĩ",
+        replyContent:
+          "Chào bạn, cảm ơn bạn đã đánh giá. Nếu có bất kỳ thắc mắc nào, bạn cứ để lại câu hỏi nhé!",
+        repliedAt: "4 ngày trước",
+      },
+    },
+    {
+      id: 6,
+      userName: "Bùi Anh Tuấn",
+      initials: "AT",
+      rating: 4,
+      content: "e",
+      createdAt: "5 ngày trước",
+      reply: {
+        repliedBy: "Quỳnh Chu",
+        initials: "QC",
+        role: "Dược sĩ",
+        replyContent:
+          "Chào bạn, cảm ơn bạn đã đánh giá. Nếu có bất kỳ thắc mắc nào, bạn cứ để lại câu hỏi nhé!",
+        repliedAt: "4 ngày trước",
+      },
+    },
+    {
+      id: 7,
+      userName: "Bùi Anh Tuấn",
+      initials: "AT",
+      rating: 4,
+      content: "e",
+      createdAt: "5 ngày trước",
+      reply: {
+        repliedBy: "Quỳnh Chu",
+        initials: "QC",
+        role: "Dược sĩ",
+        replyContent:
+          "Chào bạn, cảm ơn bạn đã đánh giá. Nếu có bất kỳ thắc mắc nào, bạn cứ để lại câu hỏi nhé!",
+        repliedAt: "4 ngày trước",
+      },
+    },
+
+    {
+      id: 8,
+      userName: "Bùi Anh Tuấn",
+      initials: "AT",
+      rating: 4,
+      content: "e",
+      createdAt: "5 ngày trước",
+      reply: {
+        repliedBy: "Quỳnh Chu",
+        initials: "QC",
+        role: "Dược sĩ",
+        replyContent:
+          "Chào bạn, cảm ơn bạn đã đánh giá. Nếu có bất kỳ thắc mắc nào, bạn cứ để lại câu hỏi nhé!",
+        repliedAt: "4 ngày trước",
+      },
+    },
+    {
+      id: 9,
+      userName: "Bùi Anh Tuấn",
+      initials: "AT",
+      rating: 4,
+      content: "e",
+      createdAt: "5 ngày trước",
+      reply: {
+        repliedBy: "Quỳnh Chu",
+        initials: "QC",
+        role: "Dược sĩ",
+        replyContent:
+          "Chào bạn, cảm ơn bạn đã đánh giá. Nếu có bất kỳ thắc mắc nào, bạn cứ để lại câu hỏi nhé!",
+        repliedAt: "4 ngày trước",
+      },
+    },
   ];
 
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
@@ -258,10 +355,6 @@ const ProductDetail = () => {
   mockReviews.forEach((review) => {
     overallRatingStats.counts[review.rating as keyof typeof overallRatingStats.counts]++;
   });
-
-  // Tính tỷ lệ phần trăm của từng sao
-  const getPercentage = (count: number) =>
-    overallRatingStats.total > 0 ? (count / overallRatingStats.total) * 100 : 0;
 
   return (
     <section className='py-5'>
@@ -405,7 +498,7 @@ const ProductDetail = () => {
             <h1 className="text-2xl font-bold text-gray-800">
               {productData.name}
             </h1>
-            <p className="text-base text-gray-600 mt-2 flex items-center gap-2">
+            <p className="text-base text-gray-600 mt-2 flex items-center gap-2 flex-wrap">
               <span>{productData.code}</span>
               <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
               <span className="flex items-center gap-1">
@@ -429,6 +522,7 @@ const ProductDetail = () => {
               </a>
             </p>
 
+
             {/* Price */}
             <div className="mt-4">
               <p className="text-4xl font-bold text-blue-600">{productData.price.toLocaleString()}đ/ Hộp</p>
@@ -436,13 +530,14 @@ const ProductDetail = () => {
             </div>
 
             {/* Additional Info */}
-            <div className="mt-4 grid grid-cols-2 gap-y-2">
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4">
               <p className="font-semibold text-gray-500">Chọn đơn vị tính:</p>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 {productData.units.map((unit, idx) => (
                   <Button key={idx} className="hover:border-blue-600 hover:text-blue-600">{unit}</Button>
                 ))}
               </div>
+
 
               <p className="text-base text-gray-500">
                 <span className="font-semibold">Danh mục:</span>
@@ -515,7 +610,7 @@ const ProductDetail = () => {
               {/* Phần trên: Nền cam nhạt */}
               <div className="bg-orange-50 p-2">
                 <p className="text-sm font-semibold text-orange-600 flex items-center gap-2">
-                <svg className="text-warning-7 mr-1" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.5299 10.87L20.0099 9.35001C19.7499 9.09 19.5399 8.58001 19.5399 8.22001V6.06C19.5399 5.18 18.8199 4.46 17.9399 4.46H15.7899C15.4299 4.46 14.9199 4.25 14.6599 3.99L13.1399 2.47C12.5199 1.85 11.4999 1.85 10.8799 2.47L9.33988 3.99C9.08988 4.25 8.57988 4.46 8.20988 4.46H6.05988C5.17988 4.46 4.45988 5.18 4.45988 6.06V8.21C4.45988 8.57 4.24988 9.08 3.98988 9.34L2.46988 10.86C1.84988 11.48 1.84988 12.5 2.46988 13.12L3.98988 14.64C4.24988 14.9 4.45988 15.41 4.45988 15.77V17.92C4.45988 18.8 5.17988 19.52 6.05988 19.52H8.20988C8.56988 19.52 9.07988 19.73 9.33988 19.99L10.8599 21.51C11.4799 22.13 12.4999 22.13 13.1199 21.51L14.6399 19.99C14.8999 19.73 15.4099 19.52 15.7699 19.52H17.9199C18.7999 19.52 19.5199 18.8 19.5199 17.92V15.77C19.5199 15.41 19.7299 14.9 19.9899 14.64L21.5099 13.12C22.1599 12.51 22.1599 11.49 21.5299 10.87ZM7.99988 9C7.99988 8.45 8.44988 8 8.99988 8C9.54988 8 9.99988 8.45 9.99988 9C9.99988 9.55 9.55988 10 8.99988 10C8.44988 10 7.99988 9.55 7.99988 9ZM9.52988 15.53C9.37988 15.68 9.18988 15.75 8.99988 15.75C8.80988 15.75 8.61988 15.68 8.46988 15.53C8.17988 15.24 8.17988 14.76 8.46988 14.47L14.4699 8.47001C14.7599 8.18001 15.2399 8.18001 15.5299 8.47001C15.8199 8.76 15.8199 9.24 15.5299 9.53L9.52988 15.53ZM14.9999 16C14.4399 16 13.9899 15.55 13.9899 15C13.9899 14.45 14.4399 14 14.9899 14C15.5399 14 15.9899 14.45 15.9899 15C15.9899 15.55 15.5499 16 14.9999 16Z" fill="currentColor"></path></svg>
+                  <svg className="text-warning-7 mr-1" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.5299 10.87L20.0099 9.35001C19.7499 9.09 19.5399 8.58001 19.5399 8.22001V6.06C19.5399 5.18 18.8199 4.46 17.9399 4.46H15.7899C15.4299 4.46 14.9199 4.25 14.6599 3.99L13.1399 2.47C12.5199 1.85 11.4999 1.85 10.8799 2.47L9.33988 3.99C9.08988 4.25 8.57988 4.46 8.20988 4.46H6.05988C5.17988 4.46 4.45988 5.18 4.45988 6.06V8.21C4.45988 8.57 4.24988 9.08 3.98988 9.34L2.46988 10.86C1.84988 11.48 1.84988 12.5 2.46988 13.12L3.98988 14.64C4.24988 14.9 4.45988 15.41 4.45988 15.77V17.92C4.45988 18.8 5.17988 19.52 6.05988 19.52H8.20988C8.56988 19.52 9.07988 19.73 9.33988 19.99L10.8599 21.51C11.4799 22.13 12.4999 22.13 13.1199 21.51L14.6399 19.99C14.8999 19.73 15.4099 19.52 15.7699 19.52H17.9199C18.7999 19.52 19.5199 18.8 19.5199 17.92V15.77C19.5199 15.41 19.7299 14.9 19.9899 14.64L21.5099 13.12C22.1599 12.51 22.1599 11.49 21.5299 10.87ZM7.99988 9C7.99988 8.45 8.44988 8 8.99988 8C9.54988 8 9.99988 8.45 9.99988 9C9.99988 9.55 9.55988 10 8.99988 10C8.44988 10 7.99988 9.55 7.99988 9ZM9.52988 15.53C9.37988 15.68 9.18988 15.75 8.99988 15.75C8.80988 15.75 8.61988 15.68 8.46988 15.53C8.17988 15.24 8.17988 14.76 8.46988 14.47L14.4699 8.47001C14.7599 8.18001 15.2399 8.18001 15.5299 8.47001C15.8199 8.76 15.8199 9.24 15.5299 9.53L9.52988 15.53ZM14.9999 16C14.4399 16 13.9899 15.55 13.9899 15C13.9899 14.45 14.4399 14 14.9899 14C15.5399 14 15.9899 14.45 15.9899 15C15.9899 15.55 15.5499 16 14.9999 16Z" fill="currentColor"></path></svg>
                   Khuyến mãi được áp dụng
                 </p>
               </div>
@@ -716,15 +811,17 @@ const ProductDetail = () => {
         </div>
       </Modal>
 
-      <div className="bg-white p-6 rounded-xl shadow-md mt-6 flex gap-8">
+      <div className="bg-white p-6 rounded-xl shadow-md mt-6 flex flex-col lg:flex-row gap-8">
         {/* Menu trái */}
-        <div className="w-1/4 sticky top-6 self-start">
+        <div className="lg:w-1/4 w-full sticky top-6 self-start hidden lg:block">
           <div className="border rounded-md divide-y">
             {tabData.map(({ key, label }) => (
               <button
                 key={key}
                 onClick={() => handleTabClick(key)}
-                className={`w-full text-left px-4 py-3 hover:bg-gray-100 transition ${activeTab === key ? 'bg-blue-100 font-bold text-[20px]' : 'text-gray-700'
+                className={`w-full text-left px-4 py-3 hover:bg-gray-100 transition ${activeTab === key
+                  ? 'bg-blue-100 font-bold text-[20px]'
+                  : 'text-gray-700'
                   }`}
               >
                 {label}
@@ -734,20 +831,19 @@ const ProductDetail = () => {
         </div>
 
         {/* Nội dung phải */}
-        <div className="w-3/4 space-y-8">
-          <div className="flex justify-between items-center">
+        <div className="lg:w-3/4 w-full space-y-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <h2 className="text-xl font-bold">Nội dung</h2>
             <div className="flex items-center gap-3">
               <span className="text-gray-700">Kích thước chữ:</span>
 
               {/* Công tắc trượt */}
-              <div className="relative w-32 h-10 rounded-full border-2 flex items-center transition-all duration-300 ease-in-out
-          bg-white shadow-inner overflow-hidden
-          border-gray-300"
+              <div
+                className="relative w-32 h-10 rounded-full border-2 flex items-center transition-all duration-300 ease-in-out bg-white shadow-inner overflow-hidden border-gray-300"
               >
                 <div
-                  className={`absolute top-0 bottom-0 w-1/2 bg-blue-600 rounded-full transition-all duration-300
-              ${isFontLarge ? 'left-1/2' : 'left-0'}`}
+                  className={`absolute top-0 bottom-0 w-1/2 bg-blue-600 rounded-full transition-all duration-300 ${isFontLarge ? 'left-1/2' : 'left-0'
+                    }`}
                 ></div>
                 <button
                   onClick={() => setIsFontLarge(false)}
@@ -774,7 +870,8 @@ const ProductDetail = () => {
               {content.map((text, idx) => (
                 <p
                   key={idx}
-                  className={`mb-2 text-gray-700 ${isFontLarge ? 'text-lg' : 'text-base'}`}
+                  className={`mb-2 text-gray-700 ${isFontLarge ? 'text-lg' : 'text-base'
+                    }`}
                 >
                   {text}
                 </p>
@@ -808,18 +905,21 @@ const ProductDetail = () => {
 
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between p-4 border-t border-b rounded-md gap-10">
             {/* Cột trái: Trung bình */}
-            <div className="flex sm:flex-col items-center sm:items-start gap-2 sm:gap-0 w-full sm:w-28">
-              <div>
+            <div className="flex flex-col items-center sm:items-start gap-2 sm:gap-0 w-full sm:w-auto">
+              <div className="text-center sm:text-left">
                 <p className="text-base font-bold text-gray-600">Trung bình</p>
-                <div className="text-[36px] font-bold leading-none mt-1 flex items-center gap-1">
-                  {overallRatingStats.average.toFixed(1)} <span className="text-yellow-400 text-xl">★</span>
+                <div className="text-[36px] font-bold leading-none mt-1 flex items-center justify-center sm:justify-start gap-1">
+                  {overallRatingStats.average.toFixed(1)}{" "}
+                  <span className="text-yellow-400 text-xl">★</span>
                 </div>
               </div>
 
               {/* Nút */}
-              <button className="mt-2 sm:mt-3 px-4 py-2 text-base bg-blue-600 text-white rounded-full hover:bg-blue-700 transition whitespace-nowrap">
-                Gửi đánh giá
-              </button>
+              <div className="w-full sm:w-auto mt-4 sm:mt-3 flex justify-center sm:justify-start">
+                <button className="px-4 py-2 text-base bg-blue-600 text-white rounded-full hover:bg-blue-700 transition whitespace-nowrap">
+                  Gửi đánh giá
+                </button>
+              </div>
             </div>
 
             {/* Cột phải: Biểu đồ đánh giá */}
@@ -855,29 +955,32 @@ const ProductDetail = () => {
           </div>
 
           {/* Lọc theo sao */}
-          <div className="mt-4 flex space-x-2 text-sm">
+          <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:space-x-2 gap-2 text-sm">
             <span className="text-gray-700">Lọc theo:</span>
-            {[5, 4, 3, 2, 1].map((star) => (
-              <button
-                key={star}
-                onClick={() => handleFilter(star)}
-                className={`border px-3 py-1 rounded-full text-gray-700 hover:bg-gray-200 ${selectedRating === star ? 'bg-blue-100' : ''
-                  }`}
-              >
-                {star} sao
-              </button>
-            ))}
+            <div className="flex flex-wrap gap-2">
+              {[5, 4, 3, 2, 1].map((star) => (
+                <button
+                  key={star}
+                  onClick={() => handleFilter(star)}
+                  className={`border px-3 py-1 rounded-full text-gray-700 hover:bg-gray-200 ${selectedRating === star ? 'bg-blue-100' : ''
+                    }`}
+                >
+                  {star} sao
+                </button>
+              ))}
+            </div>
           </div>
+
         </div>
 
         {/* --- Danh sách đánh giá từ mockReviews --- */}
         {filteredReviews.slice(0, visibleReviews).map((review) => (
-          <div key={review.id}>
-            <div className="flex items-start space-x-3">
-              <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center font-bold text-white">
+          <div key={review.id} className="mb-4">
+            <div className="flex flex-col sm:flex-row items-start sm:space-x-3">
+              <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center font-bold text-white mb-3 sm:mb-0">
                 {review.initials}
               </div>
-              <div>
+              <div className="w-full">
                 <p className="font-semibold">{review.userName}</p>
                 <div className="flex items-center text-yellow-400">
                   {"★".repeat(review.rating)}
@@ -892,13 +995,13 @@ const ProductDetail = () => {
 
             {/* Reply nếu có */}
             {review.reply && (
-              <div className="ml-12 mt-2 border-l-2 pl-4 border-gray-200">
-                <div className="flex items-start space-x-3">
-                  <div className="w-10 aspect-square bg-blue-500 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0">
+              <div className="ml-0 sm:ml-12 mt-2 border-l-2 pl-4 border-gray-200">
+                <div className="flex flex-col sm:flex-row items-start sm:space-x-3">
+                  <div className="w-12 aspect-square bg-blue-500 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 mb-3 sm:mb-0">
                     {review.reply.initials}
                   </div>
 
-                  <div>
+                  <div className="w-full">
                     <p className="font-semibold flex items-center gap-1">
                       {review.reply.repliedBy}{" "}
                       <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">
@@ -916,6 +1019,7 @@ const ProductDetail = () => {
             )}
           </div>
         ))}
+
 
         {/* Nút Xem thêm bình luận */}
         {filteredReviews.length > visibleReviews && (
