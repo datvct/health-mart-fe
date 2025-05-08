@@ -80,6 +80,18 @@ const ProductDetail = () => {
     }
   }, [currentImageIndex]);
 
+  const [quantity, setQuantity] = useState(1);
+
+  const handleIncrease = () => {
+    setQuantity(prev => prev + 1);
+  };
+
+  const handleDecrease = () => {
+    if (quantity > 1) {
+      setQuantity(prev => prev - 1);
+    }
+  };
+
   const tabData = [
     {
       key: '1',
@@ -154,6 +166,14 @@ const ProductDetail = () => {
   };
 
   const visibleTabs = isExpanded ? tabData : tabData.slice(0, 3);
+
+  const [isFontLarge, setIsFontLarge] = useState(false); // Trạng thái phóng to chữ
+  const [activeTab, setActiveTab] = useState<string | null>(null); // Trạng thái tab được chọn
+
+  const handleTabClick = (key: string) => {
+    setActiveTab(key);
+    scrollToSection(key);
+  };
 
   const mockReviews = [
     {
@@ -250,9 +270,9 @@ const ProductDetail = () => {
           {/* Left Section: Product Images */}
           <div className="flex flex-col items-center">
             {/* Nút "Chính hãng - Tra cứu" */}
-            <div className="flex justify-end w-full mb-2">
+            <div className="flex justify-end l20 w-full mb-2 mr-20">
               <Image
-                src="https://cdn.nhathuoclongchau.com.vn/unsafe/72x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/smalls/Badge_52ad415e46.png"
+                src="/images/authenticity-badge.webp"
                 alt="Chính hãng"
                 width={72}
                 height={90}
@@ -264,8 +284,8 @@ const ProductDetail = () => {
               <Image
                 src={productData.images[currentImageIndex]}
                 alt={`Ảnh sản phẩm ${currentImageIndex + 1}`}
-                width={400}
-                height={400}
+                width={450}
+                height={450}
                 className="rounded-lg object-cover cursor-pointer"
                 onClick={() => openModal(currentImageIndex)}
               />
@@ -274,36 +294,53 @@ const ProductDetail = () => {
               <button
                 onClick={handlePrevImage}
                 disabled={currentImageIndex === 0}
-                className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full p-2 shadow-md disabled:opacity-30"
+                className="absolute top-1/2 left-0 opacity-80 transform -translate-y-1/2 bg-gray-500 hover:bg-gray-600 rounded-full p-3 shadow-md disabled:opacity-0"
               >
-                ◀
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="white"
+                  className="w-4 h-4"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
               </button>
 
               {/* Nút điều hướng phải */}
               <button
                 onClick={handleNextImage}
                 disabled={currentImageIndex === productData.images.length - 1}
-                className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full p-2 shadow-md disabled:opacity-30"
+                className="absolute top-1/2 right-0 opacity-80 transform -translate-y-1/2 bg-gray-500 hover:bg-gray-600 rounded-full p-3 shadow-md disabled:opacity-0"
               >
-                ▶
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="white"
+                  className="w-4 h-4"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </button>
+
             </div>
 
             {/* Thumbnail */}
             <div className="flex gap-2 items-center mb-2">
-              {/* Hiển thị 3 ảnh đầu */}
               {productData.images.slice(0, 3).map((img, idx) => (
                 <div
                   key={idx}
                   onClick={() => setCurrentImageIndex(idx)}
-                  className={`cursor-pointer border p-1 rounded-md ${currentImageIndex === idx ? 'border-blue-500' : 'border-gray-300'}`}
+                  className={`cursor-pointer border p-1 ${currentImageIndex === idx ? 'border-blue-500' : 'border-gray-300'}`}
+                  style={{ borderRadius: '10px' }}
                 >
                   <Image
                     src={img}
                     alt={`Thumbnail ${idx + 1}`}
                     width={100}
                     height={100}
-                    className="rounded-md object-cover"
+                    className="object-cover"
                   />
                 </div>
               ))}
@@ -313,6 +350,7 @@ const ProductDetail = () => {
                 <div
                   onClick={() => openModal(3)} // Mở modal khi nhấn vào "Xem thêm"
                   className="relative cursor-pointer border p-1 rounded-md border-gray-300"
+                  style={{ borderRadius: '10px' }}
                 >
                   <Image
                     src={productData.images[3]}
@@ -321,18 +359,23 @@ const ProductDetail = () => {
                     height={100}
                     className="rounded-md object-cover"
                   />
-                  <div className="absolute inset-0 bg-black bg-opacity-50 rounded-md flex flex-col items-center justify-center text-white text-sm">
+                  <div
+                    className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-white text-sm"
+                    style={{ borderRadius: '10px' }} // Thêm border-radius cho lớp phủ đen
+                  >
                     <span>Xem thêm</span>
                     <span>{productData.images.length - 3} ảnh</span>
                   </div>
                 </div>
               )}
 
+
               {/* Nếu chỉ có đúng 4 ảnh thì hiển thị ảnh thứ 4 bình thường */}
               {productData.images.length === 4 && (
                 <div
                   onClick={() => setCurrentImageIndex(3)}
                   className={`cursor-pointer border p-1 rounded-md ${currentImageIndex === 3 ? 'border-blue-500' : 'border-gray-300'}`}
+                  style={{ borderRadius: '10px' }}
                 >
                   <Image
                     src={productData.images[3]}
@@ -353,7 +396,7 @@ const ProductDetail = () => {
 
           {/* Right Section: Product Information */}
           <div>
-            <p className="text-sm text-gray-500">
+            <p className="text-base text-black">
               <span className="font-semibold">Thương hiệu:</span>{' '}
               <a href="#" className="text-blue-600 no-underline">
                 {productData.brand}
@@ -362,57 +405,59 @@ const ProductDetail = () => {
             <h1 className="text-2xl font-bold text-gray-800">
               {productData.name}
             </h1>
-            <p className="text-sm text-gray-500 mt-2 flex items-center gap-2">
+            <p className="text-base text-gray-600 mt-2 flex items-center gap-2">
               <span>{productData.code}</span>
+              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
               <span className="flex items-center gap-1">
-                <span className="text-yellow-500 font-bold leading-none">{productData.rating}</span>
+                <span className="text-yellow-500 font-semibold">{productData.rating}</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   viewBox="0 0 24 24"
-                  className="w-4 h-4 text-yellow-500 align-baseline"
+                  className="w-4 h-4 text-yellow-500"
                 >
                   <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.857 1.464 8.837L12 18.896l-7.4 4.104 1.464-8.837L0 9.306l8.332-1.151z" />
                 </svg>
               </span>
-              <a href="#" className="text-blue-600 no-underline">
+              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+              <a href="#" className="text-blue-600 hover:underline">
                 {productData.reviewsCount} đánh giá
               </a>
-              <span className="text-gray-500">-</span>
-              <a href="#" className="text-blue-600 no-underline">
+              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+              <a href="#" className="text-blue-600 hover:underline">
                 {productData.commentsCount} bình luận
               </a>
             </p>
 
             {/* Price */}
             <div className="mt-4">
-              <p className="text-3xl font-bold text-blue-600">{productData.price.toLocaleString()}đ/ Hộp</p>
-              <p className="text-sm text-gray-400 line-through">184.000đ</p>
+              <p className="text-4xl font-bold text-blue-600">{productData.price.toLocaleString()}đ/ Hộp</p>
+              <p className="text-xl text-gray-400 line-through">184.000đ</p>
             </div>
 
             {/* Additional Info */}
             <div className="mt-4 grid grid-cols-2 gap-y-2">
-              <p className="font-semibold text-gray-700">Chọn đơn vị tính:</p>
+              <p className="font-semibold text-gray-500">Chọn đơn vị tính:</p>
               <div className="flex gap-2">
                 {productData.units.map((unit, idx) => (
                   <Button key={idx} className="hover:border-blue-600 hover:text-blue-600">{unit}</Button>
                 ))}
               </div>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-base text-gray-500">
                 <span className="font-semibold">Danh mục:</span>
               </p>
-              <p className="text-sm text-gray-500">{productData.category}</p>
+              <p className="text-base text-gray-500">{productData.category}</p>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-base text-gray-500">
                 <span className="font-semibold">Số đăng ký:</span>
               </p>
-              <p className="text-sm text-gray-500">{productData.registrationNumber}</p>
+              <p className="text-base text-gray-500">{productData.registrationNumber}</p>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-base text-gray-500">
                 <span className="font-semibold">Xem giấy công bố sản phẩm:</span>
               </p>
-              <a href="#" className="text-sm text-blue-600 no-underline flex items-center gap-1">
+              <a href="#" className="text-base text-blue-600 no-underline flex items-center gap-1">
                 <span>Click để xem</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -424,62 +469,59 @@ const ProductDetail = () => {
                 </svg>
               </a>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-base text-gray-500">
                 <span className="font-semibold">Dạng bào chế:</span>
               </p>
-              <p className="text-sm text-gray-500">{productData.dosageForm}</p>
+              <p className="text-base text-gray-500">{productData.dosageForm}</p>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-base text-gray-500">
                 <span className="font-semibold">Quy cách:</span>
               </p>
-              <p className="text-sm text-gray-500">{productData.packaging}</p>
+              <p className="text-base text-gray-500">{productData.packaging}</p>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-base text-gray-500">
                 <span className="font-semibold">Xuất xứ thương hiệu:</span>
               </p>
-              <p className="text-sm text-gray-500">{productData.origin.brandCountry}</p>
+              <p className="text-base text-gray-500">{productData.origin.brandCountry}</p>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-base text-gray-500">
                 <span className="font-semibold">Nhà sản xuất:</span>
               </p>
-              <p className="text-sm text-gray-500">{productData.origin.manufacturer}</p>
+              <p className="text-base text-gray-500">{productData.origin.manufacturer}</p>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-base text-gray-500">
                 <span className="font-semibold">Nước sản xuất:</span>
               </p>
-              <p className="text-sm text-gray-500">{productData.origin.productionCountry}</p>
+              <p className="text-base text-gray-500">{productData.origin.productionCountry}</p>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-base text-gray-500">
                 <span className="font-semibold">Thành phần:</span>
               </p>
-              <p className="text-sm text-gray-500">{productData.ingredients.join(", ")}</p>
+              <p className="text-base text-gray-500">{productData.ingredients.join(", ")}</p>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-base text-gray-500">
                 <span className="font-semibold">Mô tả ngắn:</span>
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-base text-gray-500">
                 {productData.shortDescription}
               </p>
             </div>
 
             {/* Promotion */}
-            <div className="rounded-lg border border-orange-200 mt-4">
+            <div
+              className="border border-orange-400 mt-4 shadow-sm"
+              style={{ borderRadius: '10px', overflow: 'hidden' }}
+            >
               {/* Phần trên: Nền cam nhạt */}
-              <div className="bg-orange-50 p-2 rounded-t-lg">
+              <div className="bg-orange-50 p-2">
                 <p className="text-sm font-semibold text-orange-600 flex items-center gap-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    className="w-5 h-5 text-orange-500"
-                  >
-                    <path d="M12 2l1.09 3.41h3.58l-2.89 2.1 1.09 3.41-2.89-2.1-2.89 2.1 1.09-3.41-2.89-2.1h3.58z" />
-                  </svg>
+                <svg className="text-warning-7 mr-1" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.5299 10.87L20.0099 9.35001C19.7499 9.09 19.5399 8.58001 19.5399 8.22001V6.06C19.5399 5.18 18.8199 4.46 17.9399 4.46H15.7899C15.4299 4.46 14.9199 4.25 14.6599 3.99L13.1399 2.47C12.5199 1.85 11.4999 1.85 10.8799 2.47L9.33988 3.99C9.08988 4.25 8.57988 4.46 8.20988 4.46H6.05988C5.17988 4.46 4.45988 5.18 4.45988 6.06V8.21C4.45988 8.57 4.24988 9.08 3.98988 9.34L2.46988 10.86C1.84988 11.48 1.84988 12.5 2.46988 13.12L3.98988 14.64C4.24988 14.9 4.45988 15.41 4.45988 15.77V17.92C4.45988 18.8 5.17988 19.52 6.05988 19.52H8.20988C8.56988 19.52 9.07988 19.73 9.33988 19.99L10.8599 21.51C11.4799 22.13 12.4999 22.13 13.1199 21.51L14.6399 19.99C14.8999 19.73 15.4099 19.52 15.7699 19.52H17.9199C18.7999 19.52 19.5199 18.8 19.5199 17.92V15.77C19.5199 15.41 19.7299 14.9 19.9899 14.64L21.5099 13.12C22.1599 12.51 22.1599 11.49 21.5299 10.87ZM7.99988 9C7.99988 8.45 8.44988 8 8.99988 8C9.54988 8 9.99988 8.45 9.99988 9C9.99988 9.55 9.55988 10 8.99988 10C8.44988 10 7.99988 9.55 7.99988 9ZM9.52988 15.53C9.37988 15.68 9.18988 15.75 8.99988 15.75C8.80988 15.75 8.61988 15.68 8.46988 15.53C8.17988 15.24 8.17988 14.76 8.46988 14.47L14.4699 8.47001C14.7599 8.18001 15.2399 8.18001 15.5299 8.47001C15.8199 8.76 15.8199 9.24 15.5299 9.53L9.52988 15.53ZM14.9999 16C14.4399 16 13.9899 15.55 13.9899 15C13.9899 14.45 14.4399 14 14.9899 14C15.5399 14 15.9899 14.45 15.9899 15C15.9899 15.55 15.5499 16 14.9999 16Z" fill="currentColor"></path></svg>
                   Khuyến mãi được áp dụng
                 </p>
               </div>
+
               {/* Phần dưới: Nền trắng */}
-              <div className="bg-white p-4 rounded-b-lg flex items-center gap-3">
+              <div className="bg-white p-4 flex items-center gap-3">
                 <div className="w-10 h-10 bg-blue-100 flex items-center justify-center rounded-md">
                   <img
                     src="https://s3-sgn09.fptcloud.com/lc-public/web-lc/default/promotion_used.webp"
@@ -488,22 +530,65 @@ const ProductDetail = () => {
                   />
                 </div>
                 <p className="text-sm text-gray-700">
-                  {productData.promotion.description} <span className="font-semibold">{productData.promotion.validUntil}</span>
+                  {productData.promotion.description}{' '}
+                  <span className="font-semibold">
+                    {productData.promotion.validUntil}
+                  </span>
                 </p>
               </div>
             </div>
+
 
             {/* Quantity and Actions */}
             <div className="mt-6">
               {/* Chọn số lượng */}
               <div className="flex items-center gap-4 mb-6">
-                <p className="text-sm text-gray-700 font-semibold">Chọn số lượng</p>
+                <p className="text-base text-gray-500 font-semibold">Chọn số lượng</p>
+
+                <div className="flex items-center border border-gray-300 rounded-full overflow-hidden">
+                  <button
+                    className="w-8 h-8 text-lg text-gray-600 hover:bg-gray-100"
+                    onClick={handleDecrease}
+                  >
+                    −
+                  </button>
+                  <div className="w-10 h-8 flex items-center justify-center border-l border-r border-gray-300">
+                    {quantity}
+                  </div>
+                  <button
+                    className="w-8 h-8 text-lg text-gray-600 hover:bg-gray-100"
+                    onClick={handleIncrease}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Nút hành động */}
+              <div className="flex gap-4 mb-3">
+                <button className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold py-3 rounded-full hover:opacity-90">
+                  Chọn mua
+                </button>
+                <button className="flex-1 bg-gray-100 text-blue-600 text-sm font-semibold py-3 rounded-full hover:bg-gray-200">
+                  Tìm nhà thuốc
+                </button>
+              </div>
+
+              {/* Thông báo */}
+              <div className="text-sm mt-1">
+                <span className="text-orange-600 font-semibold">
+                  ⚡ Sản phẩm đang được chú ý
+                </span>
+                <span className="text-black">
+                  , có 20 người thêm vào giỏ hàng & 42 người đang xem
+                </span>
               </div>
             </div>
 
+
             {/* Footer */}
             <div className="mt-6 border-t pt-4">
-              <div className="grid grid-cols-3 gap-4 text-sm text-gray-700">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm text-gray-700">
                 {/* Đổi trả trong 30 ngày */}
                 <div className="flex items-center gap-2">
                   <div className="w-10 h-10 flex items-center justify-center rounded-full">
@@ -575,19 +660,36 @@ const ProductDetail = () => {
             <button
               onClick={handlePrevImage}
               disabled={currentImageIndex === 0}
-              className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full p-2 shadow-md disabled:opacity-30"
+              className="absolute top-1/2 left-0 opacity-80 transform -translate-y-1/2 bg-gray-500 hover:bg-gray-600 rounded-full p-3 shadow-md disabled:opacity-0"
             >
-              ◀
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="white"
+                className="w-4 h-4"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
             </button>
 
             {/* Nút điều hướng phải */}
             <button
               onClick={handleNextImage}
               disabled={currentImageIndex === productData.images.length - 1}
-              className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full p-2 shadow-md disabled:opacity-30"
+              className="absolute top-1/2 right-0 opacity-80 transform -translate-y-1/2 bg-gray-500 hover:bg-gray-600 rounded-full p-3 shadow-md disabled:opacity-0"
             >
-              ▶
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="white"
+                className="w-4 h-4"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </button>
+
           </div>
 
           {/* Thumbnail trong modal */}
@@ -598,6 +700,7 @@ const ProductDetail = () => {
                 ref={(el) => { thumbnailRefs.current[idx] = el; }}
                 onClick={() => setCurrentImageIndex(idx)}
                 className={`cursor-pointer border p-1 rounded-md flex-shrink-0 ${currentImageIndex === idx ? 'border-blue-500' : 'border-gray-300'}`}
+                style={{ borderRadius: '10px' }}
               >
                 <Image
                   src={img}
@@ -609,6 +712,7 @@ const ProductDetail = () => {
               </div>
             ))}
           </div>
+
         </div>
       </Modal>
 
@@ -619,8 +723,9 @@ const ProductDetail = () => {
             {tabData.map(({ key, label }) => (
               <button
                 key={key}
-                onClick={() => scrollToSection(key)}
-                className="w-full text-left px-4 py-3 hover:bg-gray-100 transition"
+                onClick={() => handleTabClick(key)}
+                className={`w-full text-left px-4 py-3 hover:bg-gray-100 transition ${activeTab === key ? 'bg-blue-100 font-bold text-[20px]' : 'text-gray-700'
+                  }`}
               >
                 {label}
               </button>
@@ -630,21 +735,59 @@ const ProductDetail = () => {
 
         {/* Nội dung phải */}
         <div className="w-3/4 space-y-8">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-bold">Nội dung</h2>
+            <div className="flex items-center gap-3">
+              <span className="text-gray-700">Kích thước chữ:</span>
+
+              {/* Công tắc trượt */}
+              <div className="relative w-32 h-10 rounded-full border-2 flex items-center transition-all duration-300 ease-in-out
+          bg-white shadow-inner overflow-hidden
+          border-gray-300"
+              >
+                <div
+                  className={`absolute top-0 bottom-0 w-1/2 bg-blue-600 rounded-full transition-all duration-300
+              ${isFontLarge ? 'left-1/2' : 'left-0'}`}
+                ></div>
+                <button
+                  onClick={() => setIsFontLarge(false)}
+                  className={`w-1/2 z-10 text-sm font-medium transition-colors duration-300 ${!isFontLarge ? 'text-white' : 'text-gray-700'
+                    }`}
+                >
+                  Mặc định
+                </button>
+                <button
+                  onClick={() => setIsFontLarge(true)}
+                  className={`w-1/2 z-10 text-sm font-medium transition-colors duration-300 ${isFontLarge ? 'text-white' : 'text-gray-700'
+                    }`}
+                >
+                  Lớn hơn
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Nội dung từng tab */}
           {visibleTabs.map(({ key, title, content }) => (
             <div key={key} ref={(el) => { sectionRefs.current[key] = el; }}>
               <h2 className="text-xl font-bold mb-2">{title}</h2>
               {content.map((text, idx) => (
-                <p key={idx} className="mb-2 text-gray-700">{text}</p>
+                <p
+                  key={idx}
+                  className={`mb-2 text-gray-700 ${isFontLarge ? 'text-lg' : 'text-base'}`}
+                >
+                  {text}
+                </p>
               ))}
             </div>
           ))}
 
           {/* Nút xem thêm / thu gọn */}
           {tabData.length > 3 && (
-            <div className="mt-4 text-center">
+            <div className="mt-6 text-center">
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="text-blue-600 hover:underline"
+                className="inline-block px-5 py-2 bg-blue-50 text-blue-600 rounded-lg shadow-sm hover:bg-blue-100 transition-all duration-300"
               >
                 {isExpanded ? 'Thu gọn ▲' : 'Xem thêm ▼'}
               </button>
@@ -652,6 +795,8 @@ const ProductDetail = () => {
           )}
         </div>
       </div>
+
+
 
       <div className="bg-white p-6 rounded-xl shadow-md mt-6 space-y-6">
         {/* --- Giao diện Tổng quan đánh giá --- */}
@@ -661,32 +806,51 @@ const ProductDetail = () => {
             <span className="text-gray-500">({overallRatingStats.total} đánh giá)</span>
           </h2>
 
-          <div className="flex items-center mt-4">
-            {/* Trung bình sao */}
-            <div className="w-28 text-center">
-              <p className="text-4xl font-bold">{overallRatingStats.average.toFixed(1)}</p>
-              <div className="text-yellow-400 text-lg">
-                {"★".repeat(Math.round(overallRatingStats.average))}
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between p-4 border-t border-b rounded-md gap-10">
+            {/* Cột trái: Trung bình */}
+            <div className="flex sm:flex-col items-center sm:items-start gap-2 sm:gap-0 w-full sm:w-28">
+              <div>
+                <p className="text-base font-bold text-gray-600">Trung bình</p>
+                <div className="text-[36px] font-bold leading-none mt-1 flex items-center gap-1">
+                  {overallRatingStats.average.toFixed(1)} <span className="text-yellow-400 text-xl">★</span>
+                </div>
               </div>
-              <button className="mt-2 px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">
+
+              {/* Nút */}
+              <button className="mt-2 sm:mt-3 px-4 py-2 text-base bg-blue-600 text-white rounded-full hover:bg-blue-700 transition whitespace-nowrap">
                 Gửi đánh giá
               </button>
             </div>
 
-            {/* Biểu đồ từng sao */}
-            <div className="flex-1 ml-6 space-y-1">
-              {[5, 4, 3, 2, 1].map((star) => (
-                <div key={star} className="flex items-center space-x-2">
-                  <span className="text-sm">{star} sao</span>
-                  <div className="w-full bg-gray-200 rounded h-2">
-                    <div
-                      className="bg-orange-400 h-2 rounded"
-                      style={{ width: `${getPercentage(overallRatingStats.counts[star as keyof typeof overallRatingStats.counts])}%` }}
-                    />
+            {/* Cột phải: Biểu đồ đánh giá */}
+            <div className="flex flex-col justify-center w-full space-y-1">
+              {[5, 4, 3, 2, 1].map((star) => {
+                const count = overallRatingStats.counts[star as keyof typeof overallRatingStats.counts] || 0;
+                const total = Object.values(overallRatingStats.counts).reduce((a, b) => a + b, 0);
+                const percent = total > 0 ? (count / total) * 100 : 0;
+
+                return (
+                  <div key={star} className="flex items-center gap-2 text-sm">
+                    {/* Hàng sao */}
+                    <div className="flex w-[72px]">
+                      {Array.from({ length: 5 }, (_, i) => (
+                        <span key={i} className={i < star ? "text-yellow-400" : "text-gray-400"}>★</span>
+                      ))}
+                    </div>
+
+                    {/* Thanh biểu đồ */}
+                    <div className="w-[140px] bg-gray-200 h-2 rounded relative">
+                      <div
+                        className="absolute top-0 left-0 h-2 bg-yellow-400 rounded"
+                        style={{ width: `${percent}%` }}
+                      />
+                    </div>
+
+                    {/* Số lượng */}
+                    <div className="w-6 text-right text-sm font-medium">{count}</div>
                   </div>
-                  <span className="text-sm w-6 text-right">{overallRatingStats.counts[star as keyof typeof overallRatingStats.counts]}</span>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
