@@ -1,7 +1,7 @@
 'use client';
 import { Button, Modal } from 'antd';
 import Image from 'next/image';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 const ProductDetail = () => {
   const productData = {
@@ -92,71 +92,79 @@ const ProductDetail = () => {
     }
   };
 
-  const tabData = [
-    {
-      key: '1',
-      label: 'Mô tả sản phẩm',
-      title: 'Mô tả sản phẩm',
-      content: [
-        'Tại Việt Nam, ngày càng nhiều trẻ nhỏ gặp vấn đề về tiêu hóa, với tỷ lệ mắc bệnh lên tới 40%...',
-        'Đường ruột của chúng ta là nơi cư trú của hàng triệu vi khuẩn...',
-      ],
-    },
-    {
-      key: '2',
-      label: 'Thành phần',
-      title: 'Thành phần',
-      content: ['Bacillus clausii'],
-    },
-    {
-      key: '3',
-      label: 'Công dụng',
-      title: 'Công dụng',
-      content: [
-        'Enterogermina Gut Defense giúp tăng cường tiêu hóa, hỗ trợ bảo vệ đường ruột trước hại khuẩn.',
-      ],
-    },
-    {
-      key: '4',
-      label: 'Cách dùng',
-      title: 'Cách dùng',
-      content: [
-        'Uống trực tiếp. Cho trẻ 0 - 12 tuổi: 1 - 2 ống mỗi ngày. Trẻ trên 12 tuổi và người lớn: 2 - 3 ống mỗi ngày.',
-      ],
-    },
-    {
-      key: '5',
-      label: 'Tác dụng phụ',
-      title: 'Tác dụng phụ',
-      content: ['Chưa có thông tin về tác dụng phụ của sản phẩm.'],
-    },
-    {
-      key: '6',
-      label: 'Lưu ý',
-      title: 'Lưu ý',
-      content: [
-        'Không sử dụng cho người mẫn cảm/kiêng kỵ với bất kỳ thành phần nào của sản phẩm.',
-      ],
-    },
-    {
-      key: '7',
-      label: 'Bảo quản',
-      title: 'Bảo quản',
-      content: [
-        'Bảo quản nơi khô ráo, thoáng mát, nhiệt độ không quá 30 độ C, tránh ánh sáng. Để xa tầm tay trẻ em.',
-      ],
-    },
-  ];
+  const description_html = `
+  <h2>Em lạy anh bảo</h2>
+
+  <h2>Mô tả sản phẩm</h2>
+  <p>Tại Việt Nam, ngày càng nhiều trẻ nhỏ gặp vấn đề về tiêu hóa...</p>
+
+  <h2>Thành phần</h2>
+  <p>Bacillus clausii</p>
+
+  <h2>Công dụng</h2>
+  <p>Enterogermina Gut Defense giúp tăng cường tiêu hóa...</p>
+
+  <h2>Cách dùng</h2>
+  <p>Uống trực tiếp. Cho trẻ 0 - 12 tuổi: 1 - 2 ống mỗi ngày...</p>
+
+  <h2>Tác dụng phụ</h2>
+  <p>Chưa có thông tin về tác dụng phụ của sản phẩm.</p>
+
+  <h2>Lưu ý</h2>
+  <p>Không sử dụng cho người mẫn cảm...</p>
+
+  <h2>Bảo quản</h2>
+  <p>Bảo quản nơi khô ráo, thoáng mát, nhiệt độ không quá 30 độ C...</p>
+  `;
+
+  type Section = {
+    key: string;
+    title: string;
+    content: string[];
+  };
+
+  const parseDescriptionHtml = useCallback((html: string): Section[] => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const body = doc.body;
+
+  const sections: Section[] = [];
+  let currentSection: Section | null = null;
+  let keyIndex = 1;
+
+  Array.from(body.children).forEach((el) => {
+    if (el.tagName === 'H2') {
+      if (currentSection) sections.push(currentSection);
+      currentSection = {
+        key: keyIndex.toString(),
+        title: el.textContent || '',
+        content: [],
+      };
+      keyIndex++;
+    } else if (el.tagName === 'P' && currentSection) {
+      currentSection.content.push(el.textContent || '');
+    }
+  });
+
+  if (currentSection) sections.push(currentSection);
+  return sections;
+}, []);
+
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isFontLarge, setIsFontLarge] = useState(false);
+  const [activeTab, setActiveTab] = useState<string | null>(null);
+  const [sections, setSections] = useState<Section[]>([]);
+
+  useEffect(() => {
+    const parsed = parseDescriptionHtml(description_html);
+    setSections(parsed);
+  }, [description_html, parseDescriptionHtml]);
 
   const scrollToSection = (key: string) => {
-    const index = tabData.findIndex((item) => item.key === key);
-
+    const index = sections.findIndex((item) => item.key === key);
     if (!isExpanded && index >= 3) {
       setIsExpanded(true);
-
-      // Đợi cho render xong rồi mới scroll
       setTimeout(() => {
         sectionRefs.current[key]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
@@ -165,15 +173,14 @@ const ProductDetail = () => {
     }
   };
 
-  const visibleTabs = isExpanded ? tabData : tabData.slice(0, 3);
-
-  const [isFontLarge, setIsFontLarge] = useState(false); // Trạng thái phóng to chữ
-  const [activeTab, setActiveTab] = useState<string | null>(null); // Trạng thái tab được chọn
-
   const handleTabClick = (key: string) => {
     setActiveTab(key);
     scrollToSection(key);
   };
+
+  const visibleSections = isExpanded ? sections.slice(1) : sections.slice(1, 4);
+  const introSection = sections.length > 0 ? sections[0] : null;
+  const tabSections = sections.slice(1);
 
   const mockReviews = [
     {
@@ -815,16 +822,15 @@ const ProductDetail = () => {
         {/* Menu trái */}
         <div className="lg:w-1/4 w-full sticky top-6 self-start hidden lg:block">
           <div className="border rounded-md divide-y">
-            {tabData.map(({ key, label }) => (
+            {tabSections.map(({ key, title }) => (
               <button
                 key={key}
                 onClick={() => handleTabClick(key)}
-                className={`w-full text-left px-4 py-3 hover:bg-gray-100 transition ${activeTab === key
-                  ? 'bg-blue-100 font-bold text-[20px]'
-                  : 'text-gray-700'
-                  }`}
+                className={`w-full text-left px-4 py-3 hover:bg-gray-100 transition ${
+                  activeTab === key ? 'bg-blue-100 font-bold text-[20px]' : 'text-gray-700'
+                }`}
               >
-                {label}
+                {title}
               </button>
             ))}
           </div>
@@ -832,55 +838,72 @@ const ProductDetail = () => {
 
         {/* Nội dung phải */}
         <div className="lg:w-3/4 w-full space-y-8">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-            <h2 className="text-xl font-bold">Nội dung</h2>
-            <div className="flex items-center gap-3">
-              <span className="text-gray-700">Kích thước chữ:</span>
+          {/* Render phần "Nội dung" mở đầu */}
+          {introSection && (
+            <div>
+              {/* Tiêu đề + Kích thước chữ cùng hàng */}
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                <h2 className="text-xl font-bold sm:max-w-[60%] break-words">{introSection.title}</h2>
 
-              {/* Công tắc trượt */}
-              <div
-                className="relative w-32 h-10 rounded-full border-2 flex items-center transition-all duration-300 ease-in-out bg-white shadow-inner overflow-hidden border-gray-300"
-              >
-                <div
-                  className={`absolute top-0 bottom-0 w-1/2 bg-blue-600 rounded-full transition-all duration-300 ${isFontLarge ? 'left-1/2' : 'left-0'
-                    }`}
-                ></div>
-                <button
-                  onClick={() => setIsFontLarge(false)}
-                  className={`w-1/2 z-10 text-sm font-medium transition-colors duration-300 ${!isFontLarge ? 'text-white' : 'text-gray-700'
-                    }`}
-                >
-                  Mặc định
-                </button>
-                <button
-                  onClick={() => setIsFontLarge(true)}
-                  className={`w-1/2 z-10 text-sm font-medium transition-colors duration-300 ${isFontLarge ? 'text-white' : 'text-gray-700'
-                    }`}
-                >
-                  Lớn hơn
-                </button>
+                <div className="flex items-center gap-3">
+                  <span className="text-gray-700">Kích thước chữ:</span>
+                  <div className="relative w-32 h-10 rounded-full border-2 flex items-center transition-all duration-300 ease-in-out bg-white shadow-inner overflow-hidden border-gray-300">
+                    <div
+                      className={`absolute top-0 bottom-0 w-1/2 bg-blue-600 rounded-full transition-all duration-300 ${
+                        isFontLarge ? 'left-1/2' : 'left-0'
+                      }`}
+                    ></div>
+                    <button
+                      onClick={() => setIsFontLarge(false)}
+                      className={`w-1/2 z-10 text-sm font-medium transition-colors duration-300 ${
+                        !isFontLarge ? 'text-white' : 'text-gray-700'
+                      }`}
+                    >
+                      Mặc định
+                    </button>
+                    <button
+                      onClick={() => setIsFontLarge(true)}
+                      className={`w-1/2 z-10 text-sm font-medium transition-colors duration-300 ${
+                        isFontLarge ? 'text-white' : 'text-gray-700'
+                      }`}
+                    >
+                      Lớn hơn
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          {/* Nội dung từng tab */}
-          {visibleTabs.map(({ key, title, content }) => (
-            <div key={key} ref={(el) => { sectionRefs.current[key] = el; }}>
-              <h2 className="text-xl font-bold mb-2">{title}</h2>
-              {content.map((text, idx) => (
+              {/* Nội dung phần mở đầu */}
+              {introSection.content.map((text, idx) => (
                 <p
                   key={idx}
-                  className={`mb-2 text-gray-700 ${isFontLarge ? 'text-lg' : 'text-base'
-                    }`}
+                  className={`mb-2 text-gray-700 ${isFontLarge ? 'text-lg' : 'text-base'}`}
                 >
                   {text}
                 </p>
               ))}
             </div>
-          ))}
+          )}
+
+          {/* Render các section còn lại */}
+          {visibleSections
+            .filter((s) => s.title !== 'Tiêu đề')
+            .map(({ key, title, content }) => (
+              <div key={key} ref={(el) => { sectionRefs.current[key] = el; }}>
+                <h2 className="text-xl font-bold mb-2">{title}</h2>
+                {content.map((text, idx) => (
+                  <p
+                    key={idx}
+                    className={`mb-2 text-gray-700 ${isFontLarge ? 'text-lg' : 'text-base'}`}
+                  >
+                    {text}
+                  </p>
+                ))}
+              </div>
+            ))}
 
           {/* Nút xem thêm / thu gọn */}
-          {tabData.length > 3 && (
+          {tabSections.length > 3 && (
             <div className="mt-6 text-center">
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
@@ -892,6 +915,7 @@ const ProductDetail = () => {
           )}
         </div>
       </div>
+
 
 
 
