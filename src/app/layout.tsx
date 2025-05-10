@@ -1,6 +1,8 @@
+import 'antd/dist/reset.css';
 import type { Metadata } from 'next';
-import 'antd/dist/reset.css'; // Ant Design reset style
-import '../styles/global.css'; // file css của bạn
+import { AuthLoader } from '../lib/redux/AuthLoader';
+import ReduxProvider from '../lib/redux/ReduxProvider';
+import '../styles/global.css';
 
 export const metadata: Metadata = {
   title: 'Health Mart',
@@ -18,7 +20,12 @@ export default function RootLayout({
         {/* Thêm favicon backup trong head luôn nếu cần */}
         <link rel="icon" href="/images/favicon.ico" />
       </head>
-      <body>{children}</body>
+      <body>
+        <ReduxProvider>
+          <AuthLoader />
+          {children}
+        </ReduxProvider>
+      </body>
     </html>
   );
 }
