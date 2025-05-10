@@ -99,7 +99,34 @@ const ProductDetail = () => {
   <p>Tại Việt Nam, ngày càng nhiều trẻ nhỏ gặp vấn đề về tiêu hóa...</p>
 
   <h2>Thành phần</h2>
-  <p>Bacillus clausii</p>
+  <div class="overflow-x-auto w-full">
+    <table class="min-w-full border-collapse text-left text-sm">
+      <thead>
+        <tr class="bg-gray-300 text-gray-900 font-semibold">
+          <th class="px-4 py-2 border border-white">Thông tin thành phần</th>
+          <th class="px-4 py-2 border border-white">Hàm lượng</th>
+        </tr>
+      </thead>
+      <tbody class="bg-gray-100 text-gray-800">
+        <tr>
+          <td class="px-4 py-2 border border-white">Calci glucoheptonat</td>
+          <td class="px-4 py-2 border border-white">550mg</td>
+        </tr>
+        <tr>
+          <td class="px-4 py-2 border border-white">Vitamin D3</td>
+          <td class="px-4 py-2 border border-white">100iu</td>
+        </tr>
+        <tr>
+          <td class="px-4 py-2 border border-white">Vitamin K2</td>
+          <td class="px-4 py-2 border border-white">10mcg</td>
+        </tr>
+        <tr>
+          <td class="px-4 py-2 border border-white">Bacillus clausii</td>
+          <td class="px-4 py-2 border border-white">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <h2>Công dụng</h2>
   <p>Enterogermina Gut Defense giúp tăng cường tiêu hóa...</p>
@@ -141,14 +168,16 @@ const ProductDetail = () => {
         content: [],
       };
       keyIndex++;
-    } else if (el.tagName === 'P' && currentSection) {
-      currentSection.content.push(el.textContent || '');
+    } else if (currentSection) {
+      // Lấy HTML thay vì chỉ lấy text
+      currentSection.content.push(el.outerHTML || '');
     }
   });
 
   if (currentSection) sections.push(currentSection);
   return sections;
-}, []);
+  }, []);
+
 
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [isExpanded, setIsExpanded] = useState(false);
@@ -874,6 +903,7 @@ const ProductDetail = () => {
               </div>
 
               {/* Nội dung phần mở đầu */}
+              <hr className="my-4 border-t border-gray-300" />
               {introSection.content.map((text, idx) => (
                 <p
                   key={idx}
@@ -892,12 +922,11 @@ const ProductDetail = () => {
               <div key={key} ref={(el) => { sectionRefs.current[key] = el; }}>
                 <h2 className="text-xl font-bold mb-2">{title}</h2>
                 {content.map((text, idx) => (
-                  <p
+                  <div
                     key={idx}
                     className={`mb-2 text-gray-700 ${isFontLarge ? 'text-lg' : 'text-base'}`}
-                  >
-                    {text}
-                  </p>
+                    dangerouslySetInnerHTML={{ __html: text }}
+                  ></div>
                 ))}
               </div>
             ))}
