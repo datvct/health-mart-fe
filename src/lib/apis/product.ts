@@ -25,6 +25,11 @@ class ProductClient {
     const res = await this.client.get(endpoint + `/${id}`);
     return res.data;
   }
+
+  async getCategoryBySlug(slug: string) {
+    const res = await this.client.get(endpoint + `/category/slug/${slug}`);
+    return res.data;
+  }
 }
 
 export const productApi = new ProductClient();

@@ -13,8 +13,10 @@ import '@ant-design/v5-patch-for-react-19';
 import Link from 'next/link';
 import { productApi } from '../lib/apis/product';
 import { Category } from '../lib/types/products/type';
+import { useRouter } from 'next/navigation';
 
 const Header = () => {
+  const router = useRouter();
   const [categoriesRoot, setCategoriesRoot] = useState<Category[]>([]);
   const [activeCategory, setActiveCategory] = useState<Category | null>(null);
   const [activeCategoryLV2, setActiveCategoryLV2] = useState<Category | null>(null);
@@ -125,6 +127,9 @@ const Header = () => {
                 setActiveCategory(categoriesRoot[0]);
                 setActiveCategoryLV2(categoriesRoot[0]?.children?.[0] || null);
               }}
+              onClick={() => {
+                router.push(`/${categoriesRoot[0]?.slug}`);
+              }}
             >
               <span
                 className={`text-[#020b27] font-medium ${
@@ -202,6 +207,9 @@ const Header = () => {
                   setActiveCategory(category);
                   setActiveCategoryLV2(category?.children?.[0] || null);
                 }}
+                onClick={() => {
+                router.push(`/${category?.slug}`);
+              }}
               >
                 <span
                   className={`group-hover:text-[#1250dc] text-[#020b27] font-medium ${
