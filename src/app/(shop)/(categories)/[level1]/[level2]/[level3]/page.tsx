@@ -31,7 +31,7 @@ export default function CategoryPageLV3() {
     };
 
     fetchData();
-  }, [level3]);
+  }, [level1, level3]);
 
   // Tạo tiêu đề breadcrumb
   const customTitles = {

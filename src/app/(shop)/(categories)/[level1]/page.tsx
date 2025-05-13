@@ -40,23 +40,24 @@ export default function CategoryPageLV1() {
         <div className="grid grid-cols-3 gap-3">
           {data?.children?.map((childrenLV2, index) => (
             <div key={index} className="bg-white border border-[#e4e8ed] rounded-xl p-4 flex gap-4">
-              <div className="border-r border-[#e4e8ed] flex flex-col justify-center items-center gap-4 w-1/3 pr-4">
-                <Link href={`${data.slug}/${childrenLV2.slug}`}>
-                  <Image
-                    src={childrenLV2.image || '/placeholder.png'}
-                    alt={childrenLV2.name || 'Category Image'}
-                    width={40}
-                    height={40}
-                  />
-                </Link>
+              <Link
+                href={`${data.slug}/${childrenLV2.slug}`}
+                className="border-r border-[#e4e8ed] flex flex-col justify-center items-center gap-4 w-1/3 pr-4"
+              >
+                <Image
+                  src={childrenLV2.image || '/placeholder.png'}
+                  alt={childrenLV2.name || 'Category Image'}
+                  width={40}
+                  height={40}
+                />
                 <div className="flex flex-col gap-1">
                   <h2 className="text-center text-sm font-bold">{childrenLV2.name}</h2>
                   <p className="text-center text-sm text-[#657384]">141 sản phẩm</p>
                 </div>
-              </div>
+              </Link>
               <div className="flex flex-col w-2/3 justify-center">
                 {childrenLV2?.children?.map((childrenLV3, index) => (
-                  <Link href={'/'} key={index}>
+                  <Link href={`${data.slug}/${childrenLV2.slug}/${childrenLV3.slug}`} key={index}>
                     <span className="text-sm text-[#1250dc] font-semibold hover:underline underline-offset-4">
                       {childrenLV3.name}
                     </span>

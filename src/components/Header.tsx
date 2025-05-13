@@ -159,6 +159,9 @@ const Header = () => {
                     key={children.category_id}
                     className="flex gap-2 items-center rounded-l-xl bg-[#ffffff] hover:bg-[#EDF0F3] p-3 hover:border border-[#dce0e4] cursor-pointer"
                     onMouseEnter={() => setActiveCategoryLV2(children)}
+                    onClick={() => {
+                      router.push(`/${activeCategory.slug}/${children.slug}`);
+                    }}
                   >
                     <Image
                       src={children.image || 'http://example.image'}
@@ -175,6 +178,11 @@ const Header = () => {
                   <div
                     key={index}
                     className="bg-[#fff] flex items-center gap-2 p-2 rounded-xl cursor-pointer hover:bg-[#d7d5d5]"
+                    onClick={() => {
+                      router.push(
+                        `${activeCategory?.slug}/${activeCategoryLV2.slug}/${childrenLV3.slug}`,
+                      );
+                    }}
                   >
                     <Image
                       src={childrenLV3.image || 'http://example.image'}
@@ -208,8 +216,8 @@ const Header = () => {
                   setActiveCategoryLV2(category?.children?.[0] || null);
                 }}
                 onClick={() => {
-                router.push(`/${category?.slug}`);
-              }}
+                  router.push(`/${category?.slug}`);
+                }}
               >
                 <span
                   className={`group-hover:text-[#1250dc] text-[#020b27] font-medium ${
