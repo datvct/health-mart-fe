@@ -1,7 +1,9 @@
 import { Button } from 'antd';
 import Image from 'next/image';
-import { Product } from '../lib/types/products/type';
-import { useState } from 'react';
+import { Category, Product } from '../lib/types/products/type';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { productApi } from '../lib/apis/product';
 
 type Props = {
   data: Product;
@@ -9,6 +11,29 @@ type Props = {
 
 const ProductCard = ({ data }: Props) => {
   const [active, setActive] = useState(data.variants[0]);
+  useEffect(() => {
+  setActive(data.variants[0]); // luôn reset khi data đổi
+}, [data]);
+  const router = useRouter();
+  async function navigateToDetailProduct(id: number, slugLV3: string, slugProduct: string) {
+    const categories = await productApi.getCategoryRelated(id);
+    const levelMap = categories.data.map((item: { parent: { parent: Category } }) => {
+      let level = 1;
+      if (item.parent) {
+        level = 2;
+        if (item.parent.parent) {
+          level = 3;
+        }
+      }
+      return {
+        ...item,
+        level,
+      };
+    });
+    const lv1 = levelMap.find((c: { level: number }) => c.level === 1);
+    const lv2 = levelMap.find((c: { level: number }) => c.level === 2);
+    router.push(`${lv1.slug}/${lv2.slug}/${slugLV3}/${slugProduct}`);
+  }
   return (
     <div className="bg-white rounded-2xl flex flex-col relative p-4 hover:border hover:border-[#1250dc] cursor-pointer">
       {data.discount_percentage > 0 && (
@@ -17,7 +42,12 @@ const ProductCard = ({ data }: Props) => {
         </div>
       )}
       <div className="pt-4 px-2 pb-2 flex flex-col gap-1 h-full justify-between">
-        <div className="flex justify-center items-center">
+        <div
+          className="flex justify-center items-center"
+          onClick={() =>
+            navigateToDetailProduct(data.category.category_id, data.category.slug, data.slug)
+          }
+        >
           <Image
             src={data.image_url?.split(',')[0]?.trim()}
             alt="hình ảnh sản phẩm"
@@ -26,7 +56,14 @@ const ProductCard = ({ data }: Props) => {
             height={140}
           />
         </div>
-        <p className="line-clamp-3 text-sm font-semibold">{data.name}</p>
+        <p
+          className="line-clamp-3 text-sm font-semibold"
+          onClick={() =>
+            navigateToDetailProduct(data.category.category_id, data.category.slug, data.slug)
+          }
+        >
+          {data.name}
+        </p>
         {data.variants && data.variants.length > 1 && (
           <div className="flex w-full bg-[#f6f7f9] rounded-xl text-sm text-[#4a4f63]">
             {data.variants && data.variants.length > 1 && (

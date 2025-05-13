@@ -31,8 +31,18 @@ class ProductClient {
     return res.data;
   }
 
-  async getCategoryById(id: string) {
+    async getProductBySlug(slug: string) {
+    const res = await this.client.get(endpoint + `/slug/${slug}`);
+    return res.data;
+  }
+
+  async getCategoryById(id: number) {
     const res = await this.client.get(endpoint + `/category/${id}`);
+    return res.data;
+  }
+
+  async getCategoryRelated(id: number) {
+    const res = await this.client.get(endpoint + `/category/relate/${id}`);
     return res.data;
   }
 }

@@ -101,9 +101,9 @@ const Header = () => {
               setIsOpen(true);
             }}
           />
-          <a href="">
+          <Link href="/">
             <Image src={IMAGES.ImageLogo} alt="Logo" />
-          </a>
+          </Link>
           <Button
             className="bg-[#1250DC] text-white border-[#1250DC] font-semibold rounded-full"
             icon={<FaShoppingCart />}
@@ -193,15 +193,6 @@ const Header = () => {
                     <p>{childrenLV3.name}</p>
                   </div>
                 ))}
-                {/* <div className="bg-[#fff] flex items-center gap-2 p-2 rounded-xl cursor-pointer hover:bg-[#d7d5d5]">
-                  <Image
-                    src="https://cdn.nhathuoclongchau.com.vn/unsafe/40x40/https://cms-prod.s3-sgn09.fptcloud.com/bo_sung_canxi_vitamin_d_level_3_1cac767906.png"
-                    alt="Vitamin Khoáng Chất"
-                    width={40} // Đặt chiều rộng hình ảnh
-                    height={40} // Đặt chiều cao hình ảnh
-                  />
-                  <p>Vitamin tổng hợp</p>
-                </div> */}
               </div>
             </div>
           </div>
