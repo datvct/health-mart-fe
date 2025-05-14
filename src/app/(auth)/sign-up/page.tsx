@@ -1,13 +1,12 @@
 'use client';
 
-import { Input, Modal, message } from 'antd';
+import { Button, Input, Modal, Upload, message } from 'antd';
 import { isSignInWithEmailLink, sendSignInLinkToEmail, signInWithEmailLink } from 'firebase/auth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import SvgBackground1 from '../../../components/SvgBackground1';
-import SvgBackground2 from '../../../components/SvgBackground2';
 import { IMAGES } from '../../../constants/images';
 import { userApi } from '../../../lib/apis/user';
 import { auth } from '../../../lib/firebase';
@@ -16,12 +15,14 @@ import '../../../styles/animation.css';
 const SignupPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [fileList, setFileList] = useState<any[]>([]);
 
   const [emailInput, setEmailInput] = useState('');
   const [emailVerified, setEmailVerified] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formData, setFormData] = useState({
-    avatar: 'https://example.com/avatar.png',
+    avatar: fileList ?? 'https://example.com/avatar.png',
     fullName: '',
     email: '',
     phone: '',
@@ -41,6 +42,11 @@ const SignupPage = () => {
       window.localStorage.setItem('emailForSignIn', emailInput);
       setIsModalVisible(true);
       message.success('Đã gửi liên kết xác minh đến email');
+
+      setTimeout(() => {
+        window.open('https://mail.google.com', '_blank');
+        setIsModalVisible(false);
+      }, 1000);
     } catch (err) {
       console.error(err);
       message.error('Gửi email thất bại');
@@ -93,7 +99,17 @@ const SignupPage = () => {
   const handleSignup = async () => {
     try {
       setLoading(true);
-      const res = await userApi.registerUser(formData);
+      const form = new FormData();
+      form.append('fullName', formData.fullName);
+      form.append('email', 'vancongthanhdata10@gmail.com');
+      form.append('phone', formData.phone);
+      form.append('password', formData.password);
+      form.append('role', formData.role);
+      if (fileList.length > 0) {
+        const file = fileList[0].originFileObj;
+        form.append('avatar', file);
+      }
+      const res = await userApi.registerUser(form);
 
       if (res.statusCode !== 201) {
         message.error(res.message || 'Đăng ký thất bại!');
@@ -110,17 +126,18 @@ const SignupPage = () => {
       setLoading(false);
     }
   };
+
   return (
     <div className="flex flex-row w-full min-h-screen justify-center bg-gradient-to-r from-orange-100 to-orange-50">
       <Modal
         open={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
         onOk={confirmVerification}
-        okText="Xác minh"
+        okText="Gmail của bạn"
         cancelText="Đóng"
         centered
       >
-        <p>Hãy click vào liên kết xác minh đã được gửi đến email của bạn.</p>
+        <p>Email xác nhận đã được gửi về Email của bạn nhập</p>
       </Modal>
 
       <div className="hidden w-[30%] sm:flex items-center">
@@ -187,6 +204,25 @@ const SignupPage = () => {
                   />
                 </div>
               ))}
+
+              <div className="w-full mb-4">
+                <label className="block w-full text-sm font-semibold mb-2 text-black">
+                  Ảnh đại diện
+                </label>
+                <Upload
+                  listType="picture"
+                  fileList={fileList}
+                  maxCount={1}
+                  beforeUpload={() => false}
+                  showUploadList={{ showRemoveIcon: true }}
+                  onChange={({ fileList: newFileList }) => {
+                    setFileList(newFileList.slice(-1));
+                  }}
+                >
+                  {fileList.length >= 1 ? null : <Button>Chọn ảnh</Button>}
+                </Upload>
+              </div>
+
               <button
                 onClick={handleSignup}
                 className="w-full bg-orange-500 text-white py-3 rounded-[12px] hover:bg-orange-600 transition"
@@ -202,13 +238,6 @@ const SignupPage = () => {
               Đăng nhập
             </Link>
           </p>
-        </div>
-      </div>
-      <div className="relative hidden sm:flex w-[8%] lg:w-[10%]">
-        <div className="absolute bottom-[100px] left-[100px] w-full">
-          <div className="animate-slide-up">
-            <SvgBackground2 />
-          </div>
         </div>
       </div>
     </div>

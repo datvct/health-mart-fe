@@ -33,7 +33,8 @@ class UserClient {
     return res.data;
   }
 
-  async registerUser(data: RegisterUserPayload) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async registerUser(data: any) {
     const res = await this.client.post(`${endpoint}/register`, data);
     return res.data;
   }

@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import SvgBackground1 from '../../../components/SvgBackground1';
-import SvgBackground2 from '../../../components/SvgBackground2';
 import { IMAGES } from '../../../constants/images';
 import { authApi } from '../../../lib/apis/auth';
 import { AppDispatch } from '../../../lib/store';
@@ -22,6 +21,10 @@ const LoginPage = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleLogin = async () => {
+    if (!email.trim() || !password.trim()) {
+      message.error('Vui lòng nhập đầy đủ email và mật khẩu!');
+      return;
+    }
     try {
       setLoading(true);
       const res = await authApi.login({ email, password, remember });
@@ -84,7 +87,7 @@ const LoginPage = () => {
           </label>
 
           <Input
-            type="text"
+            type="password"
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Nhập mật khẩu của bạn"
             className="w-full px-4 py-3 border !rounded-[12px] text-[#33343E] placeholder-[#33343E] focus:outline-none focus:ring-2 focus-within:border-orange-400 focus:ring-orange-400 mb-4"
@@ -113,13 +116,6 @@ const LoginPage = () => {
               Đăng ký
             </Link>
           </p>
-        </div>
-      </div>
-      <div className="relative hidden sm:flex w-[8%] lg:w-[10%]">
-        <div className="absolute bottom-[100px] left-[100px] w-full">
-          <div className="animate-slide-up">
-            <SvgBackground2 />
-          </div>
         </div>
       </div>
     </div>
