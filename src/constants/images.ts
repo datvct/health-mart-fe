@@ -20,24 +20,24 @@ import Banner_2_1_MB from '../../public/images/hero-section/mobile/banner-2/Bann
 import Banner_2_2_MB from '../../public/images/hero-section/mobile/banner-2/Banner_MB_2_2.webp';
 import Banner_2_3_MB from '../../public/images/hero-section/mobile/banner-2/Banner_MB_2_3.webp';
 
-import Footer_MB from '../../public/images/footer/footer_MB.webp';
-import Footer_PC from '../../public/images/footer/footer_PC.jpg';
 import Footer_Certificate_1 from '../../public/images/footer/certificate/bo_cong_thuong_a8e5750f57.svg';
 import Footer_Certificate_2 from '../../public/images/footer/certificate/DMCA_1_1f84305343.svg';
 import Footer_Certificate_3 from '../../public/images/footer/certificate/legit_2_18f407eac4.svg';
-import Footer_Payment_1 from '../../public/images/footer/payment-methods/zalopay_884e503cf9.svg';
-import Footer_Payment_2 from '../../public/images/footer/payment-methods/momo_ebbd8eb9b0.svg';
 import Footer_Connect_1 from '../../public/images/footer/connect-mehtodes/facebook_logo_3152b9bb16.svg';
 import Footer_Connect_2 from '../../public/images/footer/connect-mehtodes/Logo_Zalo_979d41d52b.svg';
+import Footer_MB from '../../public/images/footer/footer_MB.webp';
+import Footer_PC from '../../public/images/footer/footer_PC.jpg';
+import Footer_Payment_2 from '../../public/images/footer/payment-methods/momo_ebbd8eb9b0.svg';
+import Footer_Payment_1 from '../../public/images/footer/payment-methods/zalopay_884e503cf9.svg';
 
-import PHARMACY_SHOP_1 from '../../public/images/he-thong-cua-hang/nhathuoc.svg'
-import PHARMACY_SHOP_2 from '../../public/images/he-thong-cua-hang/thuoc.svg'
-import PHARMACY_SHOP_3 from '../../public/images/he-thong-cua-hang/duocsi.svg'
-import PHARMACY_SHOP_4 from '../../public/images/he-thong-cua-hang/muale.svg'
-import PHARMACY_SHOP_5 from '../../public/images/he-thong-cua-hang/giaohang.svg'
-import PHARMACY_SHOP_6 from '../../public/images/he-thong-cua-hang/trahang.svg'
+import PHARMACY_SHOP_3 from '../../public/images/he-thong-cua-hang/duocsi.svg';
+import PHARMACY_SHOP_5 from '../../public/images/he-thong-cua-hang/giaohang.svg';
+import PHARMACY_SHOP_4 from '../../public/images/he-thong-cua-hang/muale.svg';
+import PHARMACY_SHOP_1 from '../../public/images/he-thong-cua-hang/nhathuoc.svg';
+import PHARMACY_SHOP_2 from '../../public/images/he-thong-cua-hang/thuoc.svg';
+import PHARMACY_SHOP_6 from '../../public/images/he-thong-cua-hang/trahang.svg';
 
-
+import ImageCartEmpty from '../../public/images/illustration-cart-empty.png';
 
 const IMAGES = {
   ImageLogo,
@@ -47,6 +47,7 @@ const IMAGES = {
   FPTLogoSmall,
   SwapIcon,
   ImageError,
+  ImageCartEmpty,
 };
 
 const HEROSECTION = {
@@ -60,7 +61,7 @@ const HEROSECTION = {
 const FOOTER = {
   Footer_MB,
   Footer_PC,
-  Certificate: {Footer_Certificate_1, Footer_Certificate_2, Footer_Certificate_3},
+  Certificate: { Footer_Certificate_1, Footer_Certificate_2, Footer_Certificate_3 },
   Payment: [Footer_Payment_1, Footer_Payment_2],
   Connect: [Footer_Connect_1, Footer_Connect_2],
 };
@@ -72,7 +73,6 @@ const PHARMACY_SHOP = {
   PHARMACY_SHOP_4,
   PHARMACY_SHOP_5,
   PHARMACY_SHOP_6,
+};
 
-}
-
-export { IMAGES, HEROSECTION, FOOTER, PHARMACY_SHOP };
+export { FOOTER, HEROSECTION, IMAGES, PHARMACY_SHOP };
