@@ -1075,7 +1075,7 @@ export default function CategoryPageLV3() {
                 </h1>
 
                 <div className="flex items-center gap-3">
-                  <span className="text-gray-700">Kích thước chữ:</span>
+                  <span className="text-gray-700 text-xs">Kích thước chữ:</span>
                   <div className="relative w-32 h-10 rounded-full border flex items-center bg-white overflow-hidden border-gray-300">
                     <div
                       className={`absolute top-0 bottom-0 w-1/2 bg-blue-600 rounded-full transition-all duration-300 ${
