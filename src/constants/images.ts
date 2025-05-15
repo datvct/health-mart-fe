@@ -4,6 +4,7 @@ import SwapIcon from '../../public/images/icon-swap.png';
 import FPTIDLogo from '../../public/images/logo-login-fpt.png';
 import LongChauLogo from '../../public/images/logo-login-long-chau.png';
 import ImageLogo from '../../public/images/logo-long-chau.svg';
+import authenticityBadge from '../../public/images/authenticity-badge.webp';
 
 import ImageError from '../../public/images/error-page/error_image.svg';
 
