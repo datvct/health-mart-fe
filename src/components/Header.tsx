@@ -8,11 +8,32 @@ import { HiUser } from 'react-icons/hi2';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { FaShoppingCart } from 'react-icons/fa';
 import { IoIosMenu } from 'react-icons/io';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import '@ant-design/v5-patch-for-react-19';
 import Link from 'next/link';
+import { productApi } from '../lib/apis/product';
+import { Category } from '../lib/types/products/type';
+import { useRouter } from 'next/navigation';
 
 const Header = () => {
+  const router = useRouter();
+  const [categoriesRoot, setCategoriesRoot] = useState<Category[]>([]);
+  const [activeCategory, setActiveCategory] = useState<Category | null>(null);
+  const [activeCategoryLV2, setActiveCategoryLV2] = useState<Category | null>(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await productApi.getListCategoriesRoot();
+        setCategoriesRoot(data.data);
+      } catch (error) {
+        console.error('Lỗi khi lấy danh mục gốc:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   type SearchProps = GetProps<typeof Input.Search>;
 
   const suffix = (
@@ -29,10 +50,13 @@ const Header = () => {
   const { Search } = Input;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [openMenus, setOpenMenus] = useState<Record<number, boolean>>({});
 
-  const toggleDropdown = () => {
-    setIsOpenMenu((prev) => !prev);
+  const toggleDropdown = (index: number) => {
+    setOpenMenus((prev) => ({
+      ...prev,
+      [index]: !prev[index], // toggle trạng thái
+    }));
   };
 
   return (
@@ -77,9 +101,9 @@ const Header = () => {
               setIsOpen(true);
             }}
           />
-          <a href="">
+          <Link href="/">
             <Image src={IMAGES.ImageLogo} alt="Logo" />
-          </a>
+          </Link>
           <Button
             className="bg-[#1250DC] text-white border-[#1250DC] font-semibold rounded-full"
             icon={<FaShoppingCart />}
@@ -97,130 +121,117 @@ const Header = () => {
       <div className="hidden md:block lg:block xl:block 2xl:block">
         <div className="flex justify-around py-2 px-4 h-[50px] relative">
           <div className="flex items-center cursor-pointer group hover:shadow-[inset_0_-2px_0_0] hover:shadow-[#1250dc]">
-            <span className="group-hover:text-[#1250dc] text-[#020b27] font-medium">
-              Thực phẩm chức năng
-            </span>
-            <MdKeyboardArrowDown
-              size={25}
-              className="transition-transform duration-300 ease-in-out  group-hover:rotate-180 group-hover:text-[#1250dc]"
-            />
-            <div className="bg-[white] z-10 top-10 absolute w-[91%] group-hover:flex p-4 rounded-b-2xl hidden">
+            <div
+              className="flex"
+              onMouseEnter={() => {
+                setActiveCategory(categoriesRoot[0]);
+                setActiveCategoryLV2(categoriesRoot[0]?.children?.[0] || null);
+              }}
+              onClick={() => {
+                router.push(`/${categoriesRoot[0]?.slug}`);
+              }}
+            >
+              <span
+                className={`text-[#020b27] font-medium ${
+                  activeCategory === categoriesRoot[0] ? 'text-[#1250dc]' : ''
+                }`}
+              >
+                {categoriesRoot[0]?.name}
+              </span>
+              <MdKeyboardArrowDown
+                size={25}
+                className={`transition-transform duration-300 ease-in-out ${
+                  activeCategory === categoriesRoot[0] ? 'rotate-180 text-[#1250dc]' : ''
+                }`}
+              />
+            </div>
+            <div
+              className={`bg-[white] z-10 top-10 absolute w-[91%] group-hover:flex p-4 rounded-b-2xl ${
+                activeCategory === null ? 'hidden' : 'flex'
+              }`}
+              onMouseLeave={() => {
+                setActiveCategory(null);
+              }}
+            >
               <div className="w-1/4 flex flex-col">
-                <div className="flex gap-2 items-center rounded-l-xl bg-[#ffffff] hover:bg-[#EDF0F3] p-3 hover:border border-[#dce0e4] cursor-pointer">
-                  <Image
-                    src="https://cdn.nhathuoclongchau.com.vn/unsafe/24x24/https://cms-prod.s3-sgn09.fptcloud.com/smalls/tpcn_vitamin_khoang_chat_level_2_91b99b5a64.png"
-                    alt="Vitamin Khoáng Chất"
-                    width={24} // Đặt chiều rộng hình ảnh
-                    height={24} // Đặt chiều cao hình ảnh
-                  />
-                  <p>Vitamin & khoáng chất</p>
-                </div>
-                <div className="flex gap-2 items-center bg-[#ffffff] p-3 cursor-pointer hover:border border-[#dce0e4] hover:bg-[#EDF0F3]">
-                  <Image
-                    src="https://cdn.nhathuoclongchau.com.vn/unsafe/24x24/https://cms-prod.s3-sgn09.fptcloud.com/smalls/tpcn_vitamin_khoang_chat_level_2_91b99b5a64.png"
-                    alt="Vitamin Khoáng Chất"
-                    width={24} // Đặt chiều rộng hình ảnh
-                    height={24} // Đặt chiều cao hình ảnh
-                  />
-                  <p>Vitamin & khoáng chất</p>
-                </div>
-                <div className="flex gap-2 items-center bg-[#ffffff] p-3 cursor-pointer hover:border border-[#dce0e4] hover:bg-[#EDF0F3]">
-                  <Image
-                    src="https://cdn.nhathuoclongchau.com.vn/unsafe/24x24/https://cms-prod.s3-sgn09.fptcloud.com/smalls/tpcn_vitamin_khoang_chat_level_2_91b99b5a64.png"
-                    alt="Vitamin Khoáng Chất"
-                    width={24} // Đặt chiều rộng hình ảnh
-                    height={24} // Đặt chiều cao hình ảnh
-                  />
-                  <p>Vitamin & khoáng chất</p>
-                </div>
+                {activeCategory?.children?.map((children) => (
+                  <div
+                    key={children.category_id}
+                    className="flex gap-2 items-center rounded-l-xl bg-[#ffffff] hover:bg-[#EDF0F3] p-3 hover:border border-[#dce0e4] cursor-pointer"
+                    onMouseEnter={() => setActiveCategoryLV2(children)}
+                    onClick={() => {
+                      router.push(`/${activeCategory.slug}/${children.slug}`);
+                    }}
+                  >
+                    <Image
+                      src={children.image || 'http://example.image'}
+                      alt={children.name}
+                      width={24}
+                      height={24}
+                    />
+                    <p>{children.name}</p>
+                  </div>
+                ))}
               </div>
               <div className="bg-[#edf0f3] w-3/4 rounded-r-xl grid grid-cols-3 gap-4 p-4">
-                <div className="bg-[#fff] flex items-center gap-2 p-2 rounded-xl cursor-pointer hover:bg-[#d7d5d5]">
-                  <Image
-                    src="https://cdn.nhathuoclongchau.com.vn/unsafe/40x40/https://cms-prod.s3-sgn09.fptcloud.com/bo_sung_canxi_vitamin_d_level_3_1cac767906.png"
-                    alt="Vitamin Khoáng Chất"
-                    width={40} // Đặt chiều rộng hình ảnh
-                    height={40} // Đặt chiều cao hình ảnh
-                  />
-                  <p>Vitamin tổng hợp</p>
-                </div>
-                <div className="bg-[#fff] flex items-center gap-2 p-2 rounded-xl cursor-pointer hover:bg-[#d7d5d5]">
-                  <Image
-                    src="https://cdn.nhathuoclongchau.com.vn/unsafe/40x40/https://cms-prod.s3-sgn09.fptcloud.com/bo_sung_canxi_vitamin_d_level_3_1cac767906.png"
-                    alt="Vitamin Khoáng Chất"
-                    width={40} // Đặt chiều rộng hình ảnh
-                    height={40} // Đặt chiều cao hình ảnh
-                  />
-                  <p>Vitamin tổng hợp</p>
-                </div>
-                <div className="bg-[#fff] flex items-center gap-2 p-2 rounded-xl cursor-pointer hover:bg-[#d7d5d5]">
-                  <Image
-                    src="https://cdn.nhathuoclongchau.com.vn/unsafe/40x40/https://cms-prod.s3-sgn09.fptcloud.com/bo_sung_canxi_vitamin_d_level_3_1cac767906.png"
-                    alt="Vitamin Khoáng Chất"
-                    width={40} // Đặt chiều rộng hình ảnh
-                    height={40} // Đặt chiều cao hình ảnh
-                  />
-                  <p>Vitamin tổng hợp</p>
-                </div>
-                <div className="bg-[#fff] flex items-center gap-2 p-2 rounded-xl cursor-pointer hover:bg-[#d7d5d5]">
-                  <Image
-                    src="https://cdn.nhathuoclongchau.com.vn/unsafe/40x40/https://cms-prod.s3-sgn09.fptcloud.com/bo_sung_canxi_vitamin_d_level_3_1cac767906.png"
-                    alt="Vitamin Khoáng Chất"
-                    width={40} // Đặt chiều rộng hình ảnh
-                    height={40} // Đặt chiều cao hình ảnh
-                  />
-                  <p>Vitamin tổng hợp</p>
-                </div>
-                <div className="bg-[#fff] flex items-center gap-2 p-2 rounded-xl cursor-pointer hover:bg-[#d7d5d5]">
-                  <Image
-                    src="https://cdn.nhathuoclongchau.com.vn/unsafe/40x40/https://cms-prod.s3-sgn09.fptcloud.com/bo_sung_canxi_vitamin_d_level_3_1cac767906.png"
-                    alt="Vitamin Khoáng Chất"
-                    width={40} // Đặt chiều rộng hình ảnh
-                    height={40} // Đặt chiều cao hình ảnh
-                  />
-                  <p>Vitamin tổng hợp</p>
-                </div>
+                {activeCategoryLV2?.children?.map((childrenLV3, index) => (
+                  <div
+                    key={index}
+                    className="bg-[#fff] flex items-center gap-2 p-2 rounded-xl cursor-pointer hover:bg-[#d7d5d5]"
+                    onClick={() => {
+                      router.push(
+                        `${activeCategory?.slug}/${activeCategoryLV2.slug}/${childrenLV3.slug}`,
+                      );
+                    }}
+                  >
+                    <Image
+                      src={childrenLV3.image || 'http://example.image'}
+                      alt={childrenLV3.name}
+                      width={40} // Đặt chiều rộng hình ảnh
+                      height={40} // Đặt chiều cao hình ảnh
+                    />
+                    <p>{childrenLV3.name}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
+          {categoriesRoot
+            .filter((_, index) => index !== 0 && index !== 4)
+            .map((category) => (
+              <div
+                key={category.category_id}
+                className="flex items-center cursor-pointer group hover:shadow-[inset_0_-2px_0_0] hover:shadow-[#1250dc]"
+                onMouseEnter={() => {
+                  setActiveCategory(category);
+                  setActiveCategoryLV2(category?.children?.[0] || null);
+                }}
+                onClick={() => {
+                  router.push(`/${category?.slug}`);
+                }}
+              >
+                <span
+                  className={`group-hover:text-[#1250dc] text-[#020b27] font-medium ${
+                    activeCategory === category ? 'text-[#1250dc]' : ''
+                  }`}
+                >
+                  {category.name}
+                </span>
+                <MdKeyboardArrowDown
+                  size={25}
+                  className={`transition-transform duration-300 ease-in-out group-hover:rotate-180 group-hover:text-[#1250dc] ${
+                    activeCategory === category ? 'rotate-180 text-[#1250dc]' : ''
+                  }`}
+                />
+              </div>
+            ))}
           <div className="flex items-center cursor-pointer group hover:shadow-[inset_0_-2px_0_0] hover:shadow-[#1250dc]">
-            <span className="group-hover:text-[#1250dc] text-[#020b27] font-medium">
-              Dược mỹ phẩm
-            </span>
-            <MdKeyboardArrowDown
-              size={25}
-              className="transition-transform duration-300 ease-in-out group-hover:rotate-180 group-hover:text-[#1250dc]"
-            />
-          </div>
-          <div className="flex items-center cursor-pointer group hover:shadow-[inset_0_-2px_0_0] hover:shadow-[#1250dc]">
-            <span className="group-hover:text-[#1250dc] text-[#020b27] font-medium">Thuốc</span>
-            <MdKeyboardArrowDown
-              size={25}
-              className="transition-transform duration-300 ease-in-out group-hover:rotate-180 group-hover:text-[#1250dc]"
-            />
-          </div>
-          <div className="flex items-center cursor-pointer group hover:shadow-[inset_0_-2px_0_0] hover:shadow-[#1250dc]">
-            <span className="group-hover:text-[#1250dc] text-[#020b27] font-medium">
-              Chăm sóc cá nhân
-            </span>
-            <MdKeyboardArrowDown
-              size={25}
-              className="transition-transform duration-300 ease-in-out group-hover:rotate-180 group-hover:text-[#1250dc]"
-            />
-          </div>
-          <div className="flex items-center cursor-pointer group hover:shadow-[inset_0_-2px_0_0] hover:shadow-[#1250dc]">
-            <span className="group-hover:text-[#1250dc] text-[#020b27] font-medium">
-              Thiết bị y tế
-            </span>
-            <MdKeyboardArrowDown
-              size={25}
-              className="transition-transform duration-300 ease-in-out group-hover:rotate-180 group-hover:text-[#1250dc]"
-            />
-          </div>
-          <div className="flex items-center cursor-pointer group hover:shadow-[inset_0_-2px_0_0] hover:shadow-[#1250dc]">
-            <span className="group-hover:text-[#1250dc] text-[#020b27] font-medium">
-              Hệ thống nhà thuốc
-            </span>
+            <Link
+              className="group-hover:text-[#1250dc] text-[#020b27] font-medium"
+              href="/he-thong-cua-hang"
+            >
+              {categoriesRoot[4]?.name}
+            </Link>
           </div>
         </div>
       </div>
@@ -262,59 +273,36 @@ const Header = () => {
         </div>
 
         <ul className="p-4 space-y-2">
-          <div className="flex flex-col group">
-            <div className="flex items-center justify-between" onClick={toggleDropdown}>
-              <li className="font-semibold p-2">Thực phẩm chức năng</li>
-              <MdKeyboardArrowDown
-                size={25}
-                className={`transition-transform duration-300 ease-in-out ${
-                  isOpenMenu ? 'rotate-180 text-[#1250dc]' : ''
-                }`}
-              />
-            </div>
-            {isOpenMenu && (
-              <div className="bg-[#eaeffa] flex flex-col mx-4 rounded-xl">
-                <div className="p-2  border-b">
-                  <Link href="/">Vitamin & khoáng chất</Link>
+          {categoriesRoot
+            .filter((_, index) => index !== 4)
+            .map((category, index) => (
+              <div key={index} className="flex flex-col group">
+                <div
+                  className="flex items-center justify-between"
+                  onClick={() => toggleDropdown(index)}
+                >
+                  <li className="font-semibold p-2">{category.name}</li>
+                  <MdKeyboardArrowDown
+                    size={25}
+                    className={`transition-transform duration-300 ease-in-out ${
+                      openMenus[index] ? 'rotate-180 text-[#1250dc]' : ''
+                    }`}
+                  />
                 </div>
-                <div className="p-2  border-b">
-                  <Link href="/">Vitamin & khoáng chất</Link>
-                </div>
-                <div className="p-2">
-                  <Link href="/">Vitamin & khoáng chất</Link>
-                </div>
+                {openMenus[index] && (
+                  <div className="bg-[#eaeffa] flex flex-col mx-4 rounded-xl">
+                    {category.children?.map((child, index) => (
+                      <div key={index} className="p-2  border-b">
+                        <Link href="/">{child.name}</Link>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          <div className="flex items-center justify-between">
-            <li className="font-semibold p-2">Dược mỹ phẩm</li>
-            <MdKeyboardArrowDown
-              size={25}
-              className="transition-transform duration-300 ease-in-out group-hover:rotate-180 group-hover:text-[#1250dc]"
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <li className="font-semibold p-2">Thuốc</li>
-            <MdKeyboardArrowDown
-              size={25}
-              className="transition-transform duration-300 ease-in-out group-hover:rotate-180 group-hover:text-[#1250dc]"
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <li className="font-semibold p-2">Chăm sóc cá nhân</li>
-            <MdKeyboardArrowDown
-              size={25}
-              className="transition-transform duration-300 ease-in-out group-hover:rotate-180 group-hover:text-[#1250dc]"
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <li className="font-semibold p-2">Thiết bị y tế</li>
-            <MdKeyboardArrowDown
-              size={25}
-              className="transition-transform duration-300 ease-in-out group-hover:rotate-180 group-hover:text-[#1250dc]"
-            />
-          </div>
-          <li className="font-semibold p-2">Hệ thống nhà nước</li>
+            ))}
+          <li className="font-semibold p-2">
+            <Link href="/he-thong-cua-hang">Hệ thống nhà nước</Link>
+          </li>
         </ul>
       </div>
     </header>
