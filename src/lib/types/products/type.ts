@@ -36,6 +36,43 @@ type Product = {
       price: number;
     },
   ];
+  ingredients?: [
+    {
+      ingredient_id: number;
+      name: string;
+      concentration: string;
+    },
+  ];
+  usages?: [
+    {
+      usage_id: number;
+      description: string;
+    },
+  ];
+  dosages?: [
+    {
+      dosage_id: number;
+      description: string;
+    },
+  ];
+  precautions?: [
+    {
+      precaution_id: number;
+      description: string;
+    },
+  ];
+  sideEffects?: [
+    {
+      side_effect_id: number;
+      description: string;
+    },
+  ];
+  storages?: [
+    {
+      storage_id: number;
+      description: string;
+    },
+  ];
 };
 
 export type { Category, Product };
