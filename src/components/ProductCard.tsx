@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -102,15 +102,18 @@ const ProductCard = ({ data }: Props) => {
         </div>
         <Button
           className="bg-[#1250DC] text-white font-medium text-sm w-full rounded-2xl mt-2"
-          onClick={() =>
+          onClick={() => {
             addToCart({
               product_id: data.product_id,
               name: data.name,
               image: data.image_url?.split(',')[0]?.trim(),
               variant_unit: active.unit,
+              sale_price: active.price - (active.price * data.discount_percentage) / 100,
               price: active.price,
-            })
-          }
+              discount_percentage: data.discount_percentage,
+            });
+            message.success('Thêm vào giỏ hàng thành công');
+          }}
         >
           Chọn mua
         </Button>

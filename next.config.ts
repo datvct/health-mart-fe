@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
       'hoanghamobile.com',
       'example.com',
       'bucket-ktpm.s3.ap-southeast-1.amazonaws.com',
+      'example.image',
     ],
   },
 };
