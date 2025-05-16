@@ -36,9 +36,11 @@ import PHARMACY_SHOP_4 from '../../public/images/he-thong-cua-hang/muale.svg';
 import PHARMACY_SHOP_1 from '../../public/images/he-thong-cua-hang/nhathuoc.svg';
 import PHARMACY_SHOP_2 from '../../public/images/he-thong-cua-hang/thuoc.svg';
 import PHARMACY_SHOP_6 from '../../public/images/he-thong-cua-hang/trahang.svg';
-
 import ImageCartEmpty from '../../public/images/illustration-cart-empty.png';
 
+import ImageLogout from '../../public/images/art.svg';
+import ImageAvtarDefault from '../../public/images/avatar-default.svg';
+import ImageBannerLeftLogin from '../../public/images/image-background-left.webp';
 const IMAGES = {
   ImageLogo,
   BackgroundLogin,
@@ -48,6 +50,9 @@ const IMAGES = {
   SwapIcon,
   ImageError,
   ImageCartEmpty,
+  ImageBannerLeftLogin,
+  ImageAvtarDefault,
+  ImageLogout,
 };
 
 const HEROSECTION = {
