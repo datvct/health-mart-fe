@@ -3,6 +3,6 @@ type Policy = {
   slug: string;
   title: string;
   content: string;
-}
+};
 
 export type { Policy };
