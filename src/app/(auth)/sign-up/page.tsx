@@ -11,6 +11,7 @@ import { IMAGES } from '../../../constants/images';
 import { userApi } from '../../../lib/apis/user';
 import { auth } from '../../../lib/firebase';
 import '../../../styles/animation.css';
+import '@ant-design/v5-patch-for-react-19';
 
 const SignupPage = () => {
   const router = useRouter();
@@ -27,7 +28,6 @@ const SignupPage = () => {
     email: '',
     phone: '',
     password: '',
-    role: 'customer',
   });
   const [loading, setLoading] = useState(false);
 
@@ -97,35 +97,40 @@ const SignupPage = () => {
   };
 
   const handleSignup = async () => {
-    try {
-      setLoading(true);
-      const form = new FormData();
-      form.append('fullName', formData.fullName);
-      form.append('email', 'vancongthanhdata10@gmail.com');
-      form.append('phone', formData.phone);
-      form.append('password', formData.password);
-      form.append('role', formData.role);
-      if (fileList.length > 0) {
-        const file = fileList[0].originFileObj;
-        form.append('avatar', file);
-      }
-      const res = await userApi.registerUser(form);
+  try {
+    setLoading(true);
 
-      if (res.statusCode !== 201) {
-        message.error(res.message || 'Đăng ký thất bại!');
-        return;
-      }
+    const form = new FormData();
+    form.append('fullName', formData.fullName);
+    form.append('email', formData.email);
+    form.append('phone', formData.phone);
+    form.append('password', formData.password);
 
-      message.success(res.message || 'Đăng ký thành công');
-      router.push('/sign-in');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      const errorMessage = error?.response?.data?.message || 'Đăng ký thất bại, vui lòng thử lại!';
-      message.error(errorMessage);
-    } finally {
-      setLoading(false);
+    if (fileList.length > 0 && fileList[0].originFileObj) {
+      const file = fileList[0].originFileObj as File;
+      form.append('avatar', file);
     }
-  };
+
+    const res = await userApi.registerUser(form);
+
+    if (res.statusCode !== 201) {
+      message.error(res.message || 'Đăng ký thất bại!');
+      return;
+    }
+
+    message.success(res.message || 'Đăng ký thành công');
+    router.push('/sign-in');
+  } catch (error: unknown) {
+    let errorMessage = 'Đăng ký thất bại, vui lòng thử lại!';
+    if (typeof error === 'object' && error !== null && 'response' in error) {
+      const err = error as { response?: { data?: { message?: string } } };
+      errorMessage = err.response?.data?.message || errorMessage;
+    }
+    message.error(errorMessage);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="flex flex-row w-full min-h-screen justify-center bg-gradient-to-r from-orange-100 to-orange-50">

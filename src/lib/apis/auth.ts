@@ -18,6 +18,13 @@ class AuthClient {
     const res = await this.client.get(`${endpoint}/me`);
     return res.data;
   }
+
+  async refreshToken(payload: { refreshToken: string; time: string }) {
+    const res = await this.client.post(`${endpoint}/refresh-token`, {
+      payload,
+    });
+    return res.data;
+  }
 }
 
 export const authApi = new AuthClient();

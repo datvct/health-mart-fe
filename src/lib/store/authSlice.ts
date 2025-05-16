@@ -47,6 +47,10 @@ const authSlice = createSlice({
         localStorage.setItem('auth_user', JSON.stringify(user));
         localStorage.setItem('auth_token', token);
         localStorage.setItem('refresh_token', refreshToken);
+      } else {
+        sessionStorage.setItem('auth_user', JSON.stringify(user));
+        sessionStorage.setItem('auth_token', token);
+        sessionStorage.setItem('refresh_token', refreshToken);
       }
 
       document.cookie = `auth_user=${JSON.stringify(user)}; path=/`;
@@ -56,11 +60,23 @@ const authSlice = createSlice({
       const storedToken = localStorage.getItem('auth_token');
       const storedRefresh = localStorage.getItem('refresh_token');
 
+      // Không đăng nhập
+      const storedUserSession = sessionStorage.getItem('auth_user');
+      const storedTokenSession = sessionStorage.getItem('auth_token');
+      const storedRefreshSession = sessionStorage.getItem('refresh_token');
+
       if (storedUser && storedToken && storedRefresh) {
         state.user = JSON.parse(storedUser);
         state.token = storedToken;
         state.refreshToken = storedRefresh;
         state.remember = true;
+      }
+
+      if (storedUserSession && storedTokenSession && storedRefreshSession) {
+        state.user = JSON.parse(storedUserSession);
+        state.token = storedTokenSession;
+        state.refreshToken = storedRefreshSession;
+        state.remember = false;
       }
     },
     logout: (state) => {
@@ -69,6 +85,7 @@ const authSlice = createSlice({
       state.refreshToken = null;
       state.remember = false;
       localStorage.clear();
+      sessionStorage.clear();
       document.cookie = 'auth_user=; Max-Age=0; path=/';
     },
   },

@@ -5,6 +5,7 @@ import { HeroSection } from '../../components/HeroSection';
 import { ProductCard } from '../../components/ProductCard';
 import { productApi } from '../../lib/apis/product';
 import { Product } from '../../lib/types/products/type';
+import '@ant-design/v5-patch-for-react-19';
 
 function Home() {
   const [data, setData] = useState<Product[]>();

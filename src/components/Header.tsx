@@ -85,15 +85,33 @@ const Header = () => {
   const userMenu: MenuProps = {
     items: [
       {
-        key: 'profile',
-        label: <Link href="/profile">Trang cá nhân</Link>,
-      },
-      {
-        key: 'logout',
-        label: <span onClick={() => setIsLogoutModalOpen(true)}>Đăng xuất</span>,
+        type: 'group',
+        label: (
+          <div className="flex items-center gap-2">
+            <Image
+              src={user?.avatar || '/images/default-avatar.png'}
+              alt="Avatar"
+              width={32}
+              height={32}
+              className="rounded-full border md:!w-7 md:h-7 lg:!w-10 lg:h-10 xl:!w-10 xl:h-10 2xl:!w-10 2xl:h-10"
+            />
+            <p className="font-semibold text-[#000]">{user?.fullName}</p>
+          </div>
+        ),
+        children: [
+          {
+            key: 'profile',
+            label: <Link href="/profile">Trang cá nhân</Link>,
+          },
+          {
+            key: 'logout',
+            label: <span onClick={() => setIsLogoutModalOpen(true)}>Đăng xuất</span>,
+          },
+        ],
       },
     ],
   };
+
   return (
     <>
       <header>
@@ -111,19 +129,16 @@ const Header = () => {
             suffix={suffix}
             onSearch={onSearch}
           />
-          <div className="flex gap-5 w-[20%] items-center">
+          <div className="flex gap-5 w-[20%] items-center justify-end">
             {user ? (
               <Dropdown menu={userMenu} trigger={['click']}>
-                <div className="flex items-center gap-2 cursor-pointer">
-                  <Image
-                    src={user.avatar || '/images/default-avatar.png'}
-                    alt="Avatar"
-                    width={32}
-                    height={32}
-                    className="rounded-full border !w-10 h-10"
-                  />
-                  <span className="text-white font-medium max-w-[100px]">{user.fullName}</span>
-                </div>
+                <Image
+                  src={user.avatar || '/images/default-avatar.png'}
+                  alt="Avatar"
+                  width={32}
+                  height={32}
+                  className="rounded-full w-10 h-10"
+                />
               </Dropdown>
             ) : (
               <div className="flex items-center gap-2 cursor-pointer group w-[120px]">
