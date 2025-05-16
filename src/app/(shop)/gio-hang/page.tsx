@@ -1,5 +1,5 @@
 import AntdBreadcrumb from '../../../components/Breadcrumb';
-import CartInfo from '../../../components/cart/CardInfo';
+import CartInfo from '../../../components/cart/CartInfo';
 
 function CartPage() {
   return (
