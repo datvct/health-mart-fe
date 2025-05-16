@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, message } from 'antd';
+import { Button, message, Upload } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -12,13 +12,14 @@ import { IMAGES } from '../../../constants/images';
 import { authApi } from '../../../lib/apis/auth';
 import { userApi } from '../../../lib/apis/user';
 import { RootState } from '../../../lib/store';
-import { logout } from '../../../lib/store/authSlice';
+import { logout, updateProfile } from '../../../lib/store/authSlice';
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const user = useSelector((state: RootState) => state.auth.user);
   const [isEditing, setIsEditing] = useState(false);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     avatar: user?.avatar || '',
     fullName: user?.fullName || '',
@@ -28,10 +29,6 @@ const ProfilePage = () => {
     role: user?.role || '',
   });
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
 
   useEffect(() => {
     if (user) {
@@ -46,15 +43,30 @@ const ProfilePage = () => {
     }
   }, [user]);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   const handleUpdate = async () => {
     try {
       if (!user) return;
-      const res = await userApi.updateUser(user?.id.toString(), formData);
-      localStorage.setItem('user', JSON.stringify(res.data));
-      dispatch({ type: 'auth/setUser', payload: res.data }); // bạn có thể import setUser nếu có action creator
+
+      const form = new FormData();
+      form.append('fullName', formData.fullName);
+      if (avatarFile) {
+        form.append('avatar', avatarFile);
+      }
+
+      const res = await userApi.updateUser(user.id, form);
+      dispatch(updateProfile(res.data));
+      console.log(res);
+
+      // localStorage.setItem('user', JSON.stringify(res.data));
+      // dispatch({ type: 'auth/setUser', payload: res.data });
       message.success('Cập nhật thông tin thành công');
       setIsEditing(false);
-    } catch {
+    } catch (error) {
+      console.error(error);
       message.error('Cập nhật thất bại');
     }
   };
@@ -69,7 +81,6 @@ const ProfilePage = () => {
       dispatch(logout());
       message.success('Đã đăng xuất');
       setIsLogoutModalOpen(false);
-
       router.push('/');
     }
   };
@@ -82,7 +93,9 @@ const ProfilePage = () => {
           <div className="w-full md:w-1/4">
             <div className="bg-gradient-to-b from-[#2a65f2] to-[#295de0] text-white rounded-xl p-5 text-center">
               <Image
-                src={user?.avatar ?? IMAGES.ImageAvtarDefault}
+                src={
+                  formData.avatar ? formData.avatar : IMAGES.ImageAvtarDefault // ảnh fallback mặc định
+                }
                 alt="avatar"
                 width={64}
                 height={64}
@@ -93,12 +106,6 @@ const ProfilePage = () => {
             </div>
             <div className="bg-white mt-4 rounded-xl divide-y">
               {[
-                // { icon: <FaUser />, label: 'Thông tin cá nhân' },
-                // { icon: <FaBox />, label: 'Đơn hàng của tôi' },
-                // { icon: <FaMapMarkerAlt />, label: 'Quản lý sổ địa chỉ' },
-                // { icon: <FaSyringe />, label: 'Lịch hẹn tiêm chủng' },
-                // { icon: <FaPrescriptionBottleAlt />, label: 'Đơn hàng tiêm chủng' },
-                // { icon: <FaTruck />, label: 'Đơn thuốc của tôi' },
                 {
                   icon: <FaSignOutAlt />,
                   label: 'Đăng xuất',
@@ -121,17 +128,34 @@ const ProfilePage = () => {
             <h2 className="text-base font-semibold text-[#020b27] border-b pb-3 hidden md:block">
               Thông tin cá nhân
             </h2>
+
             {isEditing ? (
               <div className="flex flex-col items-center py-6">
                 <Image
-                  src={formData.avatar || IMAGES.ImageAvtarDefault}
+                  src={
+                    avatarFile
+                      ? URL.createObjectURL(avatarFile)
+                      : formData.avatar || IMAGES.ImageAvtarDefault
+                  }
                   alt="avatar"
                   width={96}
                   height={96}
                   className="mb-4 w-[96px] h-[96px] rounded-full object-cover"
                 />
 
-                <div className="w-full max-w-md text-sm space-y-4">
+                <Upload
+                  accept="image/*"
+                  maxCount={1}
+                  showUploadList={false}
+                  beforeUpload={(file) => {
+                    setAvatarFile(file);
+                    return false;
+                  }}
+                >
+                  <Button>Chọn ảnh mới</Button>
+                </Upload>
+
+                <div className="w-full max-w-md text-sm space-y-4 mt-4">
                   <div>
                     <label className="block text-sm text-gray-600 mb-1">Họ và tên</label>
                     <input
@@ -159,7 +183,7 @@ const ProfilePage = () => {
                     onClick={handleUpdate}
                     className="w-full bg-[#165DFF] hover:bg-[#3c7bff] text-white font-medium py-2 rounded-full"
                   >
-                    Cập nhập thông tin
+                    Cập nhật thông tin
                   </Button>
                 </div>
               </div>
@@ -197,6 +221,7 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
+
       <LogoutConfirmModal
         open={isLogoutModalOpen}
         onCancel={() => setIsLogoutModalOpen(false)}

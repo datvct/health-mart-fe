@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { AuthLoader } from '../lib/redux/AuthLoader';
 import ReduxProvider from '../lib/redux/ReduxProvider';
 import '../styles/global.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 export const metadata: Metadata = {
   title: 'Health Mart',
@@ -24,6 +26,7 @@ export default function RootLayout({
         <ReduxProvider>
           <AuthLoader />
           {children}
+          <ToastContainer />
         </ReduxProvider>
       </body>
     </html>

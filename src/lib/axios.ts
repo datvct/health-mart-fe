@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { store } from './store';
+import { RootState, store } from './store';
 import { logout, setAuth } from './store/authSlice';
 
 // Tạo instance
@@ -11,7 +11,9 @@ const api = axios.create({
 // Thêm interceptor để tự động thêm Authorization header nếu có token
 api.interceptors.request.use(
   (config) => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
+    const state: RootState = store.getState(); // 🔥 Lấy state trực tiếp từ Redux store
+    const authToken = state.auth.token;
+    const token = typeof window !== 'undefined' ? authToken : null;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

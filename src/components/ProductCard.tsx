@@ -1,7 +1,8 @@
-import { Button, message } from 'antd';
+import { Button } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useCart } from '../hook/useCart';
 import { productApi } from '../lib/apis/product';
 import { Category, Product } from '../lib/types/products/type';
@@ -112,7 +113,7 @@ const ProductCard = ({ data }: Props) => {
               price: active.price,
               discount_percentage: data.discount_percentage,
             });
-            message.success('Thêm vào giỏ hàng thành công');
+            toast.success('Thêm vào giỏ hàng thành công');
           }}
         >
           Chọn mua

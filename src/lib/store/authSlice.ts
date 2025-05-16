@@ -88,8 +88,16 @@ const authSlice = createSlice({
       sessionStorage.clear();
       document.cookie = 'auth_user=; Max-Age=0; path=/';
     },
+    updateProfile: (state, action) => {
+      state.user = action.payload;
+      if (state.remember == true) {
+        localStorage.setItem('auth_user', JSON.stringify(action.payload));
+      } else {
+        sessionStorage.setItem('auth_user', JSON.stringify(action.payload));
+      }
+    },
   },
 });
 
-export const { setAuth, loadFromStorage, logout } = authSlice.actions;
+export const { setAuth, loadFromStorage, logout, updateProfile } = authSlice.actions;
 export default authSlice.reducer;

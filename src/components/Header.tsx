@@ -2,7 +2,7 @@
 
 import { AudioOutlined } from '@ant-design/icons';
 import '@ant-design/v5-patch-for-react-19';
-import { Button, Dropdown, GetProps, Input, MenuProps, message } from 'antd';
+import { Button, Dropdown, GetProps, Input, MenuProps } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -11,6 +11,7 @@ import { HiUser } from 'react-icons/hi2';
 import { IoIosMenu } from 'react-icons/io';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { IMAGES } from '../constants/images';
 import { authApi } from '../lib/apis/auth';
 import { productApi } from '../lib/apis/product';
@@ -33,7 +34,7 @@ const Header = () => {
         const data = await productApi.getListCategoriesRoot();
         setCategoriesRoot(data.data);
       } catch (error) {
-        console.error('Lỗi khi lấy danh mục gốc:', error);
+        toast.error('Lỗi khi lấy danh mục gốc:' + error);
       }
     };
 
@@ -73,10 +74,10 @@ const Header = () => {
       if (!user) return;
       await authApi.logout({ userId: user?.id.toString() });
     } catch (err) {
-      console.warn('Logout API failed:', err);
+      toast.warn('Logout API failed:' + err);
     } finally {
       dispatch(logout());
-      message.success('Đã đăng xuất');
+      toast.success('Đã đăng xuất');
       setIsLogoutModalOpen(false);
       router.push('/');
     }
@@ -94,7 +95,7 @@ const Header = () => {
               alt="Avatar"
               width={32}
               height={32}
-              className="rounded-full border md:!w-7 md:h-7 lg:!w-10 lg:h-10 xl:!w-10 xl:h-10 2xl:!w-10 2xl:h-10"
+              className="rounded-full border md:!w-7 md:h-7 lg:!w-10 lg:h-10 xl:!w-10 xl:h-10 2xl:!w-10 2xl:h-10 object-cover"
             />
             <p className="font-semibold text-[#000]">{user?.fullName}</p>
           </div>
@@ -134,11 +135,11 @@ const Header = () => {
             {user ? (
               <Dropdown menu={userMenu} trigger={['click']}>
                 <Image
-                  src={user.avatar || '/images/default-avatar.png'}
+                  src={user?.avatar || '/images/default-avatar.png'}
                   alt="Avatar"
                   width={32}
                   height={32}
-                  className="rounded-full w-10 h-10"
+                  className="rounded-full border md:!w-7 md:h-7 lg:!w-10 lg:h-10 xl:!w-10 xl:h-10 2xl:!w-10 2xl:h-10 object-cover"
                 />
               </Dropdown>
             ) : (
@@ -321,14 +322,29 @@ const Header = () => {
             <p className="text-sm text-justify text-white">
               Đăng nhập để hưởng những đặc quyền riêng cho thành viên
             </p>
-            <div className="flex items-center gap-2">
-              <Button className="bg-[#eaeffa] text-[#1250dc] rounded-2xl font-medium">
-                Đăng nhập
-              </Button>
-              <Button className="bg-[linear-gradient(315deg,#1250dc_0%,#306de4_100%)] text-white rounded-2xl font-medium">
-                Đăng ký
-              </Button>
-            </div>
+            {user ? (
+              <Dropdown menu={userMenu} trigger={['click']}>
+                <div className="w-full flex items-center font-bold gap-2 cursor-pointer">
+                  <Image
+                    src={user.avatar || '/images/default-avatar.png'}
+                    alt="Avatar"
+                    width={32}
+                    height={32}
+                    className="rounded-full w-10 h-10"
+                  />
+                  <span>{user.fullName}</span>
+                </div>
+              </Dropdown>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Button className="bg-[#eaeffa] text-[#1250dc] rounded-2xl font-medium">
+                  Đăng nhập
+                </Button>
+                <Button className="bg-[linear-gradient(315deg,#1250dc_0%,#306de4_100%)] text-white rounded-2xl font-medium">
+                  Đăng ký
+                </Button>
+              </div>
+            )}
           </div>
 
           <ul className="p-4 space-y-2">
