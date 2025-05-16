@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Input, Modal, Upload, message } from 'antd';
+import { Button, Input, Modal, Upload } from 'antd';
 import { isSignInWithEmailLink, sendSignInLinkToEmail, signInWithEmailLink } from 'firebase/auth';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,6 +12,7 @@ import { userApi } from '../../../lib/apis/user';
 import { auth } from '../../../lib/firebase';
 import '../../../styles/animation.css';
 import '@ant-design/v5-patch-for-react-19';
+import { toast } from 'react-toastify';
 
 const SignupPage = () => {
   const router = useRouter();
@@ -32,7 +33,7 @@ const SignupPage = () => {
   const [loading, setLoading] = useState(false);
 
   const sendEmailVerification = async () => {
-    if (!emailInput) return message.warning('Vui lòng nhập email.');
+    if (!emailInput) return toast.warning('Vui lòng nhập email.');
 
     try {
       await sendSignInLinkToEmail(auth, emailInput, {
@@ -41,21 +42,20 @@ const SignupPage = () => {
       });
       window.localStorage.setItem('emailForSignIn', emailInput);
       setIsModalVisible(true);
-      message.success('Đã gửi liên kết xác minh đến email');
+      toast.success('Đã gửi liên kết xác minh đến email');
 
       setTimeout(() => {
         window.open('https://mail.google.com', '_blank');
         setIsModalVisible(false);
       }, 1000);
-    } catch (err) {
-      console.error(err);
-      message.error('Gửi email thất bại');
+    } catch {
+      toast.error('Email này không tồn tại!!!');
     }
   };
 
   const confirmVerification = async () => {
     const storedEmail = window.localStorage.getItem('emailForSignIn');
-    if (!storedEmail) return message.error('Không tìm thấy email để xác minh');
+    if (!storedEmail) return toast.error('Không tìm thấy email để xác minh');
 
     try {
       if (isSignInWithEmailLink(auth, window.location.href)) {
@@ -63,13 +63,12 @@ const SignupPage = () => {
         setFormData((prev) => ({ ...prev, email: storedEmail }));
         setEmailVerified(true);
         setIsModalVisible(false);
-        message.success('Xác minh email thành công');
+        toast.success('Xác minh email thành công');
       } else {
-        message.error('Liên kết xác minh không hợp lệ');
+        toast.error('Liên kết xác minh không hợp lệ');
       }
-    } catch (err) {
-      console.error(err);
-      message.error('Xác minh thất bại');
+    } catch {
+      toast.error('Xác minh thất bại');
     }
   };
 
@@ -83,11 +82,10 @@ const SignupPage = () => {
         .then(() => {
           setFormData((prev) => ({ ...prev, email: storedEmail }));
           setEmailVerified(true);
-          message.success('Xác minh email thành công');
+          toast.success('Xác minh email thành công');
         })
-        .catch((err) => {
-          console.error(err);
-          message.error('Xác minh thất bại');
+        .catch(() => {
+          toast.error('Xác minh thất bại');
         });
     }
   }, [searchParams]);
@@ -96,41 +94,65 @@ const SignupPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const validateEmail = (email: string): boolean => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email.toLowerCase());
+  };
+
+  const validatePhone = (phone: string): boolean => {
+    const re = /^(0|\+84)[0-9]{9}$/; // kiểm tra số điện thoại VN có 10 số bắt đầu bằng 0 hoặc +84
+    return re.test(phone);
+  };
+
   const handleSignup = async () => {
-  try {
-    setLoading(true);
-
-    const form = new FormData();
-    form.append('fullName', formData.fullName);
-    form.append('email', formData.email);
-    form.append('phone', formData.phone);
-    form.append('password', formData.password);
-
-    if (fileList.length > 0 && fileList[0].originFileObj) {
-      const file = fileList[0].originFileObj as File;
-      form.append('avatar', file);
-    }
-
-    const res = await userApi.registerUser(form);
-
-    if (res.statusCode !== 201) {
-      message.error(res.message || 'Đăng ký thất bại!');
+    if (!formData.fullName || !formData.phone || !formData.password) {
+      toast.warning('Vui lòng nhập đầy đủ thông tin!');
       return;
     }
 
-    message.success(res.message || 'Đăng ký thành công');
-    router.push('/sign-in');
-  } catch (error: unknown) {
-    let errorMessage = 'Đăng ký thất bại, vui lòng thử lại!';
-    if (typeof error === 'object' && error !== null && 'response' in error) {
-      const err = error as { response?: { data?: { message?: string } } };
-      errorMessage = err.response?.data?.message || errorMessage;
+    if (!validateEmail(formData.email)) {
+      toast.warning('Email không hợp lệ!');
+      return;
     }
-    message.error(errorMessage);
-  } finally {
-    setLoading(false);
-  }
-};
+
+    if (!validatePhone(formData.phone)) {
+      toast.warning('Số điện thoại không hợp lệ!');
+      return;
+    }
+    try {
+      setLoading(true);
+
+      const form = new FormData();
+      form.append('fullName', formData.fullName);
+      form.append('email', formData.email);
+      form.append('phone', formData.phone);
+      form.append('password', formData.password);
+
+      if (fileList.length > 0 && fileList[0].originFileObj) {
+        const file = fileList[0].originFileObj as File;
+        form.append('avatar', file);
+      }
+
+      const res = await userApi.registerUser(form);
+
+      if (res.statusCode !== 201) {
+        toast.error(res.message || 'Đăng ký thất bại!');
+        return;
+      }
+
+      toast.success(res.message || 'Đăng ký thành công');
+      router.push('/sign-in');
+    } catch (error: unknown) {
+      let errorMessage = 'Đăng ký thất bại, vui lòng thử lại!';
+      if (typeof error === 'object' && error !== null && 'response' in error) {
+        const err = error as { response?: { data?: { message?: string } } };
+        errorMessage = err.response?.data?.message || errorMessage;
+      }
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-row w-full min-h-screen justify-center bg-gradient-to-r from-orange-100 to-orange-50">

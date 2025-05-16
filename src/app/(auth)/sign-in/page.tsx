@@ -1,5 +1,5 @@
 'use client';
-import { Input, message } from 'antd';
+import { Input } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -11,6 +11,9 @@ import { authApi } from '../../../lib/apis/auth';
 import { AppDispatch } from '../../../lib/store';
 import { setAuth } from '../../../lib/store/authSlice';
 import '../../../styles/animation.css';
+import '@ant-design/v5-patch-for-react-19';
+import { ErrorResponse } from '../../../lib/types/common/type';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -22,7 +25,7 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
-      message.error('Vui lòng nhập đầy đủ email và mật khẩu!');
+      toast.error('Vui lòng nhập đầy đủ email và mật khẩu!');
       return;
     }
     try {
@@ -32,14 +35,14 @@ const LoginPage = () => {
 
       if (user.role === 'customer') {
         dispatch(setAuth({ user, token, refreshToken, remember }));
-        message.success('Đăng nhập thành công');
+        toast.success('Đăng nhập thành công');
         router.push('/');
       } else {
-        message.error('Tài khoản không có quyền');
+        toast.error('Tài khoản không có quyền');
       }
-    } catch (err) {
-      console.error(err);
-      message.error('Sai tài khoản hoặc mật khẩu!');
+    } catch (err: unknown) {
+      const error = err as ErrorResponse;
+      toast.error(error.response.data.message);
     } finally {
       setLoading(false);
     }
