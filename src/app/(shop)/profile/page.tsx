@@ -8,11 +8,11 @@ import { FaSignOutAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import AntdBreadcrumb from '../../../components/Breadcrumb';
 import LogoutConfirmModal from '../../../components/ModalLogout';
-import { IMAGES } from '../../../constants/images';
 import { authApi } from '../../../lib/apis/auth';
 import { userApi } from '../../../lib/apis/user';
 import { RootState } from '../../../lib/store';
 import { logout, updateProfile } from '../../../lib/store/authSlice';
+import { IMAGES } from '../../../constants/images';
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
@@ -132,11 +132,7 @@ const ProfilePage = () => {
             {isEditing ? (
               <div className="flex flex-col items-center py-6">
                 <Image
-                  src={
-                    avatarFile
-                      ? URL.createObjectURL(avatarFile)
-                      : formData.avatar || IMAGES.ImageAvtarDefault
-                  }
+                  src={avatarFile ? URL.createObjectURL(avatarFile) : formData.avatar}
                   alt="avatar"
                   width={96}
                   height={96}
@@ -190,7 +186,7 @@ const ProfilePage = () => {
             ) : (
               <div className="flex flex-col items-center py-6">
                 <Image
-                  src={user?.avatar ?? IMAGES.ImageAvtarDefault}
+                  src={user?.avatar || IMAGES.ImageAvtarDefault}
                   alt="avatar"
                   width={96}
                   height={96}
