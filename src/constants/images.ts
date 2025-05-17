@@ -30,12 +30,13 @@ import Footer_PC from '../../public/images/footer/footer_PC.jpg';
 import Footer_Payment_2 from '../../public/images/footer/payment-methods/momo_ebbd8eb9b0.svg';
 import Footer_Payment_1 from '../../public/images/footer/payment-methods/zalopay_884e503cf9.svg';
 
+import PHARMACY_SHOP_3 from '../../public/images/he-thong-cua-hang/duocsi.svg';
+import PHARMACY_SHOP_5 from '../../public/images/he-thong-cua-hang/giaohang.svg';
+import PHARMACY_SHOP_4 from '../../public/images/he-thong-cua-hang/muale.svg';
 import PHARMACY_SHOP_1 from '../../public/images/he-thong-cua-hang/nhathuoc.svg';
 import PHARMACY_SHOP_2 from '../../public/images/he-thong-cua-hang/thuoc.svg';
-import PHARMACY_SHOP_3 from '../../public/images/he-thong-cua-hang/duocsi.svg';
-import PHARMACY_SHOP_4 from '../../public/images/he-thong-cua-hang/muale.svg';
-import PHARMACY_SHOP_5 from '../../public/images/he-thong-cua-hang/giaohang.svg';
 import PHARMACY_SHOP_6 from '../../public/images/he-thong-cua-hang/trahang.svg';
+import ImageCartEmpty from '../../public/images/illustration-cart-empty.png';
 
 import ImageLogout from '../../public/images/art.svg';
 import ImageAvtarDefault from '../../public/images/avatar-default.svg';
@@ -48,6 +49,7 @@ const IMAGES = {
   FPTLogoSmall,
   SwapIcon,
   ImageError,
+  ImageCartEmpty,
   ImageBannerLeftLogin,
   ImageAvtarDefault,
   ImageLogout,

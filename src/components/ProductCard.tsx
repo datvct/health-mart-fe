@@ -1,19 +1,23 @@
 import { Button } from 'antd';
 import Image from 'next/image';
-import { Category, Product } from '../lib/types/products/type';
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { useCart } from '../hook/useCart';
 import { productApi } from '../lib/apis/product';
+import { Category, Product } from '../lib/types/products/type';
 
 type Props = {
   data: Product;
 };
 
 const ProductCard = ({ data }: Props) => {
+  const { addToCart } = useCart();
+
   const [active, setActive] = useState(data.variants[0]);
   useEffect(() => {
-  setActive(data.variants[0]); // luôn reset khi data đổi
-}, [data]);
+    setActive(data.variants[0]); // luôn reset khi data đổi
+  }, [data]);
   const router = useRouter();
   async function navigateToDetailProduct(id: number, slugLV3: string, slugProduct: string) {
     const categories = await productApi.getCategoryRelated(id);
@@ -97,7 +101,21 @@ const ProductCard = ({ data }: Props) => {
         <div className="text-sm text-[#4a4f63] inline-flex w-auto">
           <p className="bg-[#f6f7f9] p-2 rounded-xl text-center">{active.unit}</p>
         </div>
-        <Button className="bg-[#1250DC] text-white font-medium text-sm w-full rounded-2xl mt-2">
+        <Button
+          className="bg-[#1250DC] text-white font-medium text-sm w-full rounded-2xl mt-2"
+          onClick={() => {
+            addToCart({
+              product_id: data.product_id,
+              name: data.name,
+              image: data.image_url?.split(',')[0]?.trim(),
+              variant_unit: active.unit,
+              sale_price: active.price - (active.price * data.discount_percentage) / 100,
+              price: active.price,
+              discount_percentage: data.discount_percentage,
+            });
+            toast.success('Thêm vào giỏ hàng thành công');
+          }}
+        >
           Chọn mua
         </Button>
       </div>

@@ -1,6 +1,6 @@
 import { Breadcrumb } from 'antd';
 import Link from 'next/link';
-import { IoHome } from "react-icons/io5";
+import { IoHome } from 'react-icons/io5';
 
 export default function AntdBreadcrumb({
   slug = [],
@@ -11,7 +11,14 @@ export default function AntdBreadcrumb({
 }) {
   const breadcrumbItems = [
     {
-      title: <Link href="/" className='!text-[#1250dc]'><span className='hidden md:inline-block lg:inline-block xl:inline-block 2xl:inline-block text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-sm'>Trang chủ</span><IoHome className='md:hidden mt-1'/></Link>,
+      title: (
+        <Link href="/" className="!text-[#1250dc]">
+          <span className="hidden md:inline-block lg:inline-block xl:inline-block 2xl:inline-block text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-sm">
+            Trang chủ
+          </span>
+          <IoHome className="md:hidden mt-1" />
+        </Link>
+      ),
     },
     ...slug.map((segment, index) => {
       const href = '/' + slug.slice(0, index + 1).join('/');
@@ -21,9 +28,12 @@ export default function AntdBreadcrumb({
 
       return {
         title: isLast ? (
-          <span className='text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-sm'>{label}</span> // Không phải link, text thường
+          <span className="text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-sm">{label}</span> // Không phải link, text thường
         ) : (
-          <Link href={href} className='!text-[#1250dc] text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-sm'>
+          <Link
+            href={href}
+            className="!text-[#1250dc] text-xs md:text-sm lg:text-sm xl:text-sm 2xl:text-sm"
+          >
             {label}
           </Link>
         ),
@@ -31,5 +41,5 @@ export default function AntdBreadcrumb({
     }),
   ];
 
-  return <Breadcrumb items={breadcrumbItems} style={{ marginBottom: 16 }} />;
+  return <Breadcrumb items={breadcrumbItems} style={{ marginBottom: 10 }} />;
 }

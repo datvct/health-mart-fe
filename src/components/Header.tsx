@@ -7,11 +7,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { FaShoppingCart } from 'react-icons/fa';
 import { HiUser } from 'react-icons/hi2';
 import { IoIosMenu } from 'react-icons/io';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { IMAGES } from '../constants/images';
 import { authApi } from '../lib/apis/auth';
 import { productApi } from '../lib/apis/product';
@@ -19,7 +19,8 @@ import { RootState } from '../lib/store';
 import { logout } from '../lib/store/authSlice';
 import { Category } from '../lib/types/products/type';
 import LogoutConfirmModal from './ModalLogout';
-import { toast } from 'react-toastify';
+import CartButtonWithBadge from './cart/CartButtonWithBadge';
+import CartPopover from './cart/CartPopover';
 
 const Header = () => {
   const router = useRouter();
@@ -149,12 +150,7 @@ const Header = () => {
                 </Link>
               </div>
             )}
-            <Button
-              className="bg-[#1250DC] text-white border-[#1250DC] font-semibold"
-              icon={<FaShoppingCart />}
-            >
-              Giỏ hàng
-            </Button>
+            <CartPopover />
           </div>
         </div>
         <div
@@ -171,10 +167,7 @@ const Header = () => {
             <Link href="/">
               <Image src={IMAGES.ImageLogo} alt="Logo" />
             </Link>
-            <Button
-              className="bg-[#1250DC] text-white border-[#1250DC] font-semibold rounded-full"
-              icon={<FaShoppingCart />}
-            ></Button>
+            <CartButtonWithBadge />
           </div>
           <Search
             className="w-full"
