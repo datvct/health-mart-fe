@@ -5,11 +5,13 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { CartItem, useCart } from '../../hook/useCart';
 import EmptyCart from './EmptyCart';
+import { useRouter } from 'next/navigation';
 
 export default function CartInfo() {
   const { getCart, removeFromCart, updateQuantity } = useCart();
   const [cartItems, setCartItems] = useState<(CartItem & { selected: boolean })[]>([]);
   const [isAllSelected, setIsAllSelected] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -58,6 +60,12 @@ export default function CartInfo() {
     const newSelected = !isAllSelected;
     setCartItems((prev) => prev.map((item) => ({ ...item, selected: newSelected })));
     setIsAllSelected(newSelected);
+  };
+
+  const handleCheckout = () => {
+    const selected = cartItems.filter((item) => item.selected);
+    sessionStorage.setItem('checkoutItems', JSON.stringify(selected));
+    router.push('/thanh-toan');
   };
 
   return cartItems.length > 0 ? (
@@ -304,7 +312,10 @@ export default function CartInfo() {
             </div>
           </div>
 
-          <button className="w-full bg-blue-600 text-white py-3 rounded-full font-medium text-sm">
+          <button
+            className="w-full bg-blue-600 text-white py-3 rounded-full font-medium text-sm"
+            onClick={handleCheckout}
+          >
             Mua hàng
           </button>
 

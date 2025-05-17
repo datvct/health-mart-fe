@@ -59,10 +59,6 @@ const ProfilePage = () => {
 
       const res = await userApi.updateUser(user.id, form);
       dispatch(updateProfile(res.data));
-      console.log(res);
-
-      // localStorage.setItem('user', JSON.stringify(res.data));
-      // dispatch({ type: 'auth/setUser', payload: res.data });
       message.success('Cập nhật thông tin thành công');
       setIsEditing(false);
     } catch (error) {

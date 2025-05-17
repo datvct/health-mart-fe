@@ -41,5 +41,5 @@ export default function AntdBreadcrumb({
     }),
   ];
 
-  return <Breadcrumb items={breadcrumbItems} />;
+  return <Breadcrumb items={breadcrumbItems} style={{ marginBottom: 10 }} />;
 }
