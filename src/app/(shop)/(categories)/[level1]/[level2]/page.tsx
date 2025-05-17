@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { productApi } from '@/lib/apis/product';
 import AntdBreadcrumb from '../../../../../components/Breadcrumb';
 import { Category, Product } from '../../../../../lib/types/products/type';
@@ -17,6 +17,7 @@ export default function CategoryPageLV2() {
   const params = useParams();
   const level1 = params?.level1 as string;
   const level2 = params?.level2 as string;
+  const router = useRouter();
 
   const [data, setData] = useState<Category | null>(null);
   const [listProduct, setListProduct] = useState<Product[]>([]);
@@ -62,13 +63,13 @@ export default function CategoryPageLV2() {
         );
 
         setCategoryTotals(totals);
-      } catch (err) {
-        console.error('Lỗi khi lấy dữ liệu category:', err);
+      } catch {
+        router.replace('/not-found');
       }
     };
 
     fetchData();
-  }, [level2]);
+  }, [level2, router]);
 
   return (
     <Skeleton active loading={!data}>

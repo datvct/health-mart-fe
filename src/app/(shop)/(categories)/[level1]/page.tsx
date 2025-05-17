@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { productApi } from '@/lib/apis/product';
 import AntdBreadcrumb from '../../../../components/Breadcrumb';
 import { Category, Product } from '../../../../lib/types/products/type';
@@ -16,6 +16,7 @@ import { IoFilter } from 'react-icons/io5';
 export default function CategoryPageLV1() {
   const params = useParams();
   const slug = params?.level1 as string;
+  const router = useRouter();
 
   const [data, setData] = useState<Category | null>(null);
   const [listProduct, setListProduct] = useState<Product[]>([]);
@@ -55,13 +56,13 @@ export default function CategoryPageLV1() {
           );
           setCategoryTotals(totals);
         }
-      } catch (err) {
-        console.error('Lỗi khi lấy dữ liệu category:', err);
+      } catch {
+        router.replace('/not-found');
       }
     };
 
     fetchData();
-  }, [slug]);
+  }, [router, slug]);
 
   const handleShowMore = () => {
     setVisibleCount((prev) => prev + 12);
@@ -125,7 +126,11 @@ export default function CategoryPageLV1() {
                 <Button className="rounded-xl">Giá thấp</Button>
               </div>
             </div>
-            <Button type="primary" onClick={showModal} className='block md:hidden lg:hidden xl:hidden 2xl:hidden'>
+            <Button
+              type="primary"
+              onClick={showModal}
+              className="block md:hidden lg:hidden xl:hidden 2xl:hidden"
+            >
               <IoFilter />
             </Button>
             <Modal

@@ -3,15 +3,12 @@
 import { Button } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
-import { IMAGES } from '../constants/images';
+import { IMAGES } from '../../../constants/images';
 
 export default function NotFound() {
   const router = useRouter();
   return (
     <>
-      <Header />
       <main>
         <section className="flex flex-col justify-center items-center p-10 m-auto gap-5 bg-[#edf0f3]">
           <Image src={IMAGES.ImageError} alt="hình xin lỗi" />
@@ -31,7 +28,6 @@ export default function NotFound() {
           </Button>
         </section>
       </main>
-      <Footer />
     </>
   );
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { productApi } from '@/lib/apis/product';
 import AntdBreadcrumb from '../../../../../../../components/Breadcrumb';
 import { Category, Product } from '../../../../../../../lib/types/products/type';
@@ -19,6 +19,7 @@ export default function CategoryPageLV3() {
   const [dataLV2, setDataLV2] = useState<Category | null>(null);
   const [dataLV1, setDataLV1] = useState<Category | null>(null);
   const [data, setData] = useState<Product | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (!level3) return;
@@ -33,13 +34,13 @@ export default function CategoryPageLV3() {
         setDataLV1(res1.data);
         setDataLV2(res2.data);
         setDataLV3(res3.data);
-      } catch (err) {
-        console.error('Lỗi khi lấy dữ liệu product:', err);
+      } catch {
+        router.replace('/not-found');
       }
     };
 
     fetchData();
-  }, [level1, level2, level3, productSlug]);
+  }, [level1, level2, level3, productSlug, router]);
 
   //   Tạo tiêu đề breadcrumb
   const customTitles = {
@@ -461,7 +462,6 @@ export default function CategoryPageLV3() {
   mockReviews.forEach((review) => {
     overallRatingStats.counts[review.rating as keyof typeof overallRatingStats.counts]++;
   });
-
 
   return (
     <Skeleton active loading={!data}>

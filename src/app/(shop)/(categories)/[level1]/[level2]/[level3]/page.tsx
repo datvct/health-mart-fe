@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { productApi } from '@/lib/apis/product';
 import AntdBreadcrumb from '../../../../../../components/Breadcrumb';
 import { Category, Product } from '../../../../../../lib/types/products/type';
@@ -16,6 +16,7 @@ export default function CategoryPageLV3() {
   const level1 = params?.level1 as string;
   const level2 = params?.level2 as string;
   const level3 = params?.level3 as string;
+  const router = useRouter();
 
   const [data, setData] = useState<Category | null>(null);
   const [dataLV1, setDataLV1] = useState<Category | null>(null);
@@ -50,13 +51,13 @@ export default function CategoryPageLV3() {
         setDataLV1(res1.data);
         const productRes = await productApi.getProductByCategoryId(res.data?.category_id);
         setListProduct(productRes.data);
-      } catch (err) {
-        console.error('Lỗi khi lấy dữ liệu category:', err);
+      } catch {
+        router.replace('/not-found');
       }
     };
 
     fetchData();
-  }, [level1, level3]);
+  }, [level1, level3, router]);
 
   // Tạo tiêu đề breadcrumb
   const customTitles = {
