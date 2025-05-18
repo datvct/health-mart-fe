@@ -13,6 +13,7 @@ import { MdKeyboardArrowDown } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { IMAGES } from '../constants/images';
+import { useCart } from '../hook/useCart';
 import { authApi } from '../lib/apis/auth';
 import { productApi } from '../lib/apis/product';
 import { RootState } from '../lib/store';
@@ -68,6 +69,14 @@ const Header = () => {
 
   const user = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
+
+  const { syncCartFromLocalToRedis } = useCart(user?.id.toString());
+
+  useEffect(() => {
+    if (user) {
+      syncCartFromLocalToRedis();
+    }
+  }, [user]);
 
   const handleLogout = async () => {
     try {
@@ -150,7 +159,7 @@ const Header = () => {
                 </Link>
               </div>
             )}
-            <CartPopover />
+            <CartPopover userId={user?.id.toString()} />
           </div>
         </div>
         <div
@@ -167,7 +176,7 @@ const Header = () => {
             <Link href="/">
               <Image src={IMAGES.ImageLogo} alt="Logo" />
             </Link>
-            <CartButtonWithBadge />
+            <CartButtonWithBadge userId={user?.id.toString()} />
           </div>
           <Search
             className="w-full"

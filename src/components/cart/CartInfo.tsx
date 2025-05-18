@@ -2,37 +2,79 @@
 
 import { ChevronRight, Minus, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { CartItem, useCart } from '../../hook/useCart';
-import EmptyCart from './EmptyCart';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { CartItem, useCart } from '../../hook/useCart';
+import { RootState } from '../../lib/store';
+import { useCartStore } from '../../lib/store/cartStore';
+import EmptyCart from './EmptyCart';
 
 export default function CartInfo() {
-  const { getCart, removeFromCart, updateQuantity } = useCart();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const userId = user?.id.toString();
+
+  const { getCart, removeFromCart, updateQuantity } = useCart(userId);
   const [cartItems, setCartItems] = useState<(CartItem & { selected: boolean })[]>([]);
   const [isAllSelected, setIsAllSelected] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const latestCart = getCart();
-      setCartItems((prev) => {
-        return latestCart.map((newItem) => {
-          const oldItem = prev.find(
-            (item) =>
-              item.product_id === newItem.product_id && item.variant_unit === newItem.variant_unit,
-          );
+  // useEffect(() => {
+  //   const interval = setInterval(async () => {
+  //     const latestCart = await getCart();
+  //     setCartItems((prev) => {
+  //       return latestCart.map((newItem) => {
+  //         const oldItem = prev.find(
+  //           (item) =>
+  //             item.product_id === newItem.product_id && item.variant_unit === newItem.variant_unit,
+  //         );
+  //         return {
+  //           ...newItem,
+  //           selected: oldItem?.selected ?? true,
+  //         };
+  //       });
+  //     });
+  //   }, 500);
+  //   setIsAllSelected(cartItems.every((item) => item.selected));
+  //   return () => clearInterval(interval);
+  // }, []);
+  // useEffect(() => {
+  //   if (!userId) return;
 
-          return {
-            ...newItem,
-            selected: oldItem?.selected ?? true,
-          };
-        });
-      });
-    }, 500);
-    setIsAllSelected(cartItems.every((item) => item.selected));
-    return () => clearInterval(interval);
-  }, []);
+  //   const interval = setInterval(async () => {
+  //     const latestCart = await getCart();
+  //     setCartItems((prev) =>
+  //       latestCart.map((item) => {
+  //         const oldItem = prev.find(
+  //           (c) => c.product_id === item.product_id && c.variant_unit === item.variant_unit,
+  //         );
+  //         return { ...item, selected: oldItem?.selected ?? true };
+  //       }),
+  //     );
+  //   }, 5000); // 5 giây hợp lý hơn
+
+  //   return () => clearInterval(interval);
+  // }, [userId]);
+
+  const version = useCartStore((s) => s.version);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchCart = async () => {
+      const latestCart = await getCart();
+      setCartItems((prev) =>
+        latestCart.map((item) => {
+          const oldItem = prev.find(
+            (c) => c.product_id === item.product_id && c.variant_unit === item.variant_unit,
+          );
+          return { ...item, selected: oldItem?.selected ?? true };
+        }),
+      );
+    };
+
+    fetchCart();
+  }, [userId, version]);
 
   const selectedItems = cartItems.filter((item) => item.selected);
 
@@ -293,7 +335,7 @@ export default function CartInfo() {
               <div className="font-semibold text-base">Thành tiền</div>
               <div className="flex items-baseline gap-2">
                 <span className="line-through text-sm text-gray-400">
-                  {totalOriginal.toLocaleString('vi-VN')}đ
+                  {totalOriginal !== totalFinal ? totalOriginal.toLocaleString('vi-VN') : ''}
                 </span>
                 <span className="text-blue-600 text-lg font-bold">
                   {totalFinal.toLocaleString('vi-VN')}đ

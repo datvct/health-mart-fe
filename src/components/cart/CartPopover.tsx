@@ -8,19 +8,33 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { CartItem, useCart } from '../../hook/useCart';
+import { useCartStore } from '../../lib/store/cartStore';
 
-export default function CartPopover() {
-  const { getCart, removeFromCart } = useCart();
+export default function CartPopover({ userId }: { userId?: string }) {
+  const { getCart, removeFromCart } = useCart(userId);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const router = useRouter();
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCartItems(getCart());
-    }, 500);
-    return () => clearInterval(interval);
-  }, []);
+  const [count, setCount] = useState(0);
+  // useEffect(() => {
+  //   const interval = setInterval(async () => {
+  //     const items = await getCart();
+  //     setCartItems(items.map((item) => ({ ...item, selected: true })));
+  //   }, 500);
 
-  const count = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  //   return () => clearInterval(interval);
+  // }, [userId]);
+  const version = useCartStore((state) => state.version);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      const cart = await getCart();
+      setCartItems(cart.map((item) => ({ ...item, selected: true })));
+      const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+      setCount(total);
+    };
+
+    fetchCart();
+  }, [userId, version]);
 
   const content = (
     <div className="w-[320px] max-h-[400px] overflow-auto">
