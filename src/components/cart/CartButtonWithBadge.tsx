@@ -4,21 +4,32 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { useCart } from '../../hook/useCart';
+import { useCartStore } from '../../lib/store/cartStore';
 
-export default function CartButtonWithBadge() {
+export default function CartButtonWithBadge({ userId }: { userId?: string }) {
   const router = useRouter();
-  const { getCart } = useCart();
+  const { getCart } = useCart(userId);
   const [count, setCount] = useState(0);
 
+  // useEffect(() => {
+  //   const interval = setInterval(async () => {
+  //     const cart = await getCart();
+  //     const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+  //     setCount(total);
+  //   }, 500);
+  //   return () => clearInterval(interval);
+  // }, []);
+  const version = useCartStore((state) => state.version);
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      const cart = getCart();
+    const fetchCart = async () => {
+      const cart = await getCart();
       const total = cart.reduce((sum, item) => sum + item.quantity, 0);
       setCount(total);
-    }, 500);
-    return () => clearInterval(interval);
-  }, []);
+    };
 
+    fetchCart();
+  }, [userId, version]);
   return (
     <button
       onClick={() => router.push('/gio-hang')}

@@ -1,11 +1,11 @@
 'use client';
 
+import '@ant-design/v5-patch-for-react-19';
 import { useEffect, useState } from 'react';
 import { HeroSection } from '../../components/HeroSection';
 import { ProductCard } from '../../components/ProductCard';
 import { productApi } from '../../lib/apis/product';
 import { Product } from '../../lib/types/products/type';
-import '@ant-design/v5-patch-for-react-19';
 
 function Home() {
   const [data, setData] = useState<Product[]>();
@@ -16,6 +16,7 @@ function Home() {
     }
     fetchData();
   }, []);
+
   return (
     <div className="flex flex-col gap-5">
       <HeroSection />

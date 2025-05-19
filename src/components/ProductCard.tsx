@@ -2,9 +2,11 @@ import { Button } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useCart } from '../hook/useCart';
 import { productApi } from '../lib/apis/product';
+import { RootState } from '../lib/store';
 import { Category, Product } from '../lib/types/products/type';
 
 type Props = {
@@ -12,12 +14,15 @@ type Props = {
 };
 
 const ProductCard = ({ data }: Props) => {
-  const { addToCart } = useCart();
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  const { addToCart } = useCart(user?.id.toString());
 
   const [active, setActive] = useState(data.variants[0]);
   useEffect(() => {
-    setActive(data.variants[0]); // luôn reset khi data đổi
+    setActive(data.variants[0]);
   }, [data]);
+
   const router = useRouter();
   async function navigateToDetailProduct(id: number, slugLV3: string, slugProduct: string) {
     const categories = await productApi.getCategoryRelated(id);
@@ -112,6 +117,7 @@ const ProductCard = ({ data }: Props) => {
               sale_price: active.price - (active.price * data.discount_percentage) / 100,
               price: active.price,
               discount_percentage: data.discount_percentage,
+              slug: data.slug,
             });
             toast.success('Thêm vào giỏ hàng thành công');
           }}
