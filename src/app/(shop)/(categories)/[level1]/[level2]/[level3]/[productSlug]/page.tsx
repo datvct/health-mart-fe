@@ -3,10 +3,20 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { productApi } from '@/lib/apis/product';
+import { reviewApi } from '@/lib/apis/review';
+import { userApi } from '@/lib/apis/user';
 import AntdBreadcrumb from '../../../../../../../components/Breadcrumb';
 import { Category, Product } from '../../../../../../../lib/types/products/type';
+import { Review } from '../../../../../../../lib/types/reviews/type';
+import { User } from '../../../../../../../lib/types/users/type';
 import { Skeleton, Button, Modal } from 'antd';
 import Image from 'next/image';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/vi';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/lib/store';
+import { toast } from 'react-toastify';
 
 export default function CategoryPageLV3() {
   const params = useParams();
@@ -20,6 +30,8 @@ export default function CategoryPageLV3() {
   const [dataLV1, setDataLV1] = useState<Category | null>(null);
   const [data, setData] = useState<Product | null>(null);
   const router = useRouter();
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [usersMap, setUsersMap] = useState<Record<number, User>>({});
 
   useEffect(() => {
     if (!level3) return;
@@ -27,6 +39,9 @@ export default function CategoryPageLV3() {
     const fetchData = async () => {
       try {
         const res = await productApi.getProductBySlug(productSlug);
+        const product = res.data;
+        setData(product);
+
         const res1 = await productApi.getCategoryBySlug(level1);
         const res2 = await productApi.getCategoryBySlug(level2);
         const res3 = await productApi.getCategoryBySlug(level3);
@@ -34,6 +49,29 @@ export default function CategoryPageLV3() {
         setDataLV1(res1.data);
         setDataLV2(res2.data);
         setDataLV3(res3.data);
+
+        const reviewRes = await reviewApi.getByProductId(product.product_id);
+        setReviews(reviewRes.data);
+
+        // Lấy tất cả userId và staffId, loại trùng, loại undefined/NaN
+        const userIds = reviewRes.data.map((r: Review) => Number(r.userId));
+        const staffIds = reviewRes.data.flatMap((r: Review) =>
+          (r.replies || []).map((reply) => Number(reply.staffId)),
+        );
+        const allIds = Array.from(new Set([...userIds, ...staffIds])).filter((id) => !isNaN(id));
+
+        // Fetch tất cả user/staff
+        const userPromises = allIds.map((id) => userApi.getUserById(id));
+        const userResponses = await Promise.all(userPromises);
+
+        const map: Record<number, User> = {};
+        userResponses.forEach((res) => {
+          const user = res.data;
+          if (user?.id != null) {
+            map[user.id] = user;
+          }
+        });
+        setUsersMap(map);
       } catch {
         router.replace('/not-found');
       }
@@ -50,50 +88,6 @@ export default function CategoryPageLV3() {
     [productSlug]: data?.name || '',
   };
 
-  const productData = {
-    brand: 'Sanofi',
-    name: 'Hỗn dịch uống men vi sinh Enterogermina Gut Defense Sanofi tăng cường tiêu hóa, hỗ trợ bảo vệ đường ruột',
-    code: '00047402',
-    rating: 4.8,
-    reviewsCount: 19,
-    commentsCount: 185,
-    price: 165000,
-    units: ['Hộp', 'Vỉ', 'Ống'],
-    category: 'Dạ dày, tá tràng',
-    registrationNumber: '2085/2024/ĐKSP',
-    dosageForm: 'Hỗn dịch uống',
-    packaging: 'Hộp 2 vỉ x 10 ống',
-    origin: {
-      brandCountry: 'Pháp',
-      manufacturer: 'Opella Healthcare Italy S.R.L.',
-      productionCountry: 'Ý',
-    },
-    ingredients: ['Bacillus clausii'],
-    shortDescription:
-      'Enterogermina Gut Defense giúp tăng cường tiêu hóa, hỗ trợ bảo vệ đường ruột trước hại khuẩn.',
-    promotion: {
-      description: 'Giảm ngay 10% áp dụng đến',
-      validUntil: '31/05',
-    },
-    images: [
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01959_4e83fd083f.jpg',
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01967_5ba17b9fc3.jpg',
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01960_1704a27488.jpg',
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01961_d57d546354.jpg',
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01962_da6b5b93a5.jpg',
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01962_da6b5b93a5.jpg',
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01962_da6b5b93a5.jpg',
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01962_da6b5b93a5.jpg',
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01962_da6b5b93a5.jpg',
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01962_da6b5b93a5.jpg',
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01962_da6b5b93a5.jpg',
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01962_da6b5b93a5.jpg',
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01962_da6b5b93a5.jpg',
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01962_da6b5b93a5.jpg',
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01962_da6b5b93a5.jpg',
-      'https://cdn.nhathuoclongchau.com.vn/unsafe/768x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_01962_da6b5b93a5.jpg',
-    ],
-  };
   const imageUrls = data?.image_url.split(',') || [];
   const [selectedVariant, setSelectedVariant] = useState<{ unit: string; price: number } | null>(
     null,
@@ -110,7 +104,7 @@ export default function CategoryPageLV3() {
   const thumbnailRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const handleNextImage = () => {
-    if (currentImageIndex < productData.images.length - 1) {
+    if (currentImageIndex < imageUrls.length - 1) {
       setCurrentImageIndex(currentImageIndex + 1);
     }
   };
@@ -282,156 +276,10 @@ export default function CategoryPageLV3() {
   const [isFontLarge, setIsFontLarge] = useState(false);
   const fontSize = isFontLarge ? 18 : 16;
 
-  const mockReviews = [
-    {
-      id: 1,
-      userName: 'Vũ Hoàng Hải',
-      initials: 'HH',
-      rating: 5,
-      content: '',
-      createdAt: '6 giờ trước',
-      reply: {
-        repliedBy: 'Vi Trần',
-        initials: 'VT',
-        role: 'Dược sĩ',
-        replyContent:
-          'Chào bạn Vũ Hoàng Hải, dạ rất cảm ơn tình cảm của bạn dành cho nhà thuốc FPT Long Châu. Bất cứ khi nào bạn cần hỗ trợ, vui lòng liên hệ tổng đài miễn phí 18006928 để được tư vấn và đặt hàng. Thân mến!',
-        repliedAt: '3 giờ trước',
-      },
-    },
-    {
-      id: 2,
-      userName: 'Chị Trang',
-      initials: 'CT',
-      rating: 5,
-      content: 'bé bị táo dùng được không ạ',
-      createdAt: '5 ngày trước',
-      reply: {
-        repliedBy: 'Anh Mạc Thị Tuyết',
-        initials: 'AT',
-        role: 'Dược sĩ',
-        replyContent:
-          'Chào chị Trang, dạ mình có thể cho bé sử dụng và theo dõi thêm ạ. Nhà thuốc thông tin đến chị. Thân mến!',
-        repliedAt: '5 ngày trước',
-      },
-    },
-    {
-      id: 3,
-      userName: 'Bùi Anh Tuấn',
-      initials: 'AT',
-      rating: 4,
-      content: 'e',
-      createdAt: '5 ngày trước',
-      reply: {
-        repliedBy: 'Quỳnh Chu',
-        initials: 'QC',
-        role: 'Dược sĩ',
-        replyContent:
-          'Chào bạn, cảm ơn bạn đã đánh giá. Nếu có bất kỳ thắc mắc nào, bạn cứ để lại câu hỏi nhé!',
-        repliedAt: '4 ngày trước',
-      },
-    },
-    {
-      id: 4,
-      userName: 'Bùi Anh Tuấn',
-      initials: 'AT',
-      rating: 4,
-      content: 'e',
-      createdAt: '5 ngày trước',
-      reply: {
-        repliedBy: 'Quỳnh Chu',
-        initials: 'QC',
-        role: 'Dược sĩ',
-        replyContent:
-          'Chào bạn, cảm ơn bạn đã đánh giá. Nếu có bất kỳ thắc mắc nào, bạn cứ để lại câu hỏi nhé!',
-        repliedAt: '4 ngày trước',
-      },
-    },
-    {
-      id: 5,
-      userName: 'Bùi Anh Tuấn',
-      initials: 'AT',
-      rating: 4,
-      content: 'e',
-      createdAt: '5 ngày trước',
-      reply: {
-        repliedBy: 'Quỳnh Chu',
-        initials: 'QC',
-        role: 'Dược sĩ',
-        replyContent:
-          'Chào bạn, cảm ơn bạn đã đánh giá. Nếu có bất kỳ thắc mắc nào, bạn cứ để lại câu hỏi nhé!',
-        repliedAt: '4 ngày trước',
-      },
-    },
-    {
-      id: 6,
-      userName: 'Bùi Anh Tuấn',
-      initials: 'AT',
-      rating: 4,
-      content: 'e',
-      createdAt: '5 ngày trước',
-      reply: {
-        repliedBy: 'Quỳnh Chu',
-        initials: 'QC',
-        role: 'Dược sĩ',
-        replyContent:
-          'Chào bạn, cảm ơn bạn đã đánh giá. Nếu có bất kỳ thắc mắc nào, bạn cứ để lại câu hỏi nhé!',
-        repliedAt: '4 ngày trước',
-      },
-    },
-    {
-      id: 7,
-      userName: 'Bùi Anh Tuấn',
-      initials: 'AT',
-      rating: 4,
-      content: 'e',
-      createdAt: '5 ngày trước',
-      reply: {
-        repliedBy: 'Quỳnh Chu',
-        initials: 'QC',
-        role: 'Dược sĩ',
-        replyContent:
-          'Chào bạn, cảm ơn bạn đã đánh giá. Nếu có bất kỳ thắc mắc nào, bạn cứ để lại câu hỏi nhé!',
-        repliedAt: '4 ngày trước',
-      },
-    },
-
-    {
-      id: 8,
-      userName: 'Bùi Anh Tuấn',
-      initials: 'AT',
-      rating: 4,
-      content: 'e',
-      createdAt: '5 ngày trước',
-      reply: {
-        repliedBy: 'Quỳnh Chu',
-        initials: 'QC',
-        role: 'Dược sĩ',
-        replyContent:
-          'Chào bạn, cảm ơn bạn đã đánh giá. Nếu có bất kỳ thắc mắc nào, bạn cứ để lại câu hỏi nhé!',
-        repliedAt: '4 ngày trước',
-      },
-    },
-    {
-      id: 9,
-      userName: 'Bùi Anh Tuấn',
-      initials: 'AT',
-      rating: 4,
-      content: 'e',
-      createdAt: '5 ngày trước',
-      reply: {
-        repliedBy: 'Quỳnh Chu',
-        initials: 'QC',
-        role: 'Dược sĩ',
-        replyContent:
-          'Chào bạn, cảm ơn bạn đã đánh giá. Nếu có bất kỳ thắc mắc nào, bạn cứ để lại câu hỏi nhé!',
-        repliedAt: '4 ngày trước',
-      },
-    },
-  ];
-
+  //Xử lý thống kê đánh giá
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [visibleReviews, setVisibleReviews] = useState(5);
+  const visibleReviewsList = reviews.filter((review) => !review.isHidden);
 
   // Hàm lọc đánh giá theo sao
   const handleFilter = (rating: number) => {
@@ -446,22 +294,115 @@ export default function CategoryPageLV3() {
 
   // Lọc các bình luận theo số sao đã chọn
   const filteredReviews = selectedRating
-    ? mockReviews.filter((review) => review.rating === selectedRating)
-    : mockReviews;
+    ? visibleReviewsList.filter((review) => review.rating === selectedRating)
+    : visibleReviewsList;
 
   // Cập nhật lại số lượng đánh giá và trung bình sao cho toàn bộ bình luận (không bị ảnh hưởng bởi bộ lọc)
   const overallRatingStats = {
-    total: mockReviews.length,
-    average: mockReviews.length
-      ? mockReviews.reduce((sum, review) => sum + review.rating, 0) / mockReviews.length
+    total: visibleReviewsList.length,
+    average: visibleReviewsList.length
+      ? visibleReviewsList.reduce((sum, review) => sum + review.rating, 0) /
+        visibleReviewsList.length
       : 0,
     counts: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
   };
 
   // Tính số lượng sao cho tất cả các đánh giá
-  mockReviews.forEach((review) => {
+  visibleReviewsList.forEach((review) => {
     overallRatingStats.counts[review.rating as keyof typeof overallRatingStats.counts]++;
   });
+
+  // --- XỬ LÝ REVIEW
+  const user = useSelector((state: RootState) => state.auth.user);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [reviewRating, setReviewRating] = useState(5); // Mặc định 5 sao
+  const [reviewContent, setReviewContent] = useState('');
+  const [reviewImage, setReviewImage] = useState<File | null>(null);
+  const [reviewImagePreview, setReviewImagePreview] = useState<string | null>(null);
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null);
+
+  dayjs.extend(relativeTime);
+  dayjs.locale('vi'); // Hiển thị "giây trước", "phút trước", "ngày trước", v.v.
+  const formatDate = (dateString: string): string => {
+    return dayjs(dateString).fromNow();
+  };
+
+  // Đổi ảnh review
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setReviewImage(file);
+      setReviewImagePreview(URL.createObjectURL(file));
+    } else {
+      setReviewImage(null);
+      setReviewImagePreview(null);
+    }
+  };
+
+  // Mở modal đánh giá
+  const handleOpenReviewModal = () => {
+    if (!user) {
+      Modal.confirm({
+        title: 'Bạn cần đăng nhập để gửi đánh giá sản phẩm!',
+        okText: 'Đăng nhập',
+        cancelText: 'Hủy',
+        onOk: () => {
+          router.push(`/sign-in?redirect=${encodeURIComponent(window.location.pathname)}`);
+        },
+      });
+      return;
+    }
+    // Kiểm tra nếu user đã đánh giá sản phẩm này
+    const hasReviewed = reviews.some((r) => r.userId === user.id);
+    if (hasReviewed) {
+      toast.info('Bạn đã đánh giá sản phẩm này!');
+      return;
+    }
+    setIsReviewModalOpen(true);
+  };
+
+  const ratingLabels: Record<number, string> = {
+    5: 'Tuyệt vời',
+    4: 'Hài lòng',
+    3: 'Bình thường',
+    2: 'Không hài lòng',
+    1: 'Thất vọng',
+  };
+
+  // Gửi đánh giá
+  const handleSubmitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user || !data) return;
+    try {
+      // 1. Gửi review
+      const reviewRes = await reviewApi.createReview({
+        userId: user.id,
+        productId: data.product_id,
+        rating: reviewRating,
+        comment: reviewContent,
+      });
+
+      // Lấy reviewId từ response
+      const reviewId = reviewRes.data?.id || reviewRes.id;
+
+      // 2. Nếu có ảnh, gửi file lên backend
+      if (reviewImage && reviewId) {
+        await reviewApi.createReviewImageFile(reviewId, reviewImage);
+      }
+
+      toast.success('Gửi đánh giá thành công!');
+      setIsReviewModalOpen(false);
+      setReviewContent('');
+      setReviewImage(null);
+      setReviewImagePreview(null);
+
+      // Reload lại đánh giá
+      const newReviewRes = await reviewApi.getByProductId(data.product_id);
+      setReviews(newReviewRes.data);
+    } catch {
+      toast.error('Gửi đánh giá thất bại!');
+    }
+  };
 
   return (
     <Skeleton active loading={!data}>
@@ -623,7 +564,9 @@ export default function CategoryPageLV3() {
                   <span>{data?.product_id}</span>
                   <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                   <span className="flex items-center gap-1">
-                    <span className="text-yellow-500 font-semibold">{productData.rating}</span>
+                    <span className="text-yellow-500 font-semibold">
+                      {overallRatingStats.average.toFixed(1)}
+                    </span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="currentColor"
@@ -635,11 +578,7 @@ export default function CategoryPageLV3() {
                   </span>
                   <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                   <a href="#" className="text-blue-600 hover:underline">
-                    {productData.reviewsCount} đánh giá
-                  </a>
-                  <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                  <a href="#" className="text-blue-600 hover:underline">
-                    {productData.commentsCount} bình luận
+                    {overallRatingStats.total} đánh giá
                   </a>
                 </p>
 
@@ -1163,7 +1102,10 @@ export default function CategoryPageLV3() {
 
                   {/* Nút */}
                   <div className="w-full sm:w-auto mt-4 sm:mt-3 flex justify-center sm:justify-start">
-                    <button className="px-4 py-2 text-base bg-blue-600 text-white rounded-full hover:bg-blue-700 transition whitespace-nowrap">
+                    <button
+                      className="px-4 py-2 text-base bg-blue-600 text-white rounded-full hover:bg-blue-700 transition whitespace-nowrap"
+                      onClick={handleOpenReviewModal}
+                    >
                       Gửi đánh giá
                     </button>
                   </div>
@@ -1230,52 +1172,112 @@ export default function CategoryPageLV3() {
               </div>
             </div>
 
-            {/* --- Danh sách đánh giá từ mockReviews --- */}
-            {filteredReviews.slice(0, visibleReviews).map((review) => (
-              <div key={review.id} className="mb-4">
-                <div className="flex flex-col sm:flex-row items-start sm:space-x-3">
-                  <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center font-bold text-white mb-3 sm:mb-0">
-                    {review.initials}
-                  </div>
-                  <div className="w-full">
-                    <p className="font-semibold">{review.userName}</p>
-                    <div className="flex items-center text-yellow-400">
-                      {'★'.repeat(review.rating)}
+            {/* --- Danh sách đánh giá --- */}
+            {filteredReviews
+              .slice()
+              .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+              .slice(0, visibleReviews)
+              .map((review) => (
+                <div key={review.id} className="mb-4">
+                  <div className="flex flex-col sm:flex-row items-start sm:space-x-3">
+                    <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center font-bold text-white mb-3 sm:mb-0 overflow-hidden">
+                      {usersMap[review.userId]?.avatar ? (
+                        <img
+                          src={usersMap[review.userId]?.avatar}
+                          alt={usersMap[review.userId]?.fullName || ''}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span>
+                          {usersMap[review.userId]?.fullName
+                            ? usersMap[review.userId].fullName.charAt(0).toUpperCase() +
+                              (
+                                usersMap[review.userId].fullName
+                                  .trim()
+                                  .split(' ')
+                                  .filter(Boolean)
+                                  .pop() || ''
+                              )
+                                .charAt(0)
+                                .toUpperCase()
+                            : `U${review.userId}`}
+                        </span>
+                      )}
                     </div>
-                    {review.content && <p className="text-gray-800 mt-1">{review.content}</p>}
-                    <p className="text-sm text-gray-600 mt-1">
-                      {review.createdAt} ·{' '}
-                      <button className="text-blue-600 hover:underline">Trả lời</button>
-                    </p>
+                    <div className="w-full">
+                      <p className="font-semibold">{usersMap[review.userId]?.fullName}</p>
+
+                      <div className="flex items-center text-yellow-400">
+                        {'★'.repeat(review.rating)}
+                      </div>
+                      {review.images && review.images.length > 0 && (
+                        <div className="flex gap-2 mt-2 flex-wrap">
+                          {review.images.map((img) => (
+                            <img
+                              key={img.id}
+                              src={img.img_url}
+                              alt="Ảnh bình luận"
+                              className="w-20 h-20 object-cover rounded"
+                              onClick={() => setZoomedImage(img.img_url)}
+                            />
+                          ))}
+                        </div>
+                      )}
+                      {review.comment && <p className="text-gray-800 mt-1">{review.comment}</p>}
+                      <p className="text-sm text-gray-600 mt-1">{formatDate(review.createdAt)}</p>
+                    </div>
                   </div>
+
+                  {/* Reply nếu có */}
+                  {review.replies && review.replies.length > 0 && (
+                    <div className="ml-0 sm:ml-12 mt-2 border-l-2 pl-4 border-gray-200">
+                      {review.replies.map((reply) => (
+                        <div
+                          key={reply.id}
+                          className="flex flex-col sm:flex-row items-start sm:space-x-3"
+                        >
+                          <div className="w-12 aspect-square bg-blue-500 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 mb-3 sm:mb-0 overflow-hidden">
+                            {usersMap[reply.staffId]?.avatar ? (
+                              <img
+                                src={usersMap[reply.staffId]?.avatar}
+                                alt={usersMap[reply.staffId]?.fullName || ''}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <span>
+                                {usersMap[reply.staffId]?.fullName
+                                  ? usersMap[reply.staffId].fullName.charAt(0).toUpperCase() +
+                                    (
+                                      usersMap[reply.staffId].fullName
+                                        .trim()
+                                        .split(' ')
+                                        .filter(Boolean)
+                                        .pop() || ''
+                                    )
+                                      .charAt(0)
+                                      .toUpperCase()
+                                  : `S${reply.staffId}`}
+                              </span>
+                            )}
+                          </div>
+                          <div className="w-full">
+                            <p className="font-semibold flex items-center gap-1">
+                              {usersMap[reply.staffId]?.fullName}
+                              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">
+                                Dược sĩ
+                              </span>
+                            </p>
+                            <p className="text-gray-800 mt-1">{reply.replyText}</p>
+                            <p className="text-sm text-gray-600 mt-1">
+                              {formatDate(reply.createdAt)}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-
-                {/* Reply nếu có */}
-                {review.reply && (
-                  <div className="ml-0 sm:ml-12 mt-2 border-l-2 pl-4 border-gray-200">
-                    <div className="flex flex-col sm:flex-row items-start sm:space-x-3">
-                      <div className="w-12 aspect-square bg-blue-500 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 mb-3 sm:mb-0">
-                        {review.reply.initials}
-                      </div>
-
-                      <div className="w-full">
-                        <p className="font-semibold flex items-center gap-1">
-                          {review.reply.repliedBy}{' '}
-                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">
-                            {review.reply.role}
-                          </span>
-                        </p>
-                        <p className="text-sm text-gray-700">{review.reply.replyContent}</p>
-                        <p className="text-sm text-gray-600 mt-1">
-                          {review.reply.repliedAt} ·{' '}
-                          <button className="text-blue-600 hover:underline">Trả lời</button>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
+              ))}
 
             {/* Nút Xem thêm bình luận */}
             {filteredReviews.length > visibleReviews && (
@@ -1289,6 +1291,155 @@ export default function CategoryPageLV3() {
               </div>
             )}
           </div>
+          <Modal
+            open={isReviewModalOpen}
+            onCancel={() => setIsReviewModalOpen(false)}
+            footer={null}
+            centered
+            styles={{ body: { padding: 0 } }}
+            width="auto"
+          >
+            <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl p-4 sm:p-6 mx-auto">
+              <div className="flex flex-col items-center gap-4">
+                {/* Thông tin sản phẩm */}
+                <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 w-full">
+                  <Image
+                    src={imageUrls[0] || '/images/no-image.png'}
+                    alt={data?.name || ''}
+                    width={48}
+                    height={48}
+                    className="rounded object-cover"
+                  />
+                  <div className="flex-1 min-w-0 mt-2 sm:mt-0">
+                    <div className="font-semibold text-base break-words">{data?.name}</div>
+                    <div className="text-gray-500 text-sm line-clamp-2">
+                      {data?.short_description}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tiêu đề */}
+                <h2 className="text-lg sm:text-xl font-bold text-center">Đánh giá sản phẩm</h2>
+
+                <div className="flex flex-col items-center gap-1 w-full justify-center">
+                  <div className="flex justify-center w-auto">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <svg
+                        key={star}
+                        onClick={() => setReviewRating(star)}
+                        className={`w-8 h-8 sm:w-9 sm:h-9 cursor-pointer ${
+                          reviewRating >= star ? 'text-orange-400' : 'text-gray-300'
+                        }`}
+                        fill={reviewRating >= star ? '#FFA500' : 'none'}
+                        stroke="#FFA500"
+                        viewBox="0 0 24 24"
+                      >
+                        <polygon
+                          strokeWidth="1"
+                          points="12,2 15,9 22,9.3 17,14.1 18.5,21 12,17.3 5.5,21 7,14.1 2,9.3 9,9"
+                        />
+                      </svg>
+                    ))}
+                  </div>
+                  {/* Nhãn rating */}
+                  <div className="text-orange-500 font-semibold text-sm mt-1 text-center w-auto">
+                    {ratingLabels[reviewRating]}
+                  </div>
+                </div>
+
+                {/* Form nhập nội dung */}
+                <form className="w-full flex flex-col gap-3" onSubmit={handleSubmitReview}>
+                  {/* Chọn ảnh đẹp hơn */}
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                    <label
+                      htmlFor="review-image-upload"
+                      className="inline-flex items-center px-3 py-2 bg-blue-50 text-blue-600 rounded cursor-pointer border border-blue-200 hover:bg-blue-100 transition"
+                    >
+                      <svg
+                        className="w-5 h-5 mr-1"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4 16l4-4a3 3 0 014 0l4 4M4 8h16M4 8v8a2 2 0 002 2h12a2 2 0 002-2V8"
+                        />
+                      </svg>
+                      {reviewImagePreview ? 'Đổi ảnh' : 'Chọn ảnh'}
+                    </label>
+
+                    {reviewImagePreview && (
+                      <button
+                        type="button"
+                        className="text-red-500 border border-red-200 rounded px-2 py-1 hover:bg-red-50 transition"
+                        onClick={() => {
+                          setReviewImage(null);
+                          setReviewImagePreview(null);
+                        }}
+                      >
+                        Xóa ảnh
+                      </button>
+                    )}
+                  </div>
+
+                  <input
+                    id="review-image-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="hidden"
+                  />
+
+                  {/* Hiển thị ảnh preview nếu có */}
+                  {reviewImagePreview && (
+                    <img
+                      src={reviewImagePreview}
+                      alt="Preview"
+                      className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded mt-2 border"
+                    />
+                  )}
+
+                  <textarea
+                    className="border rounded px-3 py-2 text-sm sm:text-base"
+                    placeholder="Nhập nội dung đánh giá (Vui lòng gõ tiếng Việt có dấu)..."
+                    rows={3}
+                    value={reviewContent}
+                    onChange={(e) => setReviewContent(e.target.value)}
+                  />
+
+                  <div className="text-red-500 text-sm font-semibold mt-1">
+                    Lưu ý: Mỗi sản phẩm chỉ được đánh giá 1 lần.
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full sm:max-w-sm sm:self-center bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-2 sm:py-3 rounded-full mt-2"
+                  >
+                    Gửi
+                  </button>
+                </form>
+              </div>
+            </div>
+          </Modal>
+          <Modal
+            open={!!zoomedImage}
+            onCancel={() => setZoomedImage(null)}
+            footer={null}
+            centered
+            width={600}
+          >
+            {zoomedImage && (
+              <img
+                src={zoomedImage}
+                alt="Ảnh đánh giá phóng to"
+                className="w-full h-auto object-contain rounded"
+                style={{ maxHeight: 500 }}
+              />
+            )}
+          </Modal>
         </section>
       </div>
     </Skeleton>

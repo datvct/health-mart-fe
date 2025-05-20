@@ -14,6 +14,11 @@ class UserClient {
     const res = await this.client.post(`${endpoint}/register`, formData);
     return res.data;
   }
+
+  async getUserById(id: number) {
+    const res = await this.client.get(`${endpoint}/${id}`);
+    return res.data;
+  }
 }
 
 export const userApi = new UserClient();

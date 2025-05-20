@@ -36,7 +36,9 @@ const LoginPage = () => {
       if (user.role === 'customer') {
         dispatch(setAuth({ user, token, refreshToken, remember }));
         toast.success('Đăng nhập thành công');
-        router.push('/');
+        const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+        const redirect = searchParams?.get('redirect');
+        router.push(redirect || '/');
       } else {
         toast.error('Tài khoản không có quyền');
       }
