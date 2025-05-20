@@ -24,6 +24,8 @@ export default function CategoryPageLV1() {
   const [visibleCount, setVisibleCount] = useState(12);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  console.log(listProduct)
+
   const showModal = () => {
     setIsModalOpen(true);
   };
