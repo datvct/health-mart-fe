@@ -6,8 +6,8 @@ const endpoint = '/product';
 class ProductClient {
   constructor(private readonly client = api) {}
 
-  async getList() {
-    const res = await this.client.get(endpoint);
+  async getList(params?: { name?: string }) {
+    const res = await this.client.get(endpoint, { params });
     return res.data;
   }
 
@@ -31,7 +31,7 @@ class ProductClient {
     return res.data;
   }
 
-    async getProductBySlug(slug: string) {
+  async getProductBySlug(slug: string) {
     const res = await this.client.get(endpoint + `/slug/${slug}`);
     return res.data;
   }
@@ -46,8 +46,25 @@ class ProductClient {
     return res.data;
   }
 
-    async getProductByCategoryId(id: number) {
-    const res = await this.client.get(endpoint + `/category-lv3/${id}`);
+  async getProductByCategoryId(id: number, filters: Record<string, any> = {}) {
+    const params = new URLSearchParams();
+
+    for (const key in filters) {
+      const value = filters[key];
+      if (Array.isArray(value)) {
+        value.forEach((v) => params.append(key, v));
+      } else if (value !== undefined && value !== null) {
+        params.append(key, value);
+      }
+    }
+
+    const queryString = params.toString();
+    const res = await this.client.get(`${endpoint}/category-lv3/${id}?${queryString}`);
+    return res.data;
+  }
+
+  async getListBrands() {
+    const res = await this.client.get(endpoint + '/list-brands');
     return res.data;
   }
 }

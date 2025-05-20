@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { productApi } from '@/lib/apis/product';
 import AntdBreadcrumb from '../../../../../../components/Breadcrumb';
 import { Category, Product } from '../../../../../../lib/types/products/type';
@@ -23,6 +23,8 @@ export default function CategoryPageLV3() {
   const [listProduct, setListProduct] = useState<Product[]>([]);
   const [visibleCount, setVisibleCount] = useState(12);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const sort = searchParams.get('sort'); // "order_desc_price" | "order_asc_price" | null
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -49,7 +51,20 @@ export default function CategoryPageLV3() {
         const res1 = await productApi.getCategoryBySlug(level1);
         setData(res.data);
         setDataLV1(res1.data);
-        const productRes = await productApi.getProductByCategoryId(res.data?.category_id);
+
+        const filters: Record<string, any> = {};
+        searchParams.forEach((value, key) => {
+          if (filters[key]) {
+            // nếu đã có thì convert thành array (multi-values)
+            filters[key] = Array.isArray(filters[key])
+              ? [...filters[key], value]
+              : [filters[key], value];
+          } else {
+            filters[key] = value;
+          }
+        });
+
+        const productRes = await productApi.getProductByCategoryId(res.data?.category_id, filters);
         setListProduct(productRes.data);
       } catch {
         router.replace('/not-found');
@@ -57,13 +72,18 @@ export default function CategoryPageLV3() {
     };
 
     fetchData();
-  }, [level1, level3, router]);
-
+  }, [level1, level3, searchParams, router]);
   // Tạo tiêu đề breadcrumb
   const customTitles = {
     [level1]: dataLV1?.name || '',
     [level2]: data?.parent?.name || '',
     [level3]: data?.name || '',
+  };
+
+  const handleSortChange = (sortValue: string) => {
+    const current = new URLSearchParams(Array.from(searchParams.entries()));
+    current.set('sort', sortValue);
+    router.push(`?${current.toString()}`);
   };
 
   return (
@@ -80,14 +100,40 @@ export default function CategoryPageLV3() {
             <div className="flex items-center gap-2 justify-between w-full">
               <p className="text-sm text-[#020b27]">Sắp xếp theo:</p>
               <div className="flex items-center divide-x divide-stroke-disable overflow-x-auto whitespace-nowrap scrollbar-none sm:hidden md:hidden lg:hidden xl:hidden 2xl:hidden gap-2 w-2/3">
-                <Button className="border-[#1250dc] text-[#1250dc]">Bán chạy</Button>
-                <Button className="">Giá cao</Button>
-                <Button className="">Giá thấp</Button>
+                <Button
+                  className={sort === 'order_desc_price' ? 'border-[#1250dc] text-[#1250dc]' : ''}
+                  onClick={() => handleSortChange('order_desc_price')}
+                >
+                  Giá cao
+                </Button>
+                <Button
+                  className={sort === 'order_asc_price' ? 'border-[#1250dc] text-[#1250dc]' : ''}
+                  onClick={() => handleSortChange('order_asc_price')}
+                >
+                  Giá thấp
+                </Button>
               </div>
               <div className="hidden sm:flex md:flex lg:flex xl:flex 2xl:flex gap-2">
-                <Button className="rounded-xl border-[#1250dc] text-[#1250dc]">Bán chạy</Button>
-                <Button className="rounded-xl">Giá cao</Button>
-                <Button className="rounded-xl">Giá thấp</Button>
+                <Button
+                  className={
+                    sort === 'order_desc_price'
+                      ? 'rounded-xl border-[#1250dc] text-[#1250dc]'
+                      : 'rounded-xl'
+                  }
+                  onClick={() => handleSortChange('order_desc_price')}
+                >
+                  Giá cao
+                </Button>
+                <Button
+                  className={
+                    sort === 'order_asc_price'
+                      ? 'rounded-xl border-[#1250dc] text-[#1250dc]'
+                      : 'rounded-xl'
+                  }
+                  onClick={() => handleSortChange('order_asc_price')}
+                >
+                  Giá thấp
+                </Button>
               </div>
             </div>
             <Button

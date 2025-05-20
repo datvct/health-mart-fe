@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { productApi } from '@/lib/apis/product';
 import AntdBreadcrumb from '../../../../../components/Breadcrumb';
 import { Category, Product } from '../../../../../lib/types/products/type';
@@ -24,6 +24,8 @@ export default function CategoryPageLV2() {
   const [categoryTotals, setCategoryTotals] = useState<Record<number, number>>({});
   const [visibleCount, setVisibleCount] = useState(12);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const sort = searchParams.get('sort'); // "order_desc_price" | "order_asc_price" | null
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -48,16 +50,26 @@ export default function CategoryPageLV2() {
       try {
         const res = await productApi.getCategoryBySlug(level2);
         setData(res.data);
-        const productRes = await productApi.getProductByCategoryId(res.data?.category_id);
+
+        const filters: Record<string, any> = {};
+        searchParams.forEach((value, key) => {
+          if (filters[key]) {
+            // nếu đã có thì convert thành array (multi-values)
+            filters[key] = Array.isArray(filters[key])
+              ? [...filters[key], value]
+              : [filters[key], value];
+          } else {
+            filters[key] = value;
+          }
+        });
+
+        const productRes = await productApi.getProductByCategoryId(res.data?.category_id, filters);
         setListProduct(productRes.data);
         const totals: Record<number, number> = {};
-        console.log(res.data);
 
         await Promise.all(
           res.data.children.map(async (category: { category_id: number }) => {
-            console.log(category);
             const productRes = await productApi.getProductByCategoryId(category.category_id);
-            console.log(productRes);
             totals[category.category_id] = productRes.data.length;
           }),
         );
@@ -69,7 +81,13 @@ export default function CategoryPageLV2() {
     };
 
     fetchData();
-  }, [level2, router]);
+  }, [level2, router, searchParams]);
+
+  const handleSortChange = (sortValue: string) => {
+    const current = new URLSearchParams(Array.from(searchParams.entries()));
+    current.set('sort', sortValue);
+    router.push(`?${current.toString()}`);
+  };
 
   return (
     <Skeleton active loading={!data}>
@@ -112,14 +130,40 @@ export default function CategoryPageLV2() {
             <div className="flex items-center gap-2 justify-between w-full">
               <p className="text-sm text-[#020b27]">Sắp xếp theo:</p>
               <div className="flex items-center divide-x divide-stroke-disable overflow-x-auto whitespace-nowrap scrollbar-none sm:hidden md:hidden lg:hidden xl:hidden 2xl:hidden gap-2 w-2/3">
-                <Button className="border-[#1250dc] text-[#1250dc]">Bán chạy</Button>
-                <Button className="">Giá cao</Button>
-                <Button className="">Giá thấp</Button>
+                <Button
+                  className={sort === 'order_desc_price' ? 'border-[#1250dc] text-[#1250dc]' : ''}
+                  onClick={() => handleSortChange('order_desc_price')}
+                >
+                  Giá cao
+                </Button>
+                <Button
+                  className={sort === 'order_asc_price' ? 'border-[#1250dc] text-[#1250dc]' : ''}
+                  onClick={() => handleSortChange('order_asc_price')}
+                >
+                  Giá thấp
+                </Button>
               </div>
               <div className="hidden sm:flex md:flex lg:flex xl:flex 2xl:flex gap-2">
-                <Button className="rounded-xl border-[#1250dc] text-[#1250dc]">Bán chạy</Button>
-                <Button className="rounded-xl">Giá cao</Button>
-                <Button className="rounded-xl">Giá thấp</Button>
+                <Button
+                  className={
+                    sort === 'order_desc_price'
+                      ? 'rounded-xl border-[#1250dc] text-[#1250dc]'
+                      : 'rounded-xl'
+                  }
+                  onClick={() => handleSortChange('order_desc_price')}
+                >
+                  Giá cao
+                </Button>
+                <Button
+                  className={
+                    sort === 'order_asc_price'
+                      ? 'rounded-xl border-[#1250dc] text-[#1250dc]'
+                      : 'rounded-xl'
+                  }
+                  onClick={() => handleSortChange('order_asc_price')}
+                >
+                  Giá thấp
+                </Button>
               </div>
             </div>
             <Button

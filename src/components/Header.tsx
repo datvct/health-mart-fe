@@ -53,7 +53,10 @@ const Header = () => {
     />
   );
 
-  const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
+  const onSearch: SearchProps['onSearch'] = (value) => {
+    if (!value.trim()) return;
+    router.push(`/?name=${encodeURIComponent(value.trim())}`);
+  };
 
   const { Search } = Input;
 
@@ -76,7 +79,7 @@ const Header = () => {
     if (user) {
       syncCartFromLocalToRedis();
     }
-  }, [user]);
+  }, [syncCartFromLocalToRedis, user]);
 
   const handleLogout = async () => {
     try {

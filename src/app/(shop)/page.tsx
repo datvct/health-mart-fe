@@ -6,16 +6,19 @@ import { HeroSection } from '../../components/HeroSection';
 import { ProductCard } from '../../components/ProductCard';
 import { productApi } from '../../lib/apis/product';
 import { Product } from '../../lib/types/products/type';
+import { useSearchParams } from 'next/navigation';
 
 function Home() {
   const [data, setData] = useState<Product[]>();
+  const searchParams = useSearchParams();
+  const name = searchParams.get('name');
   useEffect(() => {
     async function fetchData() {
-      const res = await productApi.getList();
+      const res = await productApi.getList({ name: name || '' });
       setData(res.data);
     }
     fetchData();
-  }, []);
+  }, [name]);
 
   return (
     <div className="flex flex-col gap-5">
