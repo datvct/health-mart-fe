@@ -59,7 +59,7 @@ export default function CartInfo() {
   const version = useCartStore((s) => s.version);
 
   useEffect(() => {
-    if (!userId) return;
+    // if (!userId) return;
 
     const fetchCart = async () => {
       const latestCart = await getCart();
