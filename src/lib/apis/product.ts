@@ -55,7 +55,7 @@ class ProductClient {
         value.forEach((v) => params.append(key, v));
       } else if (value !== undefined && value !== null) {
         params.append(key, value);
-      }
+  }
     }
 
     const queryString = params.toString();
@@ -66,6 +66,11 @@ class ProductClient {
   async getListBrands() {
     const res = await this.client.get(endpoint + '/list-brands');
     return res.data;
+  }
+
+  async updatePharmacyProduct(pharmacyId: number, productId: number, updateRequest: { quantity: number }) {
+    const res = await this.client.put(`${endpoint}/${productId}/pharmacy-product/${pharmacyId}`, updateRequest);
+    return res.data.data || res.data;
   }
 }
 
