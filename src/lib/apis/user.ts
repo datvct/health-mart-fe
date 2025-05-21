@@ -24,6 +24,22 @@ class UserClient {
     const res = await this.client.put(`${endpoint}/address/${addressId}`, payload);
     return res.data;
   }
+
+  async getAddressByUser(userId: number) {
+    const res = await this.client.get(`${endpoint}/address/user/${userId}`);
+    return res.data;
+  }
+
+  async createAddress(payload: unknown) {
+    const res = await this.client.post(`${endpoint}/address`, payload);
+    return res.data;
+  }
+
+  async deleteAddress(addressId: number) {
+    const res = await this.client.delete(`${endpoint}/address/${addressId}`);
+    return res.data;
+  }
+
 }
 
 export const userApi = new UserClient();
