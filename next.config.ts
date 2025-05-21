@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
       'example.com',
       'bucket-ktpm.s3.ap-southeast-1.amazonaws.com',
       'example.image',
+      's3-sgn09.fptcloud.com'
     ],
   },
 };

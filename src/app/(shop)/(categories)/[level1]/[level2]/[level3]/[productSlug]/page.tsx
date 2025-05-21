@@ -1,29 +1,33 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation';
 import { productApi } from '@/lib/apis/product';
 import { reviewApi } from '@/lib/apis/review';
 import { userApi } from '@/lib/apis/user';
+import { Button, Modal, Skeleton } from 'antd';
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import Image from 'next/image';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import AntdBreadcrumb from '../../../../../../../components/Breadcrumb';
+import { useCart } from '../../../../../../../hook/useCart';
+import { RootState } from '../../../../../../../lib/store';
 import { Category, Product } from '../../../../../../../lib/types/products/type';
 import { Review } from '../../../../../../../lib/types/reviews/type';
 import { User } from '../../../../../../../lib/types/users/type';
-import { Skeleton, Button, Modal } from 'antd';
-import Image from 'next/image';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import 'dayjs/locale/vi';
-import { useSelector } from 'react-redux';
-import type { RootState } from '@/lib/store';
-import { toast } from 'react-toastify';
 
 export default function CategoryPageLV3() {
+  const user = useSelector((state: RootState) => state.auth.user);
+
   const params = useParams();
   const level1 = params?.level1 as string;
   const level2 = params?.level2 as string;
   const level3 = params?.level3 as string;
   const productSlug = params?.productSlug as string;
+  const { addToCart } = useCart(user?.id.toString());
 
   const [dataLV3, setDataLV3] = useState<Category | null>(null);
   const [dataLV2, setDataLV2] = useState<Category | null>(null);
@@ -313,7 +317,6 @@ export default function CategoryPageLV3() {
   });
 
   // --- XỬ LÝ REVIEW
-  const user = useSelector((state: RootState) => state.auth.user);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [reviewRating, setReviewRating] = useState(5); // Mặc định 5 sao
   const [reviewContent, setReviewContent] = useState('');
@@ -701,8 +704,8 @@ export default function CategoryPageLV3() {
                           src="https://s3-sgn09.fptcloud.com/lc-public/web-lc/default/promotion_used.webp"
                           alt="Promotion Icon"
                           className="w-6 h-6"
-                          width={6}
-                          height={6}
+                          width={24}
+                          height={24}
                         />
                       </div>
                       <p className="text-sm text-gray-700">
@@ -742,7 +745,24 @@ export default function CategoryPageLV3() {
 
                   {/* Nút hành động */}
                   <div className="flex gap-4 mb-3">
-                    <button className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold py-3 rounded-full hover:opacity-90">
+                    <button
+                      className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold py-3 rounded-full hover:opacity-90"
+                      onClick={() => {
+                        addToCart({
+                          product_id: data?.product_id || 1,
+                          name: data?.name || '',
+                          image: data?.image_url?.split(',')[0]?.trim() ?? '',
+                          variant_unit: selectedVariant?.unit ?? '',
+                          sale_price:
+                            (selectedVariant?.price ?? 0) *
+                            (1 - (data?.discount_percentage ?? 0) / 100),
+                          price: selectedVariant?.price ?? 0,
+                          discount_percentage: data?.discount_percentage ?? 0,
+                          slug: data?.slug || '',
+                        });
+                        toast.success('Thêm vào giỏ hàng thành công');
+                      }}
+                    >
                       Chọn mua
                     </button>
                     <button className="flex-1 bg-gray-100 text-blue-600 text-sm font-semibold py-3 rounded-full hover:bg-gray-200">
