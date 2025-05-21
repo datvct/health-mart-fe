@@ -697,10 +697,12 @@ export default function CategoryPageLV3() {
                     {/* Phần dưới: Nền trắng */}
                     <div className="bg-white p-4 flex items-center gap-3">
                       <div className="w-10 h-10 bg-blue-100 flex items-center justify-center rounded-md">
-                        <img
+                        <Image
                           src="https://s3-sgn09.fptcloud.com/lc-public/web-lc/default/promotion_used.webp"
                           alt="Promotion Icon"
                           className="w-6 h-6"
+                          width={6}
+                          height={6}
                         />
                       </div>
                       <p className="text-sm text-gray-700">

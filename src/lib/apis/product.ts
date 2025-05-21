@@ -67,6 +67,23 @@ class ProductClient {
     const res = await this.client.get(endpoint + '/list-brands');
     return res.data;
   }
+
+  async updatePharmacyProduct(
+    pharmacyId: number,
+    productId: number,
+    updateRequest: { quantity: number },
+  ) {
+    const res = await this.client.put(
+      `${endpoint}/${productId}/pharmacy-product/${pharmacyId}`,
+      updateRequest,
+    );
+    return res.data.data || res.data;
+  }
+
+  async getPharmacyProducts() {
+    const res = await this.client.get(`${endpoint}/pharmacy-products`);
+    return res.data;
+  }
 }
 
 export const productApi = new ProductClient();
