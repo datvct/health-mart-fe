@@ -6,6 +6,11 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import AddressModal from '../../../components/order/AddressModal';
+import DiscountModal from '../../../components/order/DiscountModal';
+import EditAddressModal from '../../../components/order/EditAddressModal';
+import NewAddressModal from '../../../components/order/NewAddressModal';
+import { useVietnamLocations } from '../../../hook/useVietnamLocations';
 import { CreateOrderPromotionRequest, orderApi, OrderData, Voucher } from '../../../lib/apis/order';
 import { productApi } from '../../../lib/apis/product';
 import { userApi } from '../../../lib/apis/user';
@@ -32,170 +37,6 @@ interface PharmacyStockItem {
 
   product_id?: number;
   quantity?: number;
-}
-
-// Các hằng số về địa chỉ của Việt Nam
-const VIETNAM_PROVINCES = ['Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng'];
-const VIETNAM_DISTRICTS: { [province: string]: string[] } = {
-  'Hồ Chí Minh': ['Quận 1', 'Quận 3', 'Quận Bình Thạnh'],
-  'Hà Nội': ['Hoàn Kiếm', 'Đống Đa', 'Ba Đình'],
-  'Đà Nẵng': ['Liên Chiểu', 'Ngũ Hành Sơn'],
-};
-const VIETNAM_WARDS: { [district: string]: string[] } = {
-  'Quận 1': ['Phường Bến Nghé', 'Phường Bến Thành'],
-  'Quận 3': ['Phường 6', 'Phường 7'],
-  'Quận Bình Thạnh': ['Phường 15', 'Phường 16'],
-  'Hoàn Kiếm': ['Phường Hàng Trống', 'Phường Cửa Đông'],
-  'Đống Đa': ['Phường Khâm Thiên', 'Phường Lý Thái Tổ'],
-  'Ba Đình': ['Phường Phúc Xá', 'Phường Trúc Bạch'],
-  'Liên Chiểu': ['Phường Hòa Hiệp Bắc', 'Phường Hòa Hiệp Nam'],
-  'Ngũ Hành Sơn': ['Phường Mỹ An', 'Phường Khuê Mỹ'],
-};
-
-// Phần Mã Giảm Giá
-function DiscountModal({
-  onClose,
-  onSelectVoucher,
-}: {
-  onClose: () => void;
-  onSelectVoucher: (voucher: Voucher) => void;
-}) {
-  const [inputCode, setInputCode] = useState('');
-  const [voucher, setVoucher] = useState<Voucher | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const handleSearchDiscountCode = async () => {
-    if (!inputCode.trim()) {
-      toast.error('Vui lòng nhập mã ưu đãi');
-      return;
-    }
-    setLoading(true);
-    try {
-      // Gọi API tìm discount code theo code
-      const res = await orderApi.getDiscountCodeByCode(inputCode.trim());
-      if (res && res.code) {
-        // Kiểm tra hiệu lực của voucher
-        const now = new Date();
-        const validFrom = new Date(res.validFrom);
-        const validUntil = new Date(res.validUntil);
-        if (now < validFrom || now > validUntil) {
-          toast.error('Mã đã hết hiệu lực');
-          setVoucher(null);
-        } else {
-          setVoucher(res);
-        }
-      } else {
-        setVoucher(null);
-        toast.error('Không tìm thấy mã ưu đãi hợp lệ');
-      }
-    } catch {
-      toast.error('Không tìm thấy mã ưu đãi hợp lệ');
-    }
-    setLoading(false);
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div
-        className="bg-white rounded-xl p-6 relative overflow-auto"
-        style={{ width: '601px', height: '824px' }}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold text-center flex-1">Ưu đãi dành cho bạn</h2>
-          <button onClick={onClose} className="text-gray-500 text-2xl">
-            &times;
-          </button>
-        </div>
-        <div className="border-t border-dashed mb-4" />
-
-        {/* Thanh nhập mã ưu đãi */}
-        <div className="flex items-center bg-white p-2 rounded mb-4">
-          <input
-            type="text"
-            placeholder="Nhập mã giảm giá"
-            value={inputCode}
-            onChange={(e) => setInputCode(e.target.value)}
-            className="flex-1 p-2 border border-gray-300 rounded-l"
-          />
-          <button
-            onClick={handleSearchDiscountCode}
-            disabled={!inputCode.trim() || loading}
-            className={`p-2 rounded-r ${
-              inputCode.trim() && !loading
-                ? 'bg-[#1B59DE] cursor-pointer'
-                : 'bg-gray-300 cursor-not-allowed'
-            } text-white`}
-          >
-            {loading ? 'Đang tải...' : 'Xác nhận'}
-          </button>
-        </div>
-
-        {/* Panel hiển thị kết quả mã ưu đãi */}
-        <div
-          className={`bg-[#EDF0F3] flex justify-center mb-4 ${
-            voucher ? 'items-start' : 'items-center'
-          }`}
-          style={{ width: '553px', height: '490px' }}
-        >
-          {voucher ? (
-            <div className="text-top">
-              <p className="text-lg text-gray-600 mb-4">Mã ưu đãi tìm được:</p>
-              <div
-                className="bg-white p-4 rounded shadow"
-                style={{ width: '552px', height: '100px' }}
-              >
-                {/* Dòng 1: Tên mã (trái) và giảm giá (phải) */}
-                <div className="flex justify-between items-center">
-                  <p className="font-bold text-xl">{voucher.code}</p>
-                  <p className="font-bold text-xl text-gray-600">
-                    {voucher.discountType === 'PERCENTAGE'
-                      ? `Giảm ${voucher.discountValue}%`
-                      : `Giảm ${voucher.discountValue.toLocaleString('vi-VN')}đ`}
-                  </p>
-                </div>
-                {/* Dòng 2: Hiệu lực */}
-                <p className="text-sm text-gray-500 mt-2">
-                  Hiệu lực: {voucher.validFrom} đến {voucher.validUntil}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <p className="text-center text-lg text-gray-600">
-              Nhập mã giảm giá để được áp dụng những ưu đãi
-            </p>
-          )}
-        </div>
-        {/* Nút Áp dụng voucher */}
-        <div className="bg-white p-4 rounded">
-          <div className="flex justify-between items-center">
-            <span className="text-base font-bold">Vui lòng chọn ưu đãi</span>
-          </div>
-          <button
-            className="mt-4 w-full h-[59px] bg-blue-600 text-white rounded-full text-xl"
-            onClick={() => {
-              if (!voucher) {
-                toast.error('Chưa có ưu đãi nào được chọn');
-                return;
-              }
-              // Kiểm tra số lượt sử dụng của voucher
-              const usageCount = Number(voucher.usageCount || 0);
-              const usageLimit = Number(voucher.usageLimit || 0);
-              if (usageCount >= usageLimit) {
-                toast.error('Mã đã hết số lượt sử dụng');
-                return;
-              }
-              // Nếu còn lượt sử dụng, cho phép áp dụng voucher
-              onSelectVoucher(voucher);
-              onClose();
-            }}
-          >
-            Áp dụng
-          </button>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 export default function CheckoutPage() {
@@ -369,10 +210,12 @@ export default function CheckoutPage() {
   }, [groupedPharmacies, selectedProvince, selectedDistrict]);
 
   // --- Cho phần giao hàng tận nơi ---
+  const { provinces, loading: locationsLoading, error: locationsError } = useVietnamLocations();
   const [deliveryProvince, setDeliveryProvince] = useState('');
   const [deliveryDistrict, setDeliveryDistrict] = useState('');
   const [deliveryWard, setDeliveryWard] = useState('');
   const [deliverySpecificAddress, setDeliverySpecificAddress] = useState('');
+
   // Thông tin người đặt (orderer)
   const [deliveryReceiverName, setDeliveryReceiverName] = useState('');
   const [deliveryReceiverPhone, setDeliveryReceiverPhone] = useState('');
@@ -383,6 +226,24 @@ export default function CheckoutPage() {
   // Thêm state cho địa chỉ (ID) và ghi chú
   const [deliveryAddressId, setDeliveryAddressId] = useState<number | null>(null);
   const [deliveryNote, setDeliveryNote] = useState('');
+
+  // Các trạng thái cho modal quản lý địa chỉ
+  const [addressModalOpen, setAddressModalOpen] = useState(false);
+  const [newAddressModalOpen, setNewAddressModalOpen] = useState(false);
+
+  const handleSelectAddress = (address: any) => {
+    // Cập nhật lại state của giao hàng với thông tin của địa chỉ được chọn
+    setDeliveryProvince(address.city || '');
+    setDeliveryDistrict(address.district || '');
+    setDeliveryWard(address.ward || '');
+    setDeliverySpecificAddress(address.address_street || '');
+  };
+
+  const [editAddressModalOpen, setEditAddressModalOpen] = useState(false);
+  const [selectedAddressForEdit, setSelectedAddressForEdit] = useState<any>(null);
+
+  // Khi người dùng bấm "Sửa" từ AddressModal:
+  
   // Báo lỗi
   const [nameError, setNameError] = useState('');
   const [phoneError, setPhoneError] = useState('');
@@ -416,6 +277,9 @@ export default function CheckoutPage() {
           if (response.data.phone) {
             setDeliveryReceiverPhone(response.data.phone);
             setRecipientPhone((prev) => prev || response.data.phone);
+          }
+          if (response.data.email) {
+            setDeliveryUserEmail(response.data.email);
           }
         })
         .catch((err) => console.error('Error fetching user by id:', err));
@@ -528,6 +392,10 @@ export default function CheckoutPage() {
               ward: deliveryWard,
               address: deliverySpecificAddress,
               pharmacy_id: null,
+              customerName: deliveryReceiverName,
+              customerPhone: deliveryReceiverPhone,
+              customerEmail: deliveryUserEmail,
+              note: deliveryNote,
             }
           : deliveryMethod === 'pickup'
           ? {
@@ -539,6 +407,10 @@ export default function CheckoutPage() {
               ward: '',
               address: '',
               pharmacy_id: selectedPharmacy!,
+              customerName: recipientName,
+              customerPhone: recipientPhone,
+              customerEmail: deliveryUserEmail,
+              note: deliveryNote,
             }
           : undefined,
       items: cartItems.map((item) => ({
@@ -593,6 +465,74 @@ export default function CheckoutPage() {
     } catch {
       toast.error('Lỗi tạo đơn hàng!');
     }
+  };
+
+
+  const renderProvinceSelect = () => {
+    if (locationsLoading) return <p>Loading...</p>;
+    if (locationsError) return <p>Error: {locationsError}</p>;
+    return (
+      <select
+        className="w-full border rounded p-2 text-sm"
+        value={deliveryProvince}
+        onChange={(e) => {
+          const newProvince = e.target.value;
+          setDeliveryProvince(newProvince);
+          setDeliveryDistrict('');
+          setDeliveryWard('');
+        }}
+      >
+        <option value="">Chọn tỉnh/thành phố</option>
+        {provinces.map((p) => (
+          <option key={p.code} value={p.name}>
+            {p.name}
+          </option>
+        ))}
+      </select>
+    );
+  };
+
+  const renderDistrictSelect = () => {
+    return (
+      <select
+        className="w-full border rounded p-2 text-sm"
+        value={deliveryDistrict}
+        onChange={(e) => {
+          const newDistrict = e.target.value;
+          setDeliveryDistrict(newDistrict);
+          setDeliveryWard('');
+        }}
+        disabled={!deliveryProvince}
+      >
+        <option value="">Chọn quận/huyện</option>
+        {provinces.find((p) => p.name === deliveryProvince)?.districts.map((d) => (
+          <option key={d.code} value={d.name}>
+            {d.name}
+          </option>
+        )) || []}
+      </select>
+    );
+  };
+
+  // Phần chọn Phường/Xã:
+  const renderWardSelect = () => {
+    return (
+      <select
+        className="w-full border rounded p-2 text-sm"
+        value={deliveryWard}
+        onChange={(e) => setDeliveryWard(e.target.value)}
+        disabled={!deliveryDistrict}
+      >
+        <option value="">Chọn phường/xã</option>
+        {provinces.find((p) => p.name === deliveryProvince)
+          ?.districts.find((d) => d.name === deliveryDistrict)
+          ?.wards.map((w) => (
+            <option key={w.code} value={w.name}>
+              {w.name}
+            </option>
+          )) || []}
+      </select>
+    );
   };
 
   const [selectedPharmacy, setSelectedPharmacy] = useState<number | null>(null);
@@ -987,14 +927,14 @@ export default function CheckoutPage() {
                       </div>
                       <h2 className="font-medium">Địa chỉ nhận hàng</h2>
                     </div>
-                    {user && !editAddress && (
+                    {user ? (
                       <button
-                        onClick={() => setEditAddress(true)}
+                        onClick={() => setAddressModalOpen(true)}
                         className="px-3 py-1 bg-blue-600 text-white text-sm rounded"
                       >
-                        Chỉnh sửa
+                        Thay đổi
                       </button>
-                    )}
+                    ) : null}
                   </div>
                   {user ? (
                     !editAddress ? (
@@ -1009,58 +949,16 @@ export default function CheckoutPage() {
                         <div className="flex gap-4 mb-4">
                           <div className="w-1/2">
                             <label className="block text-gray-600">Tỉnh/Thành phố</label>
-                            <select
-                              className="w-full border rounded p-2 text-sm"
-                              value={deliveryProvince}
-                              onChange={(e) => {
-                                const newProvince = e.target.value;
-                                setDeliveryProvince(newProvince);
-                                setDeliveryDistrict('');
-                                setDeliveryWard('');
-                              }}
-                            >
-                              <option value="">Chọn tỉnh/thành phố</option>
-                              {VIETNAM_PROVINCES.map((province) => (
-                                <option key={province} value={province}>
-                                  {province}
-                                </option>
-                              ))}
-                            </select>
+                            {renderProvinceSelect()}
                           </div>
                           <div className="w-1/2">
                             <label className="block text-gray-600">Quận/Huyện</label>
-                            <select
-                              className="w-full border rounded p-2 text-sm"
-                              value={deliveryDistrict}
-                              onChange={(e) => {
-                                const newDistrict = e.target.value;
-                                setDeliveryDistrict(newDistrict);
-                                setDeliveryWard('');
-                              }}
-                            >
-                              <option value="">Chọn quận/huyện</option>
-                              {(VIETNAM_DISTRICTS[deliveryProvince] || []).map((district) => (
-                                <option key={district} value={district}>
-                                  {district}
-                                </option>
-                              ))}
-                            </select>
+                            {renderDistrictSelect()}
                           </div>
                         </div>
                         <div className="mt-2">
                           <label className="block text-gray-600">Phường/Xã</label>
-                          <select
-                            className="w-full border rounded p-2 text-sm"
-                            value={deliveryWard}
-                            onChange={(e) => setDeliveryWard(e.target.value)}
-                          >
-                            <option value="">Chọn phường/xã</option>
-                            {(VIETNAM_WARDS[deliveryDistrict] || []).map((ward) => (
-                              <option key={ward} value={ward}>
-                                {ward}
-                              </option>
-                            ))}
-                          </select>
+                          {renderWardSelect()}
                         </div>
                         <div className="mt-2">
                           <label className="block text-gray-600">Địa chỉ cụ thể</label>
@@ -1168,58 +1066,16 @@ export default function CheckoutPage() {
                       <div className="flex gap-4 mb-4">
                         <div className="w-1/2">
                           <label className="block text-gray-600">Tỉnh/Thành phố</label>
-                          <select
-                            className="w-full border rounded p-2 text-sm"
-                            value={deliveryProvince}
-                            onChange={(e) => {
-                              const newProvince = e.target.value;
-                              setDeliveryProvince(newProvince);
-                              setDeliveryDistrict('');
-                              setDeliveryWard('');
-                            }}
-                          >
-                            <option value="">Chọn tỉnh/thành phố</option>
-                            {VIETNAM_PROVINCES.map((province) => (
-                              <option key={province} value={province}>
-                                {province}
-                              </option>
-                            ))}
-                          </select>
+                          {renderProvinceSelect()}
                         </div>
                         <div className="w-1/2">
                           <label className="block text-gray-600">Quận/Huyện</label>
-                          <select
-                            className="w-full border rounded p-2 text-sm"
-                            value={deliveryDistrict}
-                            onChange={(e) => {
-                              const newDistrict = e.target.value;
-                              setDeliveryDistrict(newDistrict);
-                              setDeliveryWard('');
-                            }}
-                          >
-                            <option value="">Chọn quận/huyện</option>
-                            {(VIETNAM_DISTRICTS[deliveryProvince] || []).map((district) => (
-                              <option key={district} value={district}>
-                                {district}
-                              </option>
-                            ))}
-                          </select>
+                          {renderDistrictSelect()}
                         </div>
                       </div>
                       <div className="mt-2">
                         <label className="block text-gray-600">Phường/Xã</label>
-                        <select
-                          className="w-full border rounded p-2 text-sm"
-                          value={deliveryWard}
-                          onChange={(e) => setDeliveryWard(e.target.value)}
-                        >
-                          <option value="">Chọn phường/xã</option>
-                          {(VIETNAM_WARDS[deliveryDistrict] || []).map((ward) => (
-                            <option key={ward} value={ward}>
-                              {ward}
-                            </option>
-                          ))}
-                        </select>
+                        {renderWardSelect()}
                       </div>
                       <div className="mt-2">
                         <label className="block text-gray-600">Địa chỉ cụ thể</label>
@@ -1307,9 +1163,8 @@ export default function CheckoutPage() {
                     </div>
                   )}
                   <div className="mt-4">
-                    <label className="block text-gray-600">Ghi chú</label>
                     <textarea
-                      placeholder="Nhập ghi chú: 15 phút nữa hãy gọi cho tôi!"
+                      placeholder="15 phút nữa hãy gọi cho tôi!"
                       className="w-full border rounded p-2 text-sm"
                       value={deliveryNote}
                       onChange={(e) => setDeliveryNote(e.target.value)}
@@ -1527,6 +1382,8 @@ export default function CheckoutPage() {
                   <textarea
                     placeholder="Gọi cho tôi khi chuẩn bị hàng xong."
                     className="w-full mt-2 border rounded p-2 text-sm"
+                    value={deliveryNote}
+                    onChange={(e) => setDeliveryNote(e.target.value)}
                   />
                   <div className="mt-4">
                     <h2 className="font-medium mb-2">Danh sách nhà thuốc</h2>
@@ -1535,9 +1392,7 @@ export default function CheckoutPage() {
                         {filteredPharmacies.map((group) => {
                           // Kiểm tra xem tất cả sản phẩm trong giỏ hàng có đủ tồn kho tại nhà thuốc này hay không
                           const isPharmacyAvailable = cartItems.every((cartItem) => {
-                            const record = group.stocks.find(
-                              (s) => s.product_id === cartItem.product_id,
-                            );
+                            const record = group.stocks.find((s) => s.product_id === cartItem.product_id);
                             return (
                               record &&
                               record.quantity !== undefined &&
@@ -1563,13 +1418,12 @@ export default function CheckoutPage() {
                             >
                               <h3 className="font-semibold">{group.info.name}</h3>
                               <p className="text-sm text-gray-600">
-                                {group.info.address_street}, {group.info.ward},{' '}
-                                {group.info.district}
+                                {group.info.address_street}, {group.info.ward}, {group.info.district}
                               </p>
-                              <div className="mt-2">
+                              <div className="mt-2 space-y-1">
                                 {cartItems.map((item) => {
                                   const stockRecord = group.stocks.find(
-                                    (s) => s.product_id === item.product_id,
+                                    (s) => s.product_id === item.product_id
                                   );
                                   const available =
                                     stockRecord &&
@@ -1578,11 +1432,13 @@ export default function CheckoutPage() {
                                   return (
                                     <div
                                       key={item.product_id}
-                                      className="flex justify-between text-sm"
+                                      className="flex items-center justify-between text-sm"
                                     >
-                                      <span>{item.name}</span>
+                                      <span className="flex-1 mr-2 break-words">
+                                        {item.name}
+                                      </span>
                                       <span
-                                        className={`font-semibold ${
+                                        className={`font-semibold whitespace-nowrap ${
                                           available ? 'text-green-600' : 'text-red-500'
                                         }`}
                                       >
@@ -1597,7 +1453,9 @@ export default function CheckoutPage() {
                         })}
                       </div>
                     ) : (
-                      <p className="text-sm text-gray-600">Không có nhà thuốc nào ở khu vực này.</p>
+                      <p className="text-sm text-gray-600">
+                        Không có nhà thuốc nào ở khu vực này.
+                      </p>
                     )}
                   </div>
                 </div>
@@ -1738,6 +1596,52 @@ export default function CheckoutPage() {
                 onSelectVoucher={(voucher) => {
                   setSelectedVoucher(voucher);
                   toast.success(`Voucher ${voucher.code} đã được chọn`);
+                }}
+              />
+            )}
+
+            {addressModalOpen && user && (
+              <AddressModal
+                userId={user.id}
+                onClose={() => setAddressModalOpen(false)}
+                onSelectAddress={(address) => handleSelectAddress(address)}
+                onAddNew={() => {
+                  setAddressModalOpen(false);
+                  setNewAddressModalOpen(true);
+                }}
+                onEditAddress={(address) => {
+                  // Khi nhấn "Sửa", cập nhật state và mở modal chỉnh sửa địa chỉ
+                  setSelectedAddressForEdit(address);
+                  setAddressModalOpen(false);
+                  setEditAddressModalOpen(true);
+                }}
+              />
+            )}
+
+            {newAddressModalOpen && (
+              <NewAddressModal
+                onClose={() => setNewAddressModalOpen(false)}
+                onSave={(newAddress) => {
+                  handleSelectAddress(newAddress);
+                }}
+                onBack={() => {
+                  setNewAddressModalOpen(false);
+                  setAddressModalOpen(true);
+                }}
+              />
+            )}
+
+            {editAddressModalOpen && (
+              <EditAddressModal
+                address={selectedAddressForEdit}
+                onClose={() => setEditAddressModalOpen(false)}
+                onBack={() => {
+                  setEditAddressModalOpen(false);
+                  setAddressModalOpen(true);
+                }}
+                onUpdate={() => {
+                }}
+                onDelete={() => {
                 }}
               />
             )}

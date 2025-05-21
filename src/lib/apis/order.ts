@@ -106,13 +106,18 @@ class OrderClient {
 // -------------------------
 
 export interface ShippingAddress {
-  recipientName: string;
-  phoneNumber: string;
+  recipientName: string;   
+  phoneNumber: string;    
   city: string;
   district: string;
   ward: string;
   address: string;
   pharmacy_id: number | null;
+  // --- Các trường mới cho thông tin người đặt và ghi chú ---
+  customerName: string; 
+  customerPhone: string;  
+  customerEmail?: string;  
+  note?: string;          
 }
 
 export interface ShippingAddressWithOrderId extends ShippingAddress {
