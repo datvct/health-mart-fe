@@ -1,53 +1,63 @@
 'use client';
-import { useSearchParams } from 'next/navigation';
+
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import {
+  PDFInvoiceViewer,
+  DownloadInvoicePDF,
+} from '../../../components/Invoice/InvoiceViewerClient';
+import { sendInvoiceEmail } from '../actions/sendInvoice';
 import Link from 'next/link';
-import { orderApi } from '../../../lib/apis/order';
 
 const PaymentStatusPage = () => {
   const searchParams = useSearchParams();
   const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
-  const [orderId, setOrderId] = useState<string | null>(null);
+  const [order, setOrder] = useState<any | null>(null);
 
   useEffect(() => {
-    const vnp_ResponseCode = searchParams.get('vnp_ResponseCode');
+    const responseCode = searchParams.get('vnp_ResponseCode');
     const status = searchParams.get('status');
-    const orderIdParam = searchParams.get('orderId');
-    const codParam = searchParams.get('cod');
+    const orderData = sessionStorage.getItem('order_data');
+    const itemProduct = sessionStorage.getItem('checkoutItems')
 
-    setOrderId(orderIdParam);
-
-    if (vnp_ResponseCode) {
-      setIsSuccess(vnp_ResponseCode === '00');
+    if (responseCode) {
+      setIsSuccess(responseCode === '00');
     } else if (status) {
       setIsSuccess(status === 'success');
-    } else {
-      setIsSuccess(null); // Không xác định
     }
 
-    if (orderIdParam) {
-      const isCod = codParam === 'true';
-      const orderIdNumber = Number(orderIdParam);
-      if (!isNaN(orderIdNumber)) {
-        orderApi.updateOrder(orderIdNumber, {
-          order_status: isCod ? 'PENDING' : 'PENDING_NOTPAYMENT',
-        });
+    if (orderData && itemProduct) {
+      const parsedOrder = JSON.parse(orderData);
+      const checkoutItems = JSON.parse(itemProduct);
+      parsedOrder.itemsProduct = checkoutItems;
+      setOrder(parsedOrder);
+
+      if ((responseCode === '00' || status === 'success') && parsedOrder) {
+        sendInvoiceEmail(parsedOrder);
       }
     }
   }, [searchParams]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white p-8 rounded shadow-md max-w-md w-full text-center">
+      <div className="bg-white p-8 rounded shadow-md max-w-2xl w-full text-center">
         {isSuccess === null ? (
           <p>Đang xử lý kết quả thanh toán...</p>
         ) : isSuccess ? (
           <>
             <h1 className="text-2xl font-bold text-green-600 mb-4">🎉 Đặt hàng thành công!</h1>
             <p className="mb-2">Cảm ơn bạn đã đặt hàng.</p>
-            <p className="mb-4">
-              Mã đơn hàng: <strong>{orderId}</strong>
-            </p>
+            {order && (
+              <>
+                <p className="mb-2">
+                  Mã đơn hàng: <strong>{order.id}</strong>
+                </p>
+                <PDFInvoiceViewer order={order} />
+                <div className="mt-4">
+                  <DownloadInvoicePDF order={order} />
+                </div>
+              </>
+            )}
           </>
         ) : (
           <>
@@ -56,7 +66,7 @@ const PaymentStatusPage = () => {
           </>
         )}
 
-        <Link href="/" className="text-blue-600 hover:underline">
+        <Link href="/" className="text-blue-600 hover:underline" onClick={()=>sessionStorage.clear()}>
           Quay lại trang chủ
         </Link>
       </div>

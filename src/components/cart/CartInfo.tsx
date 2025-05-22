@@ -19,48 +19,9 @@ export default function CartInfo() {
   const [isAllSelected, setIsAllSelected] = useState(false);
   const router = useRouter();
 
-  // useEffect(() => {
-  //   const interval = setInterval(async () => {
-  //     const latestCart = await getCart();
-  //     setCartItems((prev) => {
-  //       return latestCart.map((newItem) => {
-  //         const oldItem = prev.find(
-  //           (item) =>
-  //             item.product_id === newItem.product_id && item.variant_unit === newItem.variant_unit,
-  //         );
-  //         return {
-  //           ...newItem,
-  //           selected: oldItem?.selected ?? true,
-  //         };
-  //       });
-  //     });
-  //   }, 500);
-  //   setIsAllSelected(cartItems.every((item) => item.selected));
-  //   return () => clearInterval(interval);
-  // }, []);
-  // useEffect(() => {
-  //   if (!userId) return;
-
-  //   const interval = setInterval(async () => {
-  //     const latestCart = await getCart();
-  //     setCartItems((prev) =>
-  //       latestCart.map((item) => {
-  //         const oldItem = prev.find(
-  //           (c) => c.product_id === item.product_id && c.variant_unit === item.variant_unit,
-  //         );
-  //         return { ...item, selected: oldItem?.selected ?? true };
-  //       }),
-  //     );
-  //   }, 5000); // 5 giây hợp lý hơn
-
-  //   return () => clearInterval(interval);
-  // }, [userId]);
-
   const version = useCartStore((s) => s.version);
 
   useEffect(() => {
-    // if (!userId) return;
-
     const fetchCart = async () => {
       const latestCart = await getCart();
       setCartItems((prev) =>
@@ -74,7 +35,7 @@ export default function CartInfo() {
     };
 
     fetchCart();
-  }, [userId, version]);
+  }, [getCart, userId, version]);
 
   const selectedItems = cartItems.filter((item) => item.selected);
 

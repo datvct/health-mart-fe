@@ -431,10 +431,11 @@ export default function CheckoutPage() {
         : undefined,
     };
 
-    console.log('Order Data to send:', orderData);
+    // sessionStorage.setItem('order_data', JSON.stringify(orderData));
     try {
       const orderResponse = await orderApi.createOrderAndShippingAddress(orderData);
       console.log('Order created:', orderResponse);
+      sessionStorage.setItem('order_data', JSON.stringify(orderResponse));
 
       // Nếu đặt hàng theo hình thức pickup, cập nhật tồn kho cho các sản phẩm.
       if (deliveryMethod === 'pickup' && selectedPharmacy) {
