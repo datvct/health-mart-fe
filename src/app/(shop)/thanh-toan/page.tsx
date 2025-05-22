@@ -15,6 +15,8 @@ import { CreateOrderPromotionRequest, orderApi, OrderData, Voucher } from '../..
 import { productApi } from '../../../lib/apis/product';
 import { userApi } from '../../../lib/apis/user';
 import { RootState } from '../../../lib/store';
+import { useCart } from '../../../hook/useCart';
+import { paymentApi } from '../../../lib/apis/payment';
 
 // Interface cho CartItem
 interface CartItem {
@@ -42,9 +44,9 @@ interface PharmacyStockItem {
 export default function CheckoutPage() {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.auth.user);
-  console.log('User from redux:', user);
-
+  const { clearCart } = useCart(user?.id?.toString() || undefined);
   const [showDiscountModal, setShowDiscountModal] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('cod');
 
   // SVG error icon
   const ErrorIcon = () => (
@@ -243,7 +245,7 @@ export default function CheckoutPage() {
   const [selectedAddressForEdit, setSelectedAddressForEdit] = useState<any>(null);
 
   // Khi người dùng bấm "Sửa" từ AddressModal:
-  
+
   // Báo lỗi
   const [nameError, setNameError] = useState('');
   const [phoneError, setPhoneError] = useState('');
@@ -381,6 +383,7 @@ export default function CheckoutPage() {
       discount: directDiscount + voucherDiscount, // tích hợp voucher discount vào trường discount
       final_price: totalFinal - voucherDiscount,
       ship_method: deliveryMethod === 'delivery' ? 'HOME_DELIVERY' : 'PICK_UP',
+      order_status: paymentMethod === 'cod' ? 'PENDING_NOTPAYMENT' : 'PENDING',
       // Thiết lập shippingAddress tùy theo hình thức giao hàng.
       shippingAddress:
         deliveryMethod === 'delivery'
@@ -459,14 +462,28 @@ export default function CheckoutPage() {
       }
 
       toast.success('Đặt hàng thành công!');
-      sessionStorage.removeItem('checkoutItems');
+      localStorage.removeItem('cart');
+      await clearCart();
       setCartItems([]);
-      router.push('/order-confirmation');
+      if (paymentMethod === 'qr') {
+        const vnpayResponse = await paymentApi.createPayment(
+          totalFinal - voucherDiscount,
+          orderResponse.id,
+        );
+
+        if (vnpayResponse?.data.paymentUrl) {
+          window.location.href = vnpayResponse.data.paymentUrl;
+        } else {
+          toast.error('Không tạo được liên kết thanh toán VNPAY');
+        }
+      } else {
+        // 👉 Nếu là COD hoặc các phương thức khác
+        router.push(`/payment-status?orderId=${orderResponse.id}&status=success&cod=true`);
+      }
     } catch {
       toast.error('Lỗi tạo đơn hàng!');
     }
   };
-
 
   const renderProvinceSelect = () => {
     if (locationsLoading) return <p>Loading...</p>;
@@ -505,11 +522,13 @@ export default function CheckoutPage() {
         disabled={!deliveryProvince}
       >
         <option value="">Chọn quận/huyện</option>
-        {provinces.find((p) => p.name === deliveryProvince)?.districts.map((d) => (
-          <option key={d.code} value={d.name}>
-            {d.name}
-          </option>
-        )) || []}
+        {provinces
+          .find((p) => p.name === deliveryProvince)
+          ?.districts.map((d) => (
+            <option key={d.code} value={d.name}>
+              {d.name}
+            </option>
+          )) || []}
       </select>
     );
   };
@@ -524,7 +543,8 @@ export default function CheckoutPage() {
         disabled={!deliveryDistrict}
       >
         <option value="">Chọn phường/xã</option>
-        {provinces.find((p) => p.name === deliveryProvince)
+        {provinces
+          .find((p) => p.name === deliveryProvince)
           ?.districts.find((d) => d.name === deliveryDistrict)
           ?.wards.map((w) => (
             <option key={w.code} value={w.name}>
@@ -1392,7 +1412,9 @@ export default function CheckoutPage() {
                         {filteredPharmacies.map((group) => {
                           // Kiểm tra xem tất cả sản phẩm trong giỏ hàng có đủ tồn kho tại nhà thuốc này hay không
                           const isPharmacyAvailable = cartItems.every((cartItem) => {
-                            const record = group.stocks.find((s) => s.product_id === cartItem.product_id);
+                            const record = group.stocks.find(
+                              (s) => s.product_id === cartItem.product_id,
+                            );
                             return (
                               record &&
                               record.quantity !== undefined &&
@@ -1418,12 +1440,13 @@ export default function CheckoutPage() {
                             >
                               <h3 className="font-semibold">{group.info.name}</h3>
                               <p className="text-sm text-gray-600">
-                                {group.info.address_street}, {group.info.ward}, {group.info.district}
+                                {group.info.address_street}, {group.info.ward},{' '}
+                                {group.info.district}
                               </p>
                               <div className="mt-2 space-y-1">
                                 {cartItems.map((item) => {
                                   const stockRecord = group.stocks.find(
-                                    (s) => s.product_id === item.product_id
+                                    (s) => s.product_id === item.product_id,
                                   );
                                   const available =
                                     stockRecord &&
@@ -1434,9 +1457,7 @@ export default function CheckoutPage() {
                                       key={item.product_id}
                                       className="flex items-center justify-between text-sm"
                                     >
-                                      <span className="flex-1 mr-2 break-words">
-                                        {item.name}
-                                      </span>
+                                      <span className="flex-1 mr-2 break-words">{item.name}</span>
                                       <span
                                         className={`font-semibold whitespace-nowrap ${
                                           available ? 'text-green-600' : 'text-red-500'
@@ -1453,9 +1474,7 @@ export default function CheckoutPage() {
                         })}
                       </div>
                     ) : (
-                      <p className="text-sm text-gray-600">
-                        Không có nhà thuốc nào ở khu vực này.
-                      </p>
+                      <p className="text-sm text-gray-600">Không có nhà thuốc nào ở khu vực này.</p>
                     )}
                   </div>
                 </div>
@@ -1482,25 +1501,34 @@ export default function CheckoutPage() {
                     type="radio"
                     name="payment_method"
                     className="accent-blue-600"
-                    defaultChecked
+                    value="cod"
+                    checked={paymentMethod === 'cod'}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
                   />
                   <Image
                     src="/images/thanh-toan/cod.png"
                     alt="Cash on Delivery Icon"
                     className="w-8 h-8"
-                    width={8}
-                    height={8}
+                    width={240}
+                    height={240}
                   />
                   <span>Thanh toán tiền mặt khi nhận hàng</span>
                 </label>
                 <label className="flex items-center gap-2">
-                  <input type="radio" name="payment_method" className="accent-blue-600" />
+                  <input
+                    type="radio"
+                    name="payment_method"
+                    className="accent-blue-600"
+                    value="qr"
+                    checked={paymentMethod === 'qr'}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  />
                   <Image
                     src="/images/thanh-toan/qr.png"
                     alt="QR Code Transfer Icon"
                     className="w-8 h-8"
-                    width={8}
-                    height={8}
+                    width={240}
+                    height={240}
                   />
                   <span>Thanh toán bằng chuyển khoản (QR Code)</span>
                 </label>
@@ -1639,10 +1667,8 @@ export default function CheckoutPage() {
                   setEditAddressModalOpen(false);
                   setAddressModalOpen(true);
                 }}
-                onUpdate={() => {
-                }}
-                onDelete={() => {
-                }}
+                onUpdate={() => {}}
+                onDelete={() => {}}
               />
             )}
           </div>

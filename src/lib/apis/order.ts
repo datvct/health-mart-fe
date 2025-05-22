@@ -137,6 +137,7 @@ export interface OrderData {
   discount: number;
   final_price: number;
   ship_method: 'HOME_DELIVERY' | 'PICK_UP';
+  order_status: 'PENDING_NOTPAYMENT' | 'PENDING';
   shippingAddress?: ShippingAddress;
   items?: OrderItem[];
 }
